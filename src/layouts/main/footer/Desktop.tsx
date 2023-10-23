@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 
 export default function Desktop() {
-
   return (
     <>
       <div className="w-full">
@@ -14,20 +13,33 @@ export default function Desktop() {
                 className="w-[300px] object-contain"
               />
               <p className="text-md pt-8">
-                Lầu 5, 387-389 Hai Bà Trưng Quận 3 TP HCMCông Ty Cổ Phần Phát
-                Hành Sách TP HCM - FAHASA60 - 62 Lê Lợi, Quận 1, TP. HCM, Việt
-                NamFahasa.com nhận đặt hàng trực tuyến và giao hàng tận nơi.
-                KHÔNG hỗ trợ đặt mua và nhận hàng trực tiếp tại văn phòng cũng
-                như tất cả Hệ Thống Fahasa trên toàn quốc.
+                Lầu 5, 387-389 Hai Bà Trưng Quận 3 TP HCMCông Ty Cổ Phần Phát Hành Sách TP HCM - FAHASA60 - 62 Lê Lợi,
+                Quận 1, TP. HCM, Việt NamFahasa.com nhận đặt hàng trực tuyến và giao hàng tận nơi. KHÔNG hỗ trợ đặt mua
+                và nhận hàng trực tiếp tại văn phòng cũng như tất cả Hệ Thống Fahasa trên toàn quốc.
               </p>
 
               <div className="flex flex-col w-full">
                 <div className="flex flex-row pt-5 justify-between">
-                  <Icon icon="ic:baseline-facebook" fontSize="39px" />
-                  <Icon icon="ri:instagram-fill" fontSize="39px" />
-                  <Icon icon="icon-park-solid:youtobe" fontSize="39px" />
-                  <Icon icon="mdi:gmail" fontSize="39px" />
-                  <Icon icon="mdi:gmail" fontSize="39px" />
+                  <Icon
+                    icon="ic:baseline-facebook"
+                    fontSize="39px"
+                  />
+                  <Icon
+                    icon="ri:instagram-fill"
+                    fontSize="39px"
+                  />
+                  <Icon
+                    icon="icon-park-solid:youtobe"
+                    fontSize="39px"
+                  />
+                  <Icon
+                    icon="mdi:gmail"
+                    fontSize="39px"
+                  />
+                  <Icon
+                    icon="mdi:gmail"
+                    fontSize="39px"
+                  />
                 </div>
 
                 <div className="flex flex-row justify-between pt-3">
@@ -87,18 +99,27 @@ export default function Desktop() {
 
                 <div className="flex flex-row text-md justify-between pt-4">
                   <div className="flex items-center">
-                    <Icon icon="ic:baseline-phone" fontSize={24} />
+                    <Icon
+                      icon="ic:baseline-phone"
+                      fontSize={24}
+                    />
 
                     <span className="pl-2">60-62 Lê Lợi, Q.1, TP. HCM</span>
                   </div>
 
                   <div className="flex items-center">
-                    <Icon icon="material-symbols:mail" fontSize={24} />
+                    <Icon
+                      icon="material-symbols:mail"
+                      fontSize={24}
+                    />
                     <span className="pl-2">cskh@fahasa.com.vn</span>
                   </div>
 
                   <div className="flex items-center">
-                    <Icon icon="mdi:address-marker" fontSize={24} />
+                    <Icon
+                      icon="mdi:address-marker"
+                      fontSize={24}
+                    />
                     <span className="pl-2">1900636467</span>
                   </div>
                 </div>
