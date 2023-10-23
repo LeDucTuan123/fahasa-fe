@@ -1,14 +1,3 @@
-import { Icon } from '@iconify/react';
-import {
-  Box,
-  Container,
-  Divider,
-  Grid,
-  Stack,
-  Typography,
-  styled,
-} from '@mui/material';
-import React from 'react';
 import useResponsive from 'src/hooks/useResponsive';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
@@ -17,29 +6,31 @@ export default function Footer() {
   const IsMup = useResponsive('up', 'sm');
 
   return (
-    <Stack
-      width="100%"
-      sx={{
-        backgroundColor: 'Highlight',
-        marginTop: '80px',
-      }}
+    <div
+      className='w-full bg-blue-300 mt-[80px]'
     >
-      <Container>{IsMup ? <Desktop /> : <Mobile />}</Container>
+          <div className=" sticky px-[1/3] min-h-20 py-4 top-0 z-[20] flex w-full items-center justify-between border-gray-500">
+      <div className="px-6 max-w-[1200px] w-full ml-auto mr-auto block box-border">
+      {IsMup ? <Desktop /> : <Mobile />}
+      </div>
+      </div>
 
-      <Divider />
+      <hr />
 
-      <Container>
-        <Stack spacing={2.5} alignItems="center" py={3}>
-          <Typography variant="caption">
+      <div className=" sticky px-[1/3] min-h-20 py-4 top-0 z-[20] flex w-full items-center justify-between border-gray-500">
+      <div className="px-6 max-w-[1200px] w-full ml-auto mr-auto block box-border">
+        <div className='block text-center py-6 '>
+          <p className='text-sm'>
             Giấy chứng nhận Đăng ký Kinh doanh số 0304132047 do Sở Kế hoạch và
             Đầu tư Thành phố Hồ Chí Minh cấp ngày 20/12/2005, đăng ký thay đổi
             lần thứ 10, ngày 20/05/2022.
-          </Typography>
-          <Typography variant="overline" color={'gray'}>
+          </p>
+          <p className='text-sm pt-4' color={'gray'}>
             ---OoOoOoO---
-          </Typography>
-        </Stack>
-      </Container>
-    </Stack>
+          </p>
+        </div>
+      </div>
+      </div>
+    </div>
   );
 }
