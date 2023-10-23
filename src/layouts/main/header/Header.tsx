@@ -13,10 +13,10 @@ export default function Header() {
   };
 
   return (
-    <div className="bg-blue-300 sticky px-[1/3] min-h-20 py-4 top-0 z-[20] flex w-full items-center justify-between border-gray-500">
+    <div className="bg-blue-300 fixed px-[1/3] min-h-20 py-4 top-0 z-[50] flex w-full items-center justify-between border-gray-500">
       <div className="px-6 max-w-[1200px] w-full ml-auto mr-auto block box-border">
-        <div className="flex md:flex-row sm:flex-col">
-          <div className="md:hidden sm:flex justify-center pb-4">
+        <div className="flex md:flex-row flex-col">
+          <div className="flex md:hidden justify-center pb-4">
             <Link to="/">
               <img
                 src="https:cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo.png"
@@ -46,11 +46,16 @@ export default function Header() {
               </button>
             </div>
 
-            <div className="flex w-full h-8 px-4">
+            <div className="flex w-full h-10 px-4 relative">
+              <Icon
+                icon="basil:search-outline"
+                fontSize={24}
+                className="absolute left-6 top-2 text-gray-400"
+              />
               <input
                 type="text"
                 placeholder="Search"
-                className="w-full border-gray-500 border-[1px] pl-4 outline-none rounded-md text-gray-500"
+                className="w-full border-white focus:border-gray-400 border-[1px] pl-9 outline-none rounded-md text-gray-500"
               />
             </div>
 
@@ -59,44 +64,45 @@ export default function Header() {
                 {ITEMS_NAVIGATION_LIST.map((item: ItemsNavType) => (
                   <button
                     key={item.id}
-                    className="active:bg-gray-500 h-full p-2 rounded-sm hover:bg-gray-400 transition-[500ms]"
+                    className="active:bg-[#5994d9] h-full p-2 rounded-sm hover:bg-[#7db5f7] transition-[500ms]"
                   >
                     <Link to={item.path} className="flex flex-col items-center">
                       <Icon icon={item.icon} fontSize={24} />
-                      <p className='text-[18px]'>{item.title}</p>
+                      <p className="text-[18px]">{item.title}</p>
                     </Link>
                   </button>
                 ))}
               </div>
-              <div className="md:hidden">
+              <div className="md:hidden flex items-center">
                 <button onClick={toggkeNavbar}>
                   <>
                     {isOpen ? (
-                      <Icon icon="ion:close" />
+                      <Icon icon="ion:close" fontSize={32} />
                     ) : (
-                      <Icon icon="material-symbols:menu" />
+                      <Icon icon="material-symbols:menu" fontSize={32} />
                     )}
                   </>
                 </button>
               </div>
 
-              <div className="absolute top-28">
-                <div className="flex flex-col h-fit min-w-[200px] bg-slate-400">
-                  {ITEMS_NAVIGATION_LIST.map((item: ItemsNavType) => (
-                    <button
-                      key={item.id}
-                      className={`hidden sm:${
-                        isOpen && 'flex'
-                      } active:bg-gray-500 h-full p-2 rounded-sm hover:bg-gray-200 transition-[500ms] delay-75`}
-                    >
-                      <Link to={item.path} className="flex items-center">
-                        <Icon icon={item.icon} fontSize={24} />
-                        <p className='text-[18px]'>{item.title}</p>
-                      </Link>
-                    </button>
-                  ))}
+              {isOpen && (
+                <div className="absolute top-[140px] ">
+                  <div className="flex flex-col h-fit min-w-[200px] border-[1px] bg-slate-50 border-gray-300 rounded-md">
+                    {ITEMS_NAVIGATION_LIST.map((item: ItemsNavType) => (
+                      <button
+                        key={item.id}
+                        className={`active:bg-[#5994d9] h-full p-2 hover:bg-[#7db5f7] transition-[500ms] delay-75`}
+                      >
+                        <Link to={item.path} className="flex items-center">
+                          <Icon icon={item.icon} fontSize={24} />
+                          <p className="text-[18px]">{item.title}</p>
+                        </Link>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
+              
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
-import { Box, Button, Divider, Input, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Button, Divider, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
 import useResponsive from 'src/hooks/useResponsive';
 import { LatestBooks } from '../home';
 
@@ -10,7 +10,7 @@ export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
 
   return (
-    <Stack display={'flex'} flexDirection={'column'} spacing={2}>
+    <Stack display={'flex'} flexDirection={'column'} spacing={2} pt={4}>
       <Stack display={'flex'} flexDirection={'row'}>
         <Stack
           sx={{
