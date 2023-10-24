@@ -12,3 +12,4 @@ export const HomePage = Loadable(lazy(() => import('../pages/HomePage')));
 export const DetailProductPage = Loadable(lazy(() => import('../pages/DetailProductPage')));
 export const Login = Loadable(lazy(() => import('../pages/LoginPage')));
 export const Error = Loadable(lazy(() => import('../pages/Error404')));
+export const Products = Loadable(lazy(() => import('../pages/ProductsPage')));
