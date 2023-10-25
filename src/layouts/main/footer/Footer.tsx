@@ -15,11 +15,13 @@ export default function Footer() {
 
           <div className="block text-center py-6 ">
             <p className="text-sm">
-              Giấy chứng nhận Đăng ký Kinh doanh số 0304132047 do Sở Kế hoạch và
-              Đầu tư Thành phố Hồ Chí Minh cấp ngày 20/12/2005, đăng ký thay đổi
-              lần thứ 10, ngày 20/05/2022.
+              Giấy chứng nhận Đăng ký Kinh doanh số 0304132047 do Sở Kế hoạch và Đầu tư Thành phố Hồ Chí Minh cấp ngày
+              20/12/2005, đăng ký thay đổi lần thứ 10, ngày 20/05/2022.
             </p>
-            <p className="text-sm pt-4" color={'gray'}>
+            <p
+              className="text-sm pt-4"
+              color={'gray'}
+            >
               ---OoOoOoO---
             </p>
           </div>

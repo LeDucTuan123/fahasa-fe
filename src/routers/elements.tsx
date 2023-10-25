@@ -13,3 +13,6 @@ export const DetailProductPage = Loadable(lazy(() => import('../pages/DetailProd
 export const Login = Loadable(lazy(() => import('../pages/LoginPage')));
 export const Error = Loadable(lazy(() => import('../pages/Error404')));
 export const Products = Loadable(lazy(() => import('../pages/ProductsPage')));
+export const Profile = Loadable(lazy(() => import('../pages/ProfilePage')));
+export const ProfileOrder = Loadable(lazy(() => import('../pages/ProfileOrderPage')));
+export const ProfileAddress = Loadable(lazy(() => import('../pages/ProfileAddressPage')));

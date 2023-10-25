@@ -1,7 +1,8 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/main';
-import { DetailProductPage, Error, HomePage, Login, Products } from './elements';
+import { DetailProductPage, Error, HomePage, Login, Products, Profile, ProfileAddress, ProfileOrder } from './elements';
+import ProfileLayout from 'src/layouts/ProfileLayout';
 
 export default function Route() {
   return useRoutes([
@@ -19,5 +20,14 @@ export default function Route() {
     },
     // login
     {},
+    // profile layout
+    {
+      element: <ProfileLayout />,
+      children: [
+        { path: '/profile', element: <Profile /> },
+        { path: '/address', element: <ProfileAddress /> },
+        { path: '/order', element: <ProfileOrder /> },
+      ],
+    },
   ]);
 }
