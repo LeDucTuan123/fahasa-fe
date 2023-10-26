@@ -7,7 +7,7 @@ export default function MainLayout() {
     <div className="flex flex-col h-1">
       <Header />
 
-      <main className="flex-grow pt-32 ">
+      <main className="flex-grow pt-36 ">
         <div className="px-6 max-w-[1200px] w-full ml-auto mr-auto block box-border">
           <Outlet />
         </div>
