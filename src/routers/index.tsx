@@ -1,12 +1,11 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/main';
-<<<<<<< HEAD
-import { Cart, DetailProductPage, Error, HomePage, Login } from './elements';
-=======
+
+import { Cart } from './elements';
+
 import { DetailProductPage, Error, HomePage, Login, Products, Profile, ProfileAddress, ProfileOrder } from './elements';
 import ProfileLayout from 'src/layouts/ProfileLayout';
->>>>>>> main
 
 export default function Route() {
   return useRoutes([
@@ -20,7 +19,7 @@ export default function Route() {
         { path: '/login', element: <Login /> },
         { path: '/products', element: <Products /> },
         { path: '/*', element: <Error /> },
-        { path: '/cart', element: <Cart/> }
+        { path: '/cart', element: <Cart /> },
       ],
     },
     // login
