@@ -19,6 +19,22 @@ code {
   background-color: #3333;
 }
 
+
+@keyframes progress {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+.animate-progress {
+  background-size: 200% 100%;
+  animation: progress 2s linear infinite;
+}
+
+
 .imagedetail {
   width: 76px;
   height: 76px;
@@ -55,3 +71,4 @@ code {
   background-color: #d32f2f;
   color: white;
 }
+
