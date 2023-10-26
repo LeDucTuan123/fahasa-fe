@@ -1,49 +1,17 @@
 import { Icon } from '@iconify/react';
-import { Box, Button, Divider, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
-import useResponsive from 'src/hooks/useResponsive';
 import { LatestBooks } from '../home';
 
 export default function DetailProduct() {
-  const IsmUp = useResponsive('up', 'md');
-
   const [counter, setCounter] = useState(1);
 
   return (
-    <Stack display={'flex'} flexDirection={'column'} spacing={2} pt={4}>
-      <Stack display={'flex'} flexDirection={'row'}>
-        <Stack
-          sx={{
-            flexDirection: 'column',
-            width: '40%',
-          }}
-        >
-          <Stack
-            sx={{
-              flexDirection: 'row',
-              height: '400px',
-            }}
-            gap={2}
-          >
-            <Stack
-              sx={{
-                display: !IsmUp ? 'none' : 'block',
-              }}
-            >
-              <Box
-                sx={{
-                  width: '76px',
-                  height: '76px',
-                  borderRadius: '6px',
-                  border: '1px solid white',
-                  transitionDuration: '500ms',
-                  ':hover': {
-                    border: '1px solid red',
-                    scale: 2,
-                    transform: 'scale(1.1)',
-                  },
-                }}
-              >
+    <div className="flex flex-col space-y-2 pt-4">
+      <div className="flex flex-row">
+        <div className="flex flex-col w-[40%]">
+          <div className="flex flex-row w-[400px] gap-2">
+            <div className="hidden sm:block ">
+              <div className="imagedetail">
                 <img
                   src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                   alt="img1"
@@ -53,22 +21,9 @@ export default function DetailProduct() {
                     objectFit: 'contain',
                   }}
                 />
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  width: '76px',
-                  height: '76px',
-                  borderRadius: '6px',
-                  border: '1px solid white',
-                  transitionDuration: '500ms',
-                  ':hover': {
-                    border: '1px solid red',
-                    scale: 2,
-                    transform: 'scale(1.1)',
-                  },
-                }}
-              >
+              <div className="imagedetail">
                 <img
                   src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                   alt="img1"
@@ -78,22 +33,9 @@ export default function DetailProduct() {
                     objectFit: 'contain',
                   }}
                 />
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  width: '76px',
-                  height: '76px',
-                  borderRadius: '6px',
-                  border: '1px solid white',
-                  transitionDuration: '500ms',
-                  ':hover': {
-                    border: '1px solid red',
-                    scale: 2,
-                    transform: 'scale(1.1)',
-                  },
-                }}
-              >
+              <div className="imagedetail">
                 <img
                   src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                   alt="img1"
@@ -103,22 +45,9 @@ export default function DetailProduct() {
                     objectFit: 'contain',
                   }}
                 />
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  width: '76px',
-                  height: '76px',
-                  borderRadius: '6px',
-                  border: '1px solid white',
-                  transitionDuration: '500ms',
-                  ':hover': {
-                    border: '1px solid red',
-                    scale: 2,
-                    transform: 'scale(1.1)',
-                  },
-                }}
-              >
+              <div className="imagedetail">
                 <img
                   src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                   alt="img1"
@@ -128,22 +57,9 @@ export default function DetailProduct() {
                     objectFit: 'contain',
                   }}
                 />
-              </Box>
+              </div>
 
-              <Box
-                sx={{
-                  width: '76px',
-                  height: '76px',
-                  borderRadius: '6px',
-                  border: '1px solid white',
-                  transitionDuration: '500ms',
-                  ':hover': {
-                    border: '1px solid red',
-                    scale: 2,
-                    transform: 'scale(1.1)',
-                  },
-                }}
-              >
+              <div className="imagedetail">
                 <img
                   src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                   alt="img1"
@@ -153,134 +69,65 @@ export default function DetailProduct() {
                     objectFit: 'contain',
                   }}
                 />
-              </Box>
-            </Stack>
+              </div>
+            </div>
 
-            <Box
-              sx={{
-                width: '100%',
-              }}
-            >
+            <div className="w-full">
               <img
                 src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
                 alt="img1"
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
-            </Box>
-          </Stack>
-          <Stack
-            pt={3}
-            sx={{ flexDirection: IsmUp ? 'row' : 'column' }}
-            justifyContent={'space-evenly'}
-          >
-            <Button variant="outlined" color="error" size="large">
-              <Icon icon="mdi:cart" fontSize={24} />
-              Thêm vào giỏ hàng
-            </Button>
-            <Button variant="contained" color="error" size="large">
-              Mua ngay
-            </Button>
-          </Stack>
-        </Stack>
-        <Stack
-          sx={{
-            width: '60%',
-          }}
-          spacing={2}
-        >
-          <Typography variant="h5" pb="16px">
-            Học Tốt Sinh Học 12
-          </Typography>
+            </div>
+          </div>
+          <div className="pt-3 flex flex-col sm:flex-row justify-between">
+            <button className="text-[#d32f2f] text-xl border-[2px] border-[#d32f2f] px-5 rounded-md py-2 flex sm:w-[55%] active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white">
+              <Icon
+                icon="mdi:cart"
+                fontSize={24}
+              />
+              <span>Thêm vào giỏ hàng</span>
+            </button>
+            <button className="bg-[#d32f2f] py-2 px-5 text-xl border-none rounded-md text-white sm:w-[40%] button-buy">
+              <span>Mua ngay</span>
+            </button>
+          </div>
+        </div>
+        <div className="w-[60%] space-y-2">
+          <p className="text-2xl pb-4">Học Tốt Sinh Học 12</p>
 
-          <Stack
-            sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-            }}
-          >
-            <Box sx={{ width: '60%' }}>
-              <Typography variant="subtitle2">
-                Nhà cung cấp:Dn Tư Nhân Thương Mại Toàn Phúc
-              </Typography>
-              <Typography variant="subtitle2">
-                TNhà xuất bản:NXB Đà Nẵng
-              </Typography>
-            </Box>
-            <Box sx={{ width: '40%' }}>
-              <Typography variant="subtitle2">Tác giả: Võ Văn Chiến</Typography>
-              <Typography variant="subtitle2">Hình thức bìa:Bìa Mềm</Typography>
-            </Box>
-          </Stack>
+          <div className="w-full flex flex-row">
+            <div className="w-[60%]">
+              <p className="text-sm">Nhà cung cấp:Dn Tư Nhân Thương Mại Toàn Phúc</p>
+              <p className="text-sm">TNhà xuất bản:NXB Đà Nẵng</p>
+            </div>
+            <div className="w-[40%]">
+              <p className="text-sm">Tác giả: Võ Văn Chiến</p>
+              <p className="text-sm">Hình thức bìa:Bìa Mềm</p>
+            </div>
+          </div>
 
-          <Stack flexDirection={'row'} alignItems="center" gap={2}>
-            <Box
-              sx={{
-                fontSize: '2rem',
-                fontWeight: '800',
-                color: (theme) => theme.palette.error.dark,
-              }}
-            >
-              100.000 đ
-            </Box>
-            <Box component="span" sx={{ textDecoration: 'line-through' }}>
-              2000
-            </Box>
-            <Box
-              component="div"
-              sx={{
-                width: 'fit-content',
-                display: 'flex',
-                alignItems: 'center',
-                height: '30px',
-                border: 'none',
-                borderRadius: '8px',
-                fontWeight: '600',
-                fontSize: '1rem',
-                px: 1,
-                backgroundColor: (theme) => theme.palette.error.dark,
-                color: (theme) => theme.palette.background.default
-              }}
-            >
-              -50%
-            </Box>
-          </Stack>
+          <div className="flex flex-row items-center gap-2">
+            <div className="text-[2rem] font-extrabold text-gray-800">100.000 đ</div>
+            <span className="line-through">2000</span>
+            <div className="discount">-50%</div>
+          </div>
 
-          <Stack
-            sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'row',
-            }}
-          >
-            <Box sx={{ maxWidth: '200px', minWidth: '150px', pr: 4 }}>
-              <Typography variant="subtitle2">Thời gian giao hàng</Typography>
-              <Typography variant="subtitle2">
-                TNhà xuất bản:NXB Đà Nẵng
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="subtitle2">Tác giả: Võ Văn Chiến</Typography>
-              <Typography variant="subtitle2">Hình thức bìa:Bìa Mềm</Typography>
-            </Box>
-          </Stack>
+          <div className="w-full flex flex-row">
+            <div className="max-w-[200px] min-w[150px] pr-4">
+              <p className="text-sm">Thời gian giao hàng</p>
+              <p className="text-sm">TNhà xuất bản:NXB Đà Nẵng</p>
+            </div>
+            <div>
+              <p className="text-sm">Tác giả: Võ Văn Chiến</p>
+              <p className="text-sm">Hình thức bìa:Bìa Mềm</p>
+            </div>
+          </div>
 
-          <Stack display={'flex'} flexDirection={'row'} alignItems="center">
-            <Typography variant="body1" sx={{ width: '200px' }}>
-              SỐ LƯỢNG:{' '}
-            </Typography>
+          <div className="flex flex-row items-center">
+            <p className="text-xl w-[200px]">SỐ LƯỢNG: </p>
 
-            <Box
-              sx={{
-                display: 'flex',
-                height: '35px',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                border: '1px solid #3333',
-                borderRadius: '5px',
-                px: 2,
-              }}
-            >
+            <div className="flex h-[35px] items-center border-[1px] border-solid border-[#3333] rounded-md px-2 justify-between">
               <Icon
                 icon="iconoir:minus"
                 fontSize={24}
@@ -306,15 +153,14 @@ export default function DetailProduct() {
                 onClick={() => setCounter(counter + 1)}
                 style={{ cursor: 'pointer' }}
               />
-            </Box>
-          </Stack>
-        </Stack>
-      </Stack>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Divider />
+      <hr />
 
       <LatestBooks />
-
-    </Stack>
+    </div>
   );
 }

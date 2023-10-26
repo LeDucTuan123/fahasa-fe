@@ -107,19 +107,18 @@ export default function Mobile() {
               <p>60-62 Lê Lợi, Q.1, TP. HCM</p>
             </div>
             <div className="flex gap-2">
-                <Icon
-                  icon="material-symbols:mail"
-                  fontSize={24}
-                />
-                <p>cskh@fah asa.com.vn</p>
+              <Icon
+                icon="material-symbols:mail"
+                fontSize={24}
+              />
+              <p>cskh@fah asa.com.vn</p>
             </div>
             <div className="flex gap-2">
-              
-                <Icon
-                  icon="ic:baseline-phone"
-                  fontSize={24}
-                />
-                <p>1900636467</p>
+              <Icon
+                icon="ic:baseline-phone"
+                fontSize={24}
+              />
+              <p>1900636467</p>
             </div>
           </div>
         </div>
