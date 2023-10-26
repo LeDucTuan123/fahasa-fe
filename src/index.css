@@ -4,19 +4,54 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .active {
   color: white;
   background-color: #3333;
+}
+
+.imagedetail {
+  width: 76px;
+  height: 76px;
+  border-radius: 6px;
+  border: 1px solid white;
+  transition-duration: 500ms;
+}
+.imagedetail:hover {
+  border: 1px solid red;
+  scale: 1.1;
+  transform: scale(1.1);
+}
+
+.discount {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding-inline: 4px;
+  background-color: #e25757;
+  color: azure;
+}
+.button-buy:hover {
+  border: 2px solid #d32f2f;
+  background-color: white;
+  color: #d32f2f;
+  transition-duration: 200ms;
+}
+.button-buy:active {
+  background-color: #d32f2f;
+  color: white;
 }
