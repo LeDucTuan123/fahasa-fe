@@ -10,8 +10,11 @@ import { useState } from 'react';
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggkeNavbar = () => {
-        setIsOpen(!isOpen);
+    const handleOnMouseEnter = () => {
+        setIsOpen(true);
+    };
+    const handleOnMouseLeave = () => {
+        setIsOpen(false);
     };
 
     return (
@@ -34,8 +37,8 @@ export default function Header() {
                         {/* mega menu */}
                         <div
                             className="btn-menu relative cursor-pointer items-center flex px-2 text-gray-header"
-                            onMouseEnter={toggkeNavbar}
-                            onMouseLeave={toggkeNavbar}
+                            onMouseEnter={handleOnMouseEnter}
+                            onMouseLeave={handleOnMouseLeave}
                         >
                             <Icon
                                 icon="bx:customize"
@@ -129,7 +132,12 @@ export default function Header() {
                         </div>
                     </div>
                 </div>
-                {isOpen && <MegaMenu onMouse={toggkeNavbar} />}
+                {isOpen && (
+                    <MegaMenu
+                        onMouse={handleOnMouseEnter}
+                        onLeave={handleOnMouseLeave}
+                    />
+                )}
             </nav>
             {/* <div className="dropdown-cover w-screen h-screen"></div> */}
         </div>

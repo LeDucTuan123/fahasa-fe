@@ -4,16 +4,17 @@ import { links } from './List_Item';
 
 interface Props {
     onMouse: () => void;
+    onLeave: () => void;
 }
 
-const MegaMenu = ({ onMouse }: Props) => {
+const MegaMenu = ({ onMouse, onLeave }: Props) => {
     return (
         <>
             <div
                 id="menu-mega"
-                className="absolute z-9899"
-                onMouseEnter={() => onMouse}
-                onMouseLeave={() => onMouse}
+                className="absolute bg-white top-14"
+                onMouseEnter={() => onMouse()}
+                onMouseLeave={() => onLeave()}
             >
                 {links.map((link) => (
                     <div className=" rounded-lg flex px-2 py-5 mx-auto border border-dark-400 shadow md:px-2">
