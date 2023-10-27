@@ -66,8 +66,14 @@ export default function Header() {
                     key={item.id}
                     className="active:bg-[#5994d9] h-full p-2 rounded-sm hover:bg-[#7db5f7] transition-[500ms]"
                   >
-                    <Link to={item.path} className="flex flex-col items-center">
-                      <Icon icon={item.icon} fontSize={24} />
+                    <Link
+                      to={item.path}
+                      className="flex flex-col items-center"
+                    >
+                      <Icon
+                        icon={item.icon}
+                        fontSize={24}
+                      />
                       <p className="text-[18px]">{item.title}</p>
                     </Link>
                   </button>
@@ -77,9 +83,15 @@ export default function Header() {
                 <button onClick={toggkeNavbar}>
                   <>
                     {isOpen ? (
-                      <Icon icon="ion:close" fontSize={32} />
+                      <Icon
+                        icon="ion:close"
+                        fontSize={32}
+                      />
                     ) : (
-                      <Icon icon="material-symbols:menu" fontSize={32} />
+                      <Icon
+                        icon="material-symbols:menu"
+                        fontSize={32}
+                      />
                     )}
                   </>
                 </button>
@@ -93,8 +105,14 @@ export default function Header() {
                         key={item.id}
                         className={`active:bg-[#5994d9] h-full p-2 hover:bg-[#7db5f7] transition-[500ms] delay-75`}
                       >
-                        <Link to={item.path} className="flex items-center">
-                          <Icon icon={item.icon} fontSize={24} />
+                        <Link
+                          to={item.path}
+                          className="flex items-center"
+                        >
+                          <Icon
+                            icon={item.icon}
+                            fontSize={24}
+                          />
                           <p className="text-[18px]">{item.title}</p>
                         </Link>
                       </button>
@@ -102,7 +120,6 @@ export default function Header() {
                   </div>
                 </div>
               )}
-              
             </div>
           </div>
         </div>
