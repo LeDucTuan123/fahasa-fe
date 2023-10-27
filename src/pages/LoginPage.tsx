@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import LoginView from 'src/sections/e-commerce/view/LoginView';
+import Login from 'src/sections/e-commerce/login/Login';
 
 export default function LoginPage() {
   return (
@@ -8,8 +8,7 @@ export default function LoginPage() {
       <Helmet>
         <title>Login</title>
       </Helmet>
-
-      <LoginView />
+      <Login />
     </>
   );
 }

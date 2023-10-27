@@ -2,111 +2,136 @@ import { Icon } from '@iconify/react';
 import { Link } from 'src/components/Link';
 import { ITEMS_NAVIGATION_LIST } from '../../../constans';
 import { ItemsNavType } from '../../../types';
+import Logo from '../../../assets/image/logo.png';
+import MegaMenu from './MegaMenu';
 
 import { useState } from 'react';
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
-  const toggkeNavbar = () => {
-    setIsOpen(!isOpen);
-  };
+    const toggkeNavbar = () => {
+        setIsOpen(!isOpen);
+    };
 
-  return (
-    <div className="bg-blue-300 fixed px-[1/3] min-h-20 py-4 top-0 z-[50] flex w-full items-center justify-between border-gray-500">
-      <div className="px-6 max-w-[1200px] w-full ml-auto mr-auto block box-border">
-        <div className="flex md:flex-row flex-col">
-          <div className="flex md:hidden justify-center pb-4">
-            <Link to="/">
-              <img
-                src="https:cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo.png"
-                // width="201px"
-                // height="49px"
-                style={{ objectFit: 'contain' }}
-                alt="logo"
-              />
-            </Link>
-          </div>
-          <div className="flex w-full items-center ">
-            <div className="pr-5 hidden md:flex">
-              <Link to="/">
-                <img
-                  src="https:cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo.png"
-                  // width="201px"
-                  // height="49px"
-                  style={{ objectFit: 'contain' }}
-                  alt="logo"
-                />
-              </Link>
-            </div>
-
-            <div className="hidden md:flex whitespace-nowrap justify-between items-center">
-              <button className="active:bg-gray-500 h-full">
-                <Link to="#">Nhà sách</Link>
-              </button>
-            </div>
-
-            <div className="flex w-full h-10 px-4 relative">
-              <Icon
-                icon="basil:search-outline"
-                fontSize={24}
-                className="absolute left-6 top-2 text-gray-400"
-              />
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-full border-white focus:border-gray-400 border-[1px] pl-9 outline-none rounded-md text-gray-500"
-              />
-            </div>
-
-            <div className="md:min-w-[300px] flex justify-end ">
-              <div className="hidden md:flex justify-between items-center">
-                {ITEMS_NAVIGATION_LIST.map((item: ItemsNavType) => (
-                  <button
-                    key={item.id}
-                    className="active:bg-[#5994d9] h-full p-2 rounded-sm hover:bg-[#7db5f7] transition-[500ms]"
-                  >
-                    <Link to={item.path} className="flex flex-col items-center">
-                      <Icon icon={item.icon} fontSize={24} />
-                      <p className="text-[18px]">{item.title}</p>
-                    </Link>
-                  </button>
-                ))}
-              </div>
-              <div className="md:hidden flex items-center">
-                <button onClick={toggkeNavbar}>
-                  <>
-                    {isOpen ? (
-                      <Icon icon="ion:close" fontSize={32} />
-                    ) : (
-                      <Icon icon="material-symbols:menu" fontSize={32} />
-                    )}
-                  </>
-                </button>
-              </div>
-
-              {isOpen && (
-                <div className="absolute top-[140px] ">
-                  <div className="flex flex-col h-fit min-w-[200px] border-[1px] bg-slate-50 border-gray-300 rounded-md">
-                    {ITEMS_NAVIGATION_LIST.map((item: ItemsNavType) => (
-                      <button
-                        key={item.id}
-                        className={`active:bg-[#5994d9] h-full p-2 hover:bg-[#7db5f7] transition-[500ms] delay-75`}
-                      >
-                        <Link to={item.path} className="flex items-center">
-                          <Icon icon={item.icon} fontSize={24} />
-                          <p className="text-[18px]">{item.title}</p>
+    return (
+        <div className="lg:container mx-auto py-2 ">
+            <nav className="">
+                <div className="flex lg:gap-2 items-center px-2 lg:px-0 py-2 h-[68px]">
+                    <div className="flex justify-around items-center gap-4">
+                        {/* logo */}
+                        <Link
+                            to={'/'}
+                            className="text-4xl font-mono w-52 hidden lg:block"
+                        >
+                            <img
+                                src={Logo}
+                                alt=""
+                                className="w-full"
+                            />
                         </Link>
-                      </button>
-                    ))}
-                  </div>
+
+                        {/* mega menu */}
+                        <div
+                            className="btn-menu relative cursor-pointer items-center flex px-2 text-gray-header"
+                            onMouseEnter={toggkeNavbar}
+                            onMouseLeave={toggkeNavbar}
+                        >
+                            <Icon
+                                icon="bx:customize"
+                                className="bx bx-customize text-3xl"
+                            />
+                            <Icon
+                                icon="fe:arrow-down"
+                                className="bx bx-chevron-down text-2xl lg:block hidden"
+                            />
+
+                            {/* {showDropdown && (
+                                    
+                                )} */}
+                        </div>
+                    </div>
+                    <div className="flex items-center w-full mx-2 border border-[#d3d4d5] rounded-lg bg-white">
+                        <input
+                            type="search"
+                            autoComplete="off"
+                            placeholder="Tìm kiếm.."
+                            className="px-4 py-1 border-none outline-none w-full bg-transparent"
+                        />
+                        <div className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 lg:px-6 lg:py-1 ">
+                            <Icon
+                                icon="tabler:search"
+                                className="bx bx-search text-sm"
+                            />
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {/* msg icon */}
+                        <div className="header-icon text-gray-header">
+                            <Icon
+                                icon="solar:bell-line-duotone"
+                                className="bx bx-bell text-2xl"
+                            />
+                            <span className="text-sm hidden lg:block">Thông báo</span>
+                        </div>
+                        {/* cart icon */}
+                        <div className="header-icon text-gray-header">
+                            <Icon
+                                icon="uil:cart"
+                                className="bx bx-cart-alt text-2xl"
+                            />
+                            <span className="text-sm hidden lg:block">Giỏ hàng</span>
+                        </div>
+                        {/* avatar */}
+                        <div className="header-icon text-gray-header">
+                            <Link
+                                to="/login"
+                                className="header-icon text-gray-header "
+                            >
+                                <Icon
+                                    icon="bx:user"
+                                    className="bx bx-user text-2xl text-gray-header"
+                                />
+                                <span className="text-sm text-gray-header hidden lg:block">Tài khoản</span>
+                            </Link>
+                            {/* <div
+                                    className="z-10 top-14 absolute bg-white rounded-lg shadow w-44"
+                                    onMouseOver={handleMouseOver}
+                                    onMouseLeave={handleMouseLeave}
+                                >
+                                    <ul className="py-2 text-sm text-gray-700 ">
+                                        <li>
+                                            <Link
+                                                to={"#"}
+                                                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
+                                            >
+                                                Dashboard
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                to={"#"}
+                                                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
+                                            >
+                                                Settings
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                to={"#"}
+                                                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
+                                            >
+                                                Earnings
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div> */}
+                        </div>
+                    </div>
                 </div>
-              )}
-              
-            </div>
-          </div>
+                {isOpen && <MegaMenu onMouse={toggkeNavbar} />}
+            </nav>
+            {/* <div className="dropdown-cover w-screen h-screen"></div> */}
         </div>
-      </div>
-    </div>
-  );
+    );
 }
