@@ -7,7 +7,7 @@ export default function AdminLayout() {
   return (
     <div className="p-0 m-0 w-full h-screen">
       <div className="flex flex-row">
-        <div className="w-[250px] h-screen bg-slate-500 ">
+        <div className="w-[250px] h-screen bg-slate-900 ">
           <Sidebar />
         </div>
 
