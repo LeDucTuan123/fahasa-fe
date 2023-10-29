@@ -1,19 +1,23 @@
-import { BrowserRouter } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { Provider } from 'react-redux';
 
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-import Route from "./routers";
+import Route from './routers';
+import { store } from './redux/store';
 
 function App() {
   return (
     <>
-      <HelmetProvider>
-        <BrowserRouter>
-          <Route />
-        </BrowserRouter>
-      </HelmetProvider>
+      <Provider store={store}>
+        <HelmetProvider>
+          <BrowserRouter>
+            <Route />
+          </BrowserRouter>
+        </HelmetProvider>
+      </Provider>
     </>
   );
 }
