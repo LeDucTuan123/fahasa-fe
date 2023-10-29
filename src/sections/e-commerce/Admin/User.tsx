@@ -10,31 +10,49 @@ export default function User() {
               scope="col"
               className="px-6 py-3"
             >
-              Product name
+              Id
             </th>
             <th
               scope="col"
               className="px-6 py-3"
             >
-              Color
+              Họ
             </th>
             <th
               scope="col"
               className="px-6 py-3"
             >
-              Category
+              Tên
             </th>
             <th
               scope="col"
               className="px-6 py-3"
             >
-              Price
+              Mật khẩu
             </th>
             <th
               scope="col"
               className="px-6 py-3"
             >
-              <span className="sr-only">Edit</span>
+              Email
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3"
+            >
+              Số điện thoại
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3"
+            >
+              Địa chỉ
+            </th>
+            <th
+              scope="col"
+              className="px-6 py-3"
+            >
+              Action
             </th>
           </tr>
         </thead>
@@ -44,18 +62,16 @@ export default function User() {
               scope="row"
               className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              Apple MacBook Pro 17"
+              123abc
             </th>
-            <td className="px-6 py-4">Silver</td>
-            <td className="px-6 py-4">Laptop</td>
-            <td className="px-6 py-4">$2999</td>
-            <td className="px-6 py-4 text-right">
-              <a
-                href="#"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              >
-                Edit
-              </a>
+            <td className="px-6 py-4 max-w-[170px]">Nguyen Van</td>
+            <td className="px-6 py-4 max-w-[170px]">An</td>
+            <td className="px-6 py-4 max-w-[170px]">123456</td>
+            <td className="px-6 py-4 max-w-[170px]">klkklkl@gmail.com</td>
+            <td className="px-6 py-4 max-w-[170px]">01234567890</td>
+            <td className="px-6 py-4 max-w-[170px]">Sg Ho Chi Minh</td>
+            <td className="px-6 py-4 max-w-[170px] text-left">
+              <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
             </td>
           </tr>
           <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -63,37 +79,33 @@ export default function User() {
               scope="row"
               className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              Microsoft Surface Pro
+              123abc
             </th>
-            <td className="px-6 py-4">White</td>
-            <td className="px-6 py-4">Laptop PC</td>
-            <td className="px-6 py-4">$1999</td>
-            <td className="px-6 py-4 text-right">
-              <a
-                href="#"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              >
-                Edit
-              </a>
+            <td className="px-6 max-w-[170px] py-4">Nguyen Van</td>
+            <td className="px-6 max-w-[170px] py-4">An</td>
+            <td className="px-6 max-w-[170px] py-4">123456</td>
+            <td className="px-6 max-w-[170px] py-4">klkklkl@gmail.com</td>
+            <td className="px-6 max-w-[170px] py-4">01234567890</td>
+            <td className="px-6 max-w-[170px] py-4">Sg Ho Chi Minh</td>
+            <td className="px-6 max-w-[170px] py-4 text-left">
+              <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
             </td>
           </tr>
-          <tr className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 ">
             <th
               scope="row"
               className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              Magic Mouse 2
+              123abc
             </th>
-            <td className="px-6 py-4">Black</td>
-            <td className="px-6 py-4">Accessories</td>
-            <td className="px-6 py-4">$99</td>
-            <td className="px-6 py-4 text-right">
-              <a
-                href="#"
-                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-              >
-                Edit
-              </a>
+            <td className="px-6 py-4 max-w-[170px]">Nguyen Van</td>
+            <td className="px-6 py-4 max-w-[170px]">An</td>
+            <td className="px-6 py-4 max-w-[170px]">123456</td>
+            <td className="px-6 py-4 max-w-[170px]">klkklkl@gmail.com</td>
+            <td className="px-6 py-4 max-w-[170px]">01234567890</td>
+            <td className="px-6 py-4 max-w-[170px]">Sg Ho Chi Minh Sg Ho Chi Minh Sg Ho Chi Minh Sg Ho Chi Minh</td>
+            <td className="px-6 py-4 max-w-[170px] text-left">
+              <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
             </td>
           </tr>
         </tbody>
