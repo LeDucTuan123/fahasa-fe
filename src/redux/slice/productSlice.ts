@@ -13,7 +13,7 @@ const initialState: ProductState = {
 
 //  AsyncThunk
 export const getProduct = createAsyncThunk('product/getProduct', async (_, thunkApi) => {
-  const res = await fetch.get<ProductType[]>(apiPaths.products, {
+  const res = await fetch.get<ProductType[]>(apiPaths.book, {
     signal: thunkApi.signal,
   });
   console.log(res.data);
