@@ -1,4 +1,4 @@
 export const apiPaths = {
-  products: '/posts', //test
+  book: '/rest/book', // Lấy tất cả sách
   //   ...
 };

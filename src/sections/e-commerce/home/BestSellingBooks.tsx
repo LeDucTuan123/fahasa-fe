@@ -81,12 +81,16 @@ const Item = styled(Paper)(({ theme }) => ({
   cursor: 'pointer',
 }));
 
-export default function BestSellingBooks() {
+interface props {
+  books: any;
+}
+
+export default function BestSellingBooks({ books }: props) {
   return (
     <div className="w-full pt-5">
       <p className="text-xl py-5">Sách bán chạy</p>
       <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4">
-        {category.map((pr, index) => (
+        {/* {category.map((pr, index) => (
           <div
             key={index}
             className="p-5 border-[1px] border-gray-300 shadow-md rounded-md"
@@ -103,7 +107,28 @@ export default function BestSellingBooks() {
               <p className="text-sm">{pr.price}</p>
             </div>
           </div>
-        ))}
+        ))} */}
+
+        {books.map((item: any) => {
+          return (
+            <div
+              key={item.id}
+              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md"
+            >
+              <Link to="/detailproduct">
+                <img
+                  src={item.images}
+                  alt={'img'}
+                  className="w-full h-[140px] object-cover"
+                />
+              </Link>
+              <div className="pt-2">
+                <p className="text-sm">{item.title}</p>
+                <p className="text-sm">{item.price}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
