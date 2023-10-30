@@ -37,7 +37,7 @@ const MegaMenu = ({ onMouse, onLeave }: Props) => {
         console.log(error);
       });
   }, []);
-
+  // khi di chuột vào thì nó sẽ đổi category level 2 và level 3 tương ứng
   function handleOnMouseEnterChange(id: number) {
     let subcate: any =
       level2 &&
