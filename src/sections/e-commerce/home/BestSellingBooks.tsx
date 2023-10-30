@@ -1,6 +1,7 @@
 import { Box, Grid, Paper, Typography, styled } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { BookType } from 'src/types/book';
 
 const category = [
   {
@@ -82,7 +83,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 interface props {
-  books: any;
+  books: Array<BookType>;
 }
 
 export default function BestSellingBooks({ books }: props) {
@@ -109,22 +110,32 @@ export default function BestSellingBooks({ books }: props) {
           </div>
         ))} */}
 
-        {books.map((item: any) => {
+        {books.slice(0, 10).map((item: BookType) => {
           return (
             <div
               key={item.id}
-              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md"
+              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
             >
               <Link to={`/detailproduct/${item.id}`}>
                 <img
                   src={item.images}
                   alt={'img'}
-                  className="w-full h-[140px] object-cover"
+                  className="w-full max-h-[190px] object-cover"
                 />
               </Link>
-              <div className="pt-2">
-                <p className="text-sm">{item.title}</p>
-                <p className="text-sm">{item.price}</p>
+              <div className="pt-2 ">
+                <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+                <p className="text-lg font-semibold text-[#C92127] mt-2">
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                    item.price - (item.price * item.discount) / 100,
+                  )}
+                </p>
+                <p className="text-sm text-[#888888] line-through">
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                </p>
+                <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+                  {item.discount}%
+                </span>
               </div>
             </div>
           );

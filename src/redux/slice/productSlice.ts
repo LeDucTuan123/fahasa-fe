@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
-import { ProductType } from 'src/types/product';
+import { BookType } from 'src/types/book';
 
 interface ProductState {
-  product: ProductType[];
-  productDetail: ProductType | null;
+  product: BookType[];
+  productDetail: BookType | null;
 }
 
 const initialState: ProductState = {
@@ -15,7 +15,7 @@ const initialState: ProductState = {
 
 //  AsyncThunk
 export const getProduct = createAsyncThunk('product/getProduct', async (_, thunkApi) => {
-  const res = await fetch.get<ProductType[]>(apiPaths.book, {
+  const res = await fetch.get<BookType[]>(apiPaths.book, {
     signal: thunkApi.signal,
   });
   console.log(res.data);
@@ -23,7 +23,7 @@ export const getProduct = createAsyncThunk('product/getProduct', async (_, thunk
 });
 
 export const getDetailProduct = createAsyncThunk('product/getDetailProduct', async (id: any, thunkApi) => {
-  const res = await fetch.get<ProductType>(`${apiPaths.book}/${id}`, {
+  const res = await fetch.get<BookType>(`${apiPaths.book}/${id}`, {
     signal: thunkApi.signal,
   });
   console.log(res.data);
