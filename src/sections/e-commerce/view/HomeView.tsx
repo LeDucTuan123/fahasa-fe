@@ -18,11 +18,7 @@ export default function HomeView() {
   useEffect(() => {
     fetch(apiPaths.book)
       .then((res) => {
-        let bookTemp: any = [];
-        for (let i = 0; i < 10; i++) {
-          bookTemp.push(res.data[i]);
-        }
-        setBooks(bookTemp);
+        setBooks(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -37,7 +33,7 @@ export default function HomeView() {
 
       <BestSellingBooks books={books} />
 
-      <LatestBooks />
+      <LatestBooks books={books} />
     </>
   );
 }

@@ -184,7 +184,7 @@ export default function DetailProduct() {
 
       <hr />
 
-      <LatestBooks />
+      {/* <LatestBooks /> */}
     </div>
   );
 }

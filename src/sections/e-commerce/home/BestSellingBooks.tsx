@@ -110,7 +110,7 @@ export default function BestSellingBooks({ books }: props) {
           </div>
         ))} */}
 
-        {books.map((item: BookType) => {
+        {books.slice(0, 10).map((item: BookType) => {
           return (
             <div
               key={item.id}
