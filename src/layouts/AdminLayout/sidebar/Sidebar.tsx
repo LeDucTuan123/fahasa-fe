@@ -55,6 +55,7 @@ export default function Sidebar() {
       <div className="flex flex-col h-full ">
         {List_Item_Sidebar.map((item) => (
           <NavLink
+            key={item.id}
             to={item.path}
             className={({ isActive }) => (isActive ? ' text-slate-900 bg-slate-300' : ' text-gray-200')}
           >
