@@ -3,17 +3,17 @@ import Footer from './footer';
 import Header from './header';
 
 export default function MainLayout() {
-    return (
-        <>
-            <Header />
+  return (
+    <>
+      <Header />
 
-            <main className="bg-[#f0f0f0]">
-                <div className=" lg:container w-full ml-auto mr-auto block box-border">
-                    <Outlet />
-                </div>
-            </main>
+      <main className="bg-[#f0f0f0] pb-5">
+        <div className=" lg:container w-full ml-auto mr-auto block box-border">
+          <Outlet />
+        </div>
+      </main>
 
-            <Footer />
-        </>
-    );
+      <Footer />
+    </>
+  );
 }

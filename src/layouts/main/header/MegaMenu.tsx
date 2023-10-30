@@ -14,7 +14,9 @@ let level3: any = null;
 const MegaMenu = ({ onMouse, onLeave }: Props) => {
   const [categoryLevel1, setCategoryLevel1] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
+  const [currentCategory, setCurrentCategory] = useState<Number>();
 
+  // lấy dữ liệu category
   useEffect(() => {
     fetch('/rest/category')
       .then((res) => {
@@ -27,8 +29,9 @@ const MegaMenu = ({ onMouse, onLeave }: Props) => {
         level3 = res.data.filter((item: any) => {
           return item.level === 3;
         });
-        console.log('hello');
         setCategoryLevel1(level1);
+        setCurrentCategory(1);
+        handleOnMouseEnterChange(1);
       })
       .catch((error) => {
         console.log(error);
@@ -46,6 +49,7 @@ const MegaMenu = ({ onMouse, onLeave }: Props) => {
         return item.parent.id === element.id;
       });
     });
+    setCurrentCategory(id);
     setSubCategory(subcate);
   }
   return (
@@ -67,7 +71,11 @@ const MegaMenu = ({ onMouse, onLeave }: Props) => {
                       <div
                         key={item.id}
                         onMouseEnter={() => handleOnMouseEnterChange(item.id)}
-                        className="py-4 hover:bg-[#f2f4f5] rounded-lg cursor-pointer"
+                        className={
+                          item.id === currentCategory
+                            ? 'py-4 bg-[#f2f4f5] rounded-lg cursor-pointer'
+                            : 'py-4 hover:bg-[#f2f4f5] rounded-lg cursor-pointer'
+                        }
                       >
                         <Link
                           to={'#'}
