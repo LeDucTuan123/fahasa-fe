@@ -1,9 +1,33 @@
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import fetch from 'src/services/axios/Axios';
+import { ProductType } from 'src/types/product';
 import { LatestBooks } from '../home';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
+  const [data, setData] = useState<ProductType>();
+
+  const { id } = useParams();
+
+  const fetchData = useCallback(() => fetch.get(`/rest/book/${id}`).then((res) => setData(res.data)), [id]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+  console.log(data?.images);
+  // const book = useSelector((state: any) => state.productDetail);
+
+  // // const dispatch = useAppDispatch();
+
+  // // const fetchDetail = useCallback(() => {
+  // //   dispatch(getDetailProduct(id));
+  // // }, [dispatch, id]);
+
+  // // useEffect(() => {
+  // //   fetchDetail();
+  // // }, [fetchDetail]);
 
   return (
     <div className="flex flex-col space-y-2 pt-4">
@@ -13,7 +37,7 @@ export default function DetailProduct() {
             <div className="hidden sm:block ">
               <div className="imagedetail">
                 <img
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                  src={data?.images}
                   alt="img1"
                   style={{
                     width: '100%',
@@ -25,7 +49,7 @@ export default function DetailProduct() {
 
               <div className="imagedetail">
                 <img
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                  src={data?.images}
                   alt="img1"
                   style={{
                     width: '100%',
@@ -37,7 +61,7 @@ export default function DetailProduct() {
 
               <div className="imagedetail">
                 <img
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                  src={data?.images}
                   alt="img1"
                   style={{
                     width: '100%',
@@ -49,7 +73,7 @@ export default function DetailProduct() {
 
               <div className="imagedetail">
                 <img
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                  src={data?.images}
                   alt="img1"
                   style={{
                     width: '100%',
@@ -61,7 +85,7 @@ export default function DetailProduct() {
 
               <div className="imagedetail">
                 <img
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                  src={data?.images}
                   alt="img1"
                   style={{
                     width: '100%',
@@ -74,7 +98,7 @@ export default function DetailProduct() {
 
             <div className="w-full">
               <img
-                src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                src={data?.images}
                 alt="img1"
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
@@ -94,34 +118,34 @@ export default function DetailProduct() {
           </div>
         </div>
         <div className="w-[60%] space-y-2">
-          <p className="text-2xl pb-4">Học Tốt Sinh Học 12</p>
+          <p className="text-2xl pb-4">{data?.title}</p>
 
           <div className="w-full flex flex-row">
-            <div className="w-[60%]">
-              <p className="text-sm">Nhà cung cấp:Dn Tư Nhân Thương Mại Toàn Phúc</p>
-              <p className="text-sm">TNhà xuất bản:NXB Đà Nẵng</p>
-            </div>
+            {/* <div className="w-[60%]">
+              {/* <p className="text-sm">Nhà cung cấp: {data?.author}</p> */}
+            {/* <p className="text-sm">TNhà xuất bản: {data?.author}</p> */}
+            {/* </div> */}
             <div className="w-[40%]">
-              <p className="text-sm">Tác giả: Võ Văn Chiến</p>
-              <p className="text-sm">Hình thức bìa:Bìa Mềm</p>
+              <p className="text-sm">Tác giả: {data?.author}</p>
+              {/* <p className="text-sm">Hình thức bìa: {data?.description}</p> */}
             </div>
           </div>
 
           <div className="flex flex-row items-center gap-2">
-            <div className="text-[2rem] font-extrabold text-gray-800">100.000 đ</div>
-            <span className="line-through">2000</span>
-            <div className="discount">-50%</div>
+            <div className="text-[2rem] font-extrabold text-gray-800">{data?.price} đ</div>
+            <span className="line-through">{data?.stock}</span>
+            <div className="discount">{data?.discount}%</div>
           </div>
 
           <div className="w-full flex flex-row">
-            <div className="max-w-[200px] min-w[150px] pr-4">
-              <p className="text-sm">Thời gian giao hàng</p>
-              <p className="text-sm">TNhà xuất bản:NXB Đà Nẵng</p>
+            <div className="w-full pr-4">
+              <p className="text-xl">Miêu tả: </p>
+              <p className="text-sm">{data?.description}</p>
             </div>
-            <div>
-              <p className="text-sm">Tác giả: Võ Văn Chiến</p>
-              <p className="text-sm">Hình thức bìa:Bìa Mềm</p>
-            </div>
+            {/* <div> */}
+            {/* <p className="text-sm">Tác giả: {data?.author}</p> */}
+            {/* <p className="text-sm">Hình thức bìa: {data?.description}</p> */}
+            {/* </div> */}
           </div>
 
           <div className="flex flex-row items-center">
