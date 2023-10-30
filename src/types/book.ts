@@ -1,10 +1,10 @@
-export interface ProductType {
+export interface BookType {
   id: any;
   title: string;
   author: string;
   images: string;
-  price: string;
-  discount: string;
+  price: number;
+  discount: number;
   description: string;
   stock?: string;
   productId?: string;

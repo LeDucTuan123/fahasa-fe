@@ -2,12 +2,12 @@ import { Icon } from '@iconify/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import fetch from 'src/services/axios/Axios';
-import { ProductType } from 'src/types/product';
+import { BookType } from 'src/types/book';
 import { LatestBooks } from '../home';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
-  const [data, setData] = useState<ProductType>();
+  const [data, setData] = useState<BookType>();
 
   const { id } = useParams();
 
