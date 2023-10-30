@@ -115,7 +115,7 @@ export default function BestSellingBooks({ books }: props) {
               key={item.id}
               className="p-5 border-[1px] border-gray-300 shadow-md rounded-md"
             >
-              <Link to="/detailproduct">
+              <Link to={`/detailproduct/${item.id}`}>
                 <img
                   src={item.images}
                   alt={'img'}

@@ -1,7 +1,8 @@
 export interface ProductType {
+  id: any;
   title: string;
   author: string;
-  image: string;
+  images: string;
   price: string;
   discount: string;
   description: string;

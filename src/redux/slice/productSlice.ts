@@ -5,15 +5,25 @@ import { ProductType } from 'src/types/product';
 
 interface ProductState {
   product: ProductType[];
+  productDetail: ProductType | null;
 }
 
 const initialState: ProductState = {
   product: [],
+  productDetail: null,
 };
 
 //  AsyncThunk
 export const getProduct = createAsyncThunk('product/getProduct', async (_, thunkApi) => {
   const res = await fetch.get<ProductType[]>(apiPaths.book, {
+    signal: thunkApi.signal,
+  });
+  console.log(res.data);
+  return res.data;
+});
+
+export const getDetailProduct = createAsyncThunk('product/getDetailProduct', async (id: any, thunkApi) => {
+  const res = await fetch.get<ProductType>(`${apiPaths.book}/${id}`, {
     signal: thunkApi.signal,
   });
   console.log(res.data);
@@ -26,9 +36,14 @@ const productSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase('product/getProduct', (state, action: any) => {
-      state.product = action.payload;
-    });
+    builder
+      .addCase('product/getProduct', (state, action: any) => {
+        state.product = action.payload;
+      })
+      .addCase('product/getDetailProduct', (state, action: any) => {
+        const detail: any = state.product.find((post) => post.id === action.payload.id);
+        state.productDetail = detail;
+      });
   },
 });
 
