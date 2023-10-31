@@ -4,10 +4,13 @@ import { useParams } from 'react-router-dom';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import { LatestBooks } from '../home';
+import { useSelector } from 'react-redux';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
   const [data, setData] = useState<BookType>();
+  // Lấy danh sách book trong redux bookSlice
+  const books: BookType[] = useSelector((state: any) => state.book.books);
 
   const { id } = useParams();
 
@@ -184,7 +187,7 @@ export default function DetailProduct() {
 
       <hr />
 
-      {/* <LatestBooks /> */}
+      <LatestBooks books={books} />
     </div>
   );
 }

@@ -56,7 +56,7 @@ const MegaMenu = ({ onMouse, onLeave }: Props) => {
     <>
       <div
         id="menu-mega"
-        className="absolute bg-yellow-400 top-14"
+        className="absolute bg-yellow-400 top-14 z-50"
         onMouseEnter={() => onMouse()}
         onMouseLeave={() => onLeave()}
       >

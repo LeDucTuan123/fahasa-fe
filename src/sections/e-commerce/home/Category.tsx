@@ -1,7 +1,8 @@
 import { Box, Grid, Paper, Stack, Typography, styled } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import useResponsive from 'src/hooks/useResponsive';
+import fetch from 'src/services/axios/Axios';
 
 const category = [
   {
@@ -48,6 +49,19 @@ const category = [
 // }));
 
 export default function Category() {
+  const [categoryWithImage, setCategoryWithImage] = useState([]);
+  useEffect(() => {
+    fetch('/rest/category')
+      .then((res) => {
+        let arr = res.data.filter((item: any) => {
+          return item.images !== null;
+        });
+        setCategoryWithImage(arr);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   // const settings = {
   //   dots: true,
   //   infinite: true,
@@ -60,27 +74,43 @@ export default function Category() {
   //   cssEase: 'linear',
   // };
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 2,
+    autoplay: true,
+    autoplaySpeed: 1000,
+  };
+
   return (
     <div className="w-full pt-5">
       <p className="text-xl py-5">Danh mục sản phẩm</p>
 
       {/* <div className="sm:flex hidden"> */}
-      <div className="grid lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-4 w-full">
-        {category.map((pr, index) => (
-          <div
-            key={index}
-            className="p-5 border-[1px] border-gray-300 shadow-md rounded-md"
-          >
-            <img
-              src={pr.image}
-              alt={pr.title}
-              className="w-full h-[140px] object-cover"
-            />
-            <div className="pt-2">
-              <p className="text-sm">{pr.title}</p>
+      {/* grid lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-4 */}
+      <div className=" w-full">
+        <Slider {...settings}>
+          {categoryWithImage.map((item: any) => (
+            <div
+              key={item.id}
+              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md text-center"
+            >
+              <div className="flex">
+                <img
+                  src={item.images}
+                  alt={item.categoryname}
+                  className="w-[100px] h-[100px] object-cover m-auto"
+                />
+              </div>
+
+              <div className="pt-2 h-[40px]">
+                <p className="text-sm">{item.categoryname}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </Slider>
       </div>
 
       {/* mobile */}
