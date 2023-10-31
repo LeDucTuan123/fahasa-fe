@@ -199,13 +199,14 @@ export default function Header() {
             onLeave={handleOnMouseLeave}
           />
         )}
+
         {/* Mobile menu */}
         <div
           className={`lg:hidden fixed bg-[#f8f6f0] top-0 right-0 transition-all w-screen h-full duration-500 ${
             openMenu ? 'left-0' : 'left-[-100%]'
           }`}
         >
-          {/* header mobile */}
+          {/* Header mobile */}
           <div className="flex justify-between bg-indigo-300 grid-cols-2 px-2">
             <div
               onClick={handleMenu}
