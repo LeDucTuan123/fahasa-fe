@@ -56,11 +56,11 @@ const MegaMenu = ({ onMouse, onLeave }: Props) => {
     <>
       <div
         id="menu-mega"
-        className="absolute bg-yellow-400 top-14"
+        className="absolute lg:block hidden py-5 top-14"
         onMouseEnter={() => onMouse()}
         onMouseLeave={() => onLeave()}
       >
-        <div className=" rounded-lg flex px-2 py-5 mx-auto border border-dark-400 shadow md:px-2">
+        <div className="relative rounded-lg flex px-2 py-5 bg-white mx-auto border border-dark-400 shadow md:px-2 z-20">
           <div className="menu-left">
             <div className="font-bold text-xl text-[#7A7E7F] text-left px-5 mb-2 w-[280px]">Danh mục sản phẩm</div>
             <ul className="w-[280px] px-3 text-left text-base text-[#212121] font-bold">
@@ -119,17 +119,11 @@ const MegaMenu = ({ onMouse, onLeave }: Props) => {
                 </div>
               );
             })}
-
-            {/* {link.sublinks.map((head) => (
-                
-              ))} */}
           </div>
-          {/* </div>
-        {links.map((link) => (
-          
-        ))} */}
         </div>
       </div>
+      {/* dropdown-cover */}
+      <div className="fixed lg:block hidden dropdown-cover h-screen w-screen bg-black opacity-50 top-20 right-0 z-10"></div>
     </>
   );
 };
