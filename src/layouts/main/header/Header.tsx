@@ -5,6 +5,7 @@ import MegaMenu from './MegaMenu';
 
 import { useState } from 'react';
 import { List_nav } from './List_Item';
+import Search from './search';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +54,7 @@ export default function Header() {
                                 )} */}
             </div>
           </div>
-          <div className="flex items-center w-full mx-2 border border-[#d3d4d5] rounded-lg bg-white">
+          {/* <div className="flex items-center w-full mx-2 border border-[#d3d4d5] rounded-lg bg-white">
             <input
               type="search"
               autoComplete="off"
@@ -66,7 +67,8 @@ export default function Header() {
                 className="bx bx-search text-sm"
               />
             </div>
-          </div>
+          </div> */}
+          <Search />
           <div className="flex items-center gap-2">
             {/* msg icon */}
             {List_nav.map((item) => (
