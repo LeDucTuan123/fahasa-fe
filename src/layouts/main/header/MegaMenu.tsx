@@ -6,52 +6,23 @@ import fetch from 'src/services/axios';
 interface Props {
   onMouse: () => void;
   onLeave: () => void;
+  categoryLevel1: any;
+  subCategory: any;
+  currentCategory: any;
+  handleOnMouseEnterChange: (id: number) => void;
 }
 
-let level2: any = null;
-let level3: any = null;
+// let level2: any = null;
+// let level3: any = null;
 
-const MegaMenu = ({ onMouse, onLeave }: Props) => {
-  const [categoryLevel1, setCategoryLevel1] = useState([]);
-  const [subCategory, setSubCategory] = useState([]);
-  const [currentCategory, setCurrentCategory] = useState<Number>();
-
-  // lấy dữ liệu category
-  useEffect(() => {
-    fetch('/rest/category')
-      .then((res) => {
-        let level1 = res.data.filter((item: any) => {
-          return item.level === 1;
-        });
-        level2 = res.data.filter((item: any) => {
-          return item.level === 2;
-        });
-        level3 = res.data.filter((item: any) => {
-          return item.level === 3;
-        });
-        setCategoryLevel1(level1);
-        setCurrentCategory(1);
-        handleOnMouseEnterChange(1);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-  // khi di chuột vào thì nó sẽ đổi category level 2 và level 3 tương ứng
-  function handleOnMouseEnterChange(id: number) {
-    let subcate: any =
-      level2 &&
-      level2.filter((item: any) => {
-        return item.parent.id === id;
-      });
-    subcate.forEach((element: any) => {
-      element.listCategory = level3.filter((item: any) => {
-        return item.parent.id === element.id;
-      });
-    });
-    setCurrentCategory(id);
-    setSubCategory(subcate);
-  }
+const MegaMenu = ({
+  onMouse,
+  onLeave,
+  categoryLevel1,
+  subCategory,
+  currentCategory,
+  handleOnMouseEnterChange,
+}: Props) => {
   return (
     <>
       <div
