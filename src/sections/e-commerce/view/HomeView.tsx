@@ -1,29 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Banner, BestSellingBooks, Category, LatestBooks } from '../home';
-import fetch from 'src/services/axios';
-import { getProduct } from 'src/redux/slice/productSlice';
-import { useAppDispatch } from 'src/redux/store';
-import { apiPaths } from 'src/services/api/path-api';
 import { BookType } from 'src/types/book';
+import { useAppDispatch } from 'src/redux/store';
+import { getBook } from 'src/redux/slice/bookSlice';
+import { useSelector } from 'react-redux';
 
 export default function HomeView() {
-  // const dispatch = useAppDispatch();
-  // useEffect(() => {
-  //   dispatch(getProduct());
-  //   // fetch.get(apiPaths.products).then((res) => console.log(res.data));
-  // }, [dispatch]);
-
-  const [books, setBooks] = useState<Array<BookType>>([]);
+  const dispatch = useAppDispatch();
+  const books: BookType[] = useSelector((state: any) => state.book.books);
 
   useEffect(() => {
-    fetch(apiPaths.book)
-      .then((res) => {
-        setBooks(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    dispatch(getBook());
+  }, [dispatch]);
 
   return (
     <>
