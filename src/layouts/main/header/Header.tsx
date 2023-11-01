@@ -6,6 +6,7 @@ import fetch from 'src/services/axios';
 
 import { useState, useEffect } from 'react';
 import { List_nav } from './List_Item';
+import Search from './search';
 
 // là mảng chứa những category level 2
 let level2: any = null;
@@ -183,20 +184,7 @@ export default function Header() {
           </div>
 
           {/* search */}
-          <div className="flex items-center w-full mx-2 border border-[#d3d4d5] rounded-lg bg-white">
-            <input
-              type="search"
-              autoComplete="off"
-              placeholder="Tìm kiếm.."
-              className="px-4 py-1 border-none outline-none w-full bg-transparent"
-            />
-            <div className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 lg:px-6 py-1 lg:py-2 ">
-              <Icon
-                icon="tabler:search"
-                className="bx bx-search text-sm"
-              />
-            </div>
-          </div>
+          <Search />
           {/* msg icon */}
           <div className="flex items-center gap-2">
             {List_nav.map((item) => (

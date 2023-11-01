@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import bookReducer from './slice/bookSlice';
+import commonReducer from './slice/commonSlice';
+import toolReducer from './slice/ToolSlice';
 // ...
 
 export const store = configureStore({
   reducer: {
     book: bookReducer,
+    common: commonReducer,
+    tool: toolReducer,
   },
 });
 
