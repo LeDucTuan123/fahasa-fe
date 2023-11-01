@@ -202,38 +202,21 @@ export default function Header() {
               </Link>
             ))}
 
-            {/* <div
-                                    className="z-10 top-14 absolute bg-white rounded-lg shadow w-44"
-                                    onMouseOver={handleMouseOver}
-                                    onMouseLeave={handleMouseLeave}
-                                >
-                                    <ul className="py-2 text-sm text-gray-700 ">
-                                        <li>
-                                            <Link
-                                                to={"#"}
-                                                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
-                                            >
-                                                Dashboard
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link
-                                                to={"#"}
-                                                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
-                                            >
-                                                Settings
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link
-                                                to={"#"}
-                                                className="block px-4 py-2 hover:bg-gray-100  dark:hover:text-white"
-                                            >
-                                                Earnings
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </div> */}
+            {/* info */}
+            <div className="z-10 hidden top-20 absolute bg-slate-200 rounded-lg border shadow items-center">
+              <div className="px-2 py-2">
+                <div className="py-2">
+                  <div className="px-6 py-3 text-center border bg-indigo-500 rounded-lg ">
+                    <span className="text-base font-semibold text-white">Đăng nhập</span>
+                  </div>
+                </div>
+                <div className="py-2">
+                  <div className="px-6 py-3 text-center border-2 border-indigo-500 bg-white rounded-lg ">
+                    <span className="text-base font-semibold text-indigo-500">Đăng ký</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         {isOpen && (
