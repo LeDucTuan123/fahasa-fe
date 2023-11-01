@@ -1,4 +1,6 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+// import fetch from 'src/services/axios/Axios';
+// import { CategoryType } from 'src/types';
 
 interface IPositionSearch {
   width: number;
@@ -9,6 +11,7 @@ interface IPositionSearch {
 
 interface CommonState {
   positionSearch: IPositionSearch;
+  // category: CategoryType[];
   isShowSearch: boolean;
 }
 
@@ -20,7 +23,16 @@ const initialState: CommonState = {
     height: 0,
   },
   isShowSearch: false,
+  // category: [],
 };
+
+// export const getCategory = createAsyncThunk('cate/getcategory', async (_, thunkApi) => {
+//   const res = await fetch.get('/rest/category', {
+//     signal: thunkApi.signal,
+//   });
+
+//   return res.data;
+// });
 
 export const commonSlice = createSlice({
   name: 'common',
@@ -30,9 +42,11 @@ export const commonSlice = createSlice({
       state.isShowSearch = action.payload;
     },
   },
-  extraReducers: (builder) => {
-    // builder.addCase
-  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(getCategory.fulfilled, (state, action: any) => {
+  //     state.category = action.payload;
+  //   });
+  // },
 });
 
 const commonReducer = commonSlice.reducer;
