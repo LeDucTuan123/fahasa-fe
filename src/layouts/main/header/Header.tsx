@@ -2,11 +2,61 @@ import { Icon } from '@iconify/react';
 import { Link } from 'src/components/Link';
 import Logo from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
+import fetch from 'src/services/axios';
 
 import { useState, useEffect } from 'react';
 import { List_nav } from './List_Item';
+import Search from './search';
+
+// là mảng chứa những category level 2
+let level2: any = null;
+// là mảng chứa những category level 3
+let level3: any = null;
 
 export default function Header() {
+  // Đây là đoạn code gọi api category -- start
+  const [categoryLevel1, setCategoryLevel1] = useState([]);
+  const [subCategory, setSubCategory] = useState([]);
+  const [currentCategory, setCurrentCategory] = useState<Number>();
+
+  // lấy dữ liệu category
+  useEffect(() => {
+    fetch('/rest/category')
+      .then((res) => {
+        let level1 = res.data.filter((item: any) => {
+          return item.level === 1;
+        });
+        level2 = res.data.filter((item: any) => {
+          return item.level === 2;
+        });
+        level3 = res.data.filter((item: any) => {
+          return item.level === 3;
+        });
+        setCategoryLevel1(level1);
+        setCurrentCategory(1);
+        handleOnMouseEnterChange(1);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  // khi di chuột vào thì nó sẽ đổi category level 2 và level 3 tương ứng
+  function handleOnMouseEnterChange(id: number) {
+    let subcate: any =
+      level2 &&
+      level2.filter((item: any) => {
+        return item.parent.id === id;
+      });
+    subcate.forEach((element: any) => {
+      element.listCategory = level3.filter((item: any) => {
+        return item.parent.id === element.id;
+      });
+    });
+    setCurrentCategory(id);
+    setSubCategory(subcate);
+  }
+  // Đây là đoạn code gọi api category -- end
+
   // hover
   const [isOpen, setIsOpen] = useState(false);
 
@@ -55,11 +105,19 @@ export default function Header() {
     }
   }, [windowSize]);
 
-  const [isOpenMobile, setOpenMobile] = useState(false);
+  // mở menu con sử dụng trong mobile -- start
+  const [isOpenMobile, setOpenMobile] = useState<number>(0);
 
-  const handleMenuMobile = () => {
-    setOpenMobile(!isOpenMobile);
+  const handleMenuMobile = (id: number) => {
+    // nếu người dùng bấm lại menu con thì nó sẽ ẩn đi
+    if (id === isOpenMobile) {
+      setOpenMobile(0);
+      return;
+    }
+    setOpenMobile(id);
   };
+
+  // mở menu con sử dụng trong mobile --> end
 
   return (
     <div className="lg:container mx-auto py-2 ">
@@ -126,20 +184,7 @@ export default function Header() {
           </div>
 
           {/* search */}
-          <div className="flex items-center w-full mx-2 border border-[#d3d4d5] rounded-lg bg-white">
-            <input
-              type="search"
-              autoComplete="off"
-              placeholder="Tìm kiếm.."
-              className="px-4 py-1 border-none outline-none w-full bg-transparent"
-            />
-            <div className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 lg:px-6 py-1 lg:py-2 ">
-              <Icon
-                icon="tabler:search"
-                className="bx bx-search text-sm"
-              />
-            </div>
-          </div>
+          <Search />
           {/* msg icon */}
           <div className="flex items-center gap-2">
             {List_nav.map((item) => (
@@ -195,6 +240,10 @@ export default function Header() {
           <MegaMenu
             onMouse={handleOnMouseEnter}
             onLeave={handleOnMouseLeave}
+            categoryLevel1={categoryLevel1}
+            subCategory={subCategory}
+            currentCategory={currentCategory}
+            handleOnMouseEnterChange={handleOnMouseEnterChange}
           />
         )}
 
@@ -224,20 +273,20 @@ export default function Header() {
           <div className="flex w-full ">
             {/* danh muc */}
             <div className="categori-menu bg-[#f8f6f0] w-[90px]">
-              <div className=" h-[90px] border rounded-lg px-[2px] flex flex-col justify-center items-center ">
-                <Icon
-                  icon="material-symbols:book-outline"
-                  className="text-2xl"
-                />
-                <span className="text-center text-sm font-semibold">Sách Trong Nước</span>
-              </div>
-              <div className=" h-[90px] border rounded-lg px-[2px] flex flex-col justify-center items-center ">
-                <Icon
-                  icon="material-symbols:book-outline"
-                  className="text-2xl"
-                />
-                <span className="text-center text-sm font-semibold">Sách Trong Nước</span>
-              </div>
+              {categoryLevel1.map((item: any) => {
+                return (
+                  <div
+                    className=" h-[90px] border rounded-lg px-[2px] flex flex-col justify-center items-center "
+                    onClick={() => handleOnMouseEnterChange(item.id)}
+                  >
+                    <Icon
+                      icon="material-symbols:book-outline"
+                      className="text-2xl"
+                    />
+                    <span className="text-center text-sm font-semibold">{item.categoryname}</span>
+                  </div>
+                );
+              })}
             </div>
             {/* categori */}
             <div className="categori-content w-[calc(100%-90px)] py-1 px-1">
@@ -257,35 +306,49 @@ export default function Header() {
                 </Link>
               </div>
               {/* content */}
-              <div className="py-1">
-                <div
-                  className="flex justify-between py-2 px-2 w-full bg-white border rounded-lg"
-                  onClick={handleMenuMobile}
-                >
-                  <div>
-                    <span className="uppercase font-semibold">Văn học</span>
-                  </div>
-                  {isOpenMobile ? (
-                    <Icon
-                      icon="ri:arrow-drop-up-fill"
-                      className="text-2xl"
-                    />
-                  ) : (
-                    <Icon
-                      icon="ri:arrow-drop-down-fill"
-                      className="text-2xl"
-                    />
-                  )}
-                </div>
-
-                {isOpenMobile && (
-                  <div className="">
-                    <div className="py-2 px-2 w-full bg-white border">
-                      <span className="capitalize">Tieu thuyet</span>
+              {subCategory.map((item: any) => {
+                return (
+                  <div
+                    key={item.id}
+                    className="py-1"
+                  >
+                    <div
+                      className="flex justify-between py-2 px-2 w-full bg-white border rounded-lg"
+                      onClick={() => handleMenuMobile(item.id)}
+                    >
+                      <div>
+                        <span className="uppercase font-semibold">{item.categoryname}</span>
+                      </div>
+                      {isOpenMobile ? (
+                        <Icon
+                          icon="ri:arrow-drop-up-fill"
+                          className="text-2xl"
+                        />
+                      ) : (
+                        <Icon
+                          icon="ri:arrow-drop-down-fill"
+                          className="text-2xl"
+                        />
+                      )}
                     </div>
+
+                    {item.id === isOpenMobile &&
+                      item.listCategory &&
+                      item.listCategory.map((item: any) => {
+                        return (
+                          <div
+                            className=""
+                            key={item.id}
+                          >
+                            <div className="py-2 px-2 w-full bg-white border">
+                              <span className="capitalize">{item.categoryname}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
-                )}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>

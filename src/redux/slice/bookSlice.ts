@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { apiPaths } from 'src/services/api/path-api';
-import fetch from 'src/services/axios/Axios';
+import fetch from 'src/services/axios';
 import { BookType } from 'src/types/book';
 
 interface BookState {
