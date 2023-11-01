@@ -39,6 +39,7 @@ const MegaMenu = ({
               <div>
                 <li>
                   {categoryLevel1.map((item: CategoryType) => {
+                    const updatedUrl = item.categoryname.replace(/\s/g, '-');
                     return (
                       <div
                         key={item.id}
@@ -50,7 +51,7 @@ const MegaMenu = ({
                         }
                       >
                         <Link
-                          to={item.categoryname}
+                          to={updatedUrl}
                           className="w-full px-2"
                         >
                           <span className="menu-title capitalize text-lg">{item.categoryname} </span>
@@ -65,19 +66,26 @@ const MegaMenu = ({
           <div className="w-px px-[1px] bg-gray-400"></div>
           <div className="menu-right  grid grid-cols-4 gap-x-10 px-4">
             {subCategory.map((item: any) => {
+              const updatedUrl = item.categoryname.replace(/\s/g, '-');
+              const updatedUrl1 = item.parent.categoryname.replace(/\s/g, '-');
+
               return (
                 <div className="xl:w-[200px] lg:w-[150px] mt-5">
-                  <Link to={`${item.parent.categoryname}/${item.categoryname}`}>
+                  <Link to={`${updatedUrl1}/${updatedUrl}`}>
                     <span className="text-[13px] font-bold text-[#333333] uppercase">{item.categoryname}</span>
                   </Link>
                   <ul className="mt-2">
                     <div>
                       {item.listCategory &&
                         item.listCategory.map((item: CategoryType) => {
+                          const updatedUrl = item.categoryname.replace(/\s/g, '-');
+                          const updatedUrl1 = item.parent.categoryname.replace(/\s/g, '-');
+                          const updatedUrl2 = item.parent.parent.categoryname.replace(/\s/g, '-');
+
                           return (
                             <li className="">
                               <Link
-                                to={`${item.parent.parent.categoryname}/${item.parent.categoryname}/${item.categoryname}`}
+                                to={`${updatedUrl2}/${updatedUrl1}/${updatedUrl}`}
                                 className=" hover:text-[#bf9a61]"
                               >
                                 <p className="truncate ... text-[13px]">{item.categoryname}</p>
