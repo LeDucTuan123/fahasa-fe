@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { links } from './List_Item';
 import fetch from 'src/services/axios';
+import { CategoryType } from 'src/types';
 
 interface Props {
   onMouse: () => void;
@@ -37,7 +38,7 @@ const MegaMenu = ({
             <ul className="w-[280px] px-3 text-left text-base text-[#212121] font-bold">
               <div>
                 <li>
-                  {categoryLevel1.map((item: any) => {
+                  {categoryLevel1.map((item: CategoryType) => {
                     return (
                       <div
                         key={item.id}
@@ -49,7 +50,7 @@ const MegaMenu = ({
                         }
                       >
                         <Link
-                          to={'#'}
+                          to={item.categoryname}
                           className="w-full px-2"
                         >
                           <span className="menu-title capitalize text-lg">{item.categoryname} </span>
@@ -66,15 +67,17 @@ const MegaMenu = ({
             {subCategory.map((item: any) => {
               return (
                 <div className="xl:w-[200px] lg:w-[150px] mt-5">
-                  <span className="text-[13px] font-bold text-[#333333] uppercase">{item.categoryname}</span>
+                  <Link to={`${item.parent.categoryname}/${item.categoryname}`}>
+                    <span className="text-[13px] font-bold text-[#333333] uppercase">{item.categoryname}</span>
+                  </Link>
                   <ul className="mt-2">
                     <div>
                       {item.listCategory &&
-                        item.listCategory.map((item: any) => {
+                        item.listCategory.map((item: CategoryType) => {
                           return (
                             <li className="">
                               <Link
-                                to={'#'}
+                                to={`${item.parent.parent.categoryname}/${item.parent.categoryname}/${item.categoryname}`}
                                 className=" hover:text-[#bf9a61]"
                               >
                                 <p className="truncate ... text-[13px]">{item.categoryname}</p>
