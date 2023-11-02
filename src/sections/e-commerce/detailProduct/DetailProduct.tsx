@@ -34,9 +34,7 @@ export default function DetailProduct() {
 
   // hàm thêm sản phẩm vào localstorage khi không đăng nhập
   function handleAddProduct() {
-    let obj: any = {};
-    obj.product = data;
-    obj.quantity = counter;
+    let obj: any = { ...data, quantity: counter };
     const cartLocal = localStorage.getItem('cart');
     let cart: Array<any> = [];
     if (cartLocal) {
@@ -44,7 +42,7 @@ export default function DetailProduct() {
 
       // Kiểm tra xem sản phẩm đó đã dc thêm vào storage chưa
       const index = cart.findIndex((item: any) => {
-        return item.product.id === obj.product.id;
+        return item.id === obj.id;
       });
 
       // nếu rùi thì chỉ thêm vào số lượng cho sản phẩm đó
