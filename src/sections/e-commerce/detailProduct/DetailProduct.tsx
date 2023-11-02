@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import { LatestBooks } from '../home';
@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
   const [data, setData] = useState<BookType>();
+  const navigate = useNavigate();
   // Lấy danh sách book trong redux bookSlice
   const books: BookType[] = useSelector((state: any) => state.book.books);
 
@@ -19,7 +20,6 @@ export default function DetailProduct() {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  console.log(data?.images);
   // const book = useSelector((state: any) => state.productDetail);
 
   // // const dispatch = useAppDispatch();
@@ -31,6 +31,41 @@ export default function DetailProduct() {
   // // useEffect(() => {
   // //   fetchDetail();
   // // }, [fetchDetail]);
+
+  // hàm thêm sản phẩm vào localstorage khi không đăng nhập
+  function handleAddProduct() {
+    let obj: any = { ...data, quantity: counter };
+    const cartLocal = localStorage.getItem('cart');
+    let cart: Array<any> = [];
+    if (cartLocal) {
+      cart = JSON.parse(cartLocal || '');
+
+      // Kiểm tra xem sản phẩm đó đã dc thêm vào storage chưa
+      const index = cart.findIndex((item: any) => {
+        return item.id === obj.id;
+      });
+
+      // nếu rùi thì chỉ thêm vào số lượng cho sản phẩm đó
+      if (index !== -1) {
+        obj.quantity = obj.quantity + cart[index].quantity;
+        cart.splice(index, 1, obj);
+        localStorage.setItem('cart', JSON.stringify(cart));
+        // nếu không thì thêm mới
+      } else {
+        cart.push(obj);
+        localStorage.setItem('cart', JSON.stringify(cart));
+      }
+      // khi trong storage chưa có gì hết
+    } else {
+      cart.push(obj);
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }
+
+  function handleBuyNow() {
+    handleAddProduct();
+    navigate('/cart');
+  }
 
   return (
     <div className="flex flex-col space-y-2 pt-4">
@@ -108,14 +143,20 @@ export default function DetailProduct() {
             </div>
           </div>
           <div className="pt-3 flex flex-col sm:flex-row justify-between">
-            <button className="text-[#d32f2f] text-xl border-[2px] border-[#d32f2f] px-5 rounded-md py-2 flex sm:w-[55%] active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white">
+            <button
+              onClick={() => handleAddProduct()}
+              className="text-[#d32f2f] text-xl border-[2px] border-[#d32f2f] px-5 rounded-md py-2 flex sm:w-[55%] active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white"
+            >
               <Icon
                 icon="mdi:cart"
                 fontSize={24}
               />
               <span>Thêm vào giỏ hàng</span>
             </button>
-            <button className="bg-[#d32f2f] py-2 px-5 text-xl border-none rounded-md text-white sm:w-[40%] button-buy">
+            <button
+              onClick={() => handleBuyNow()}
+              className="bg-[#d32f2f] py-2 px-5 text-xl border-none rounded-md text-white sm:w-[40%] button-buy"
+            >
               <span>Mua ngay</span>
             </button>
           </div>
@@ -172,6 +213,7 @@ export default function DetailProduct() {
                   border: 'none',
                   textAlign: 'center',
                 }}
+                readOnly
               />
 
               <Icon
