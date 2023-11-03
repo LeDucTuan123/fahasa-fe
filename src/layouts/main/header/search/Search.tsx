@@ -19,6 +19,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
+
 export default function Search() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ export default function Search() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const debounceValue = useDebounce(searchValue, 500);
+  const debounceValue = useDebounce(searchValue, 500); //delay 500ms khi gõ tìm kiếm
   const scrollYRef = useRef(0);
 
   const handleCloseSearch = useCallback(() => {
@@ -42,6 +43,7 @@ export default function Search() {
     }
   }, [dispatch, isShowSearch]);
 
+  //khi nguoi dùng lăng chuột thì sẽ tắt search
   useEffect(() => {
     const handleScroll = () => {
       scrollYRef.current = window.scrollY;
@@ -59,6 +61,7 @@ export default function Search() {
   /////////////////////////////////////////////
   //fetch data search
   // const fetchData = useCallback(() => {}, [cate, debounceValue]);
+
   useEffect(() => {
     setLoading(true);
     if (cate === 'book') {
