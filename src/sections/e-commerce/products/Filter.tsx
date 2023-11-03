@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function filter() {
   return (
-    <div>
-      <div className="border-2 w-64">
+    <div className="hidden sm:flex ">
+      <div className="border-2 w-64 bg-slate-100">
         <div className="font-medium m-2">
           NHÓM SẢN PHẨM
           <div className="text-slate-400 ml-2 mt-1">Tất Cả Nhóm Sản Phẩm</div>
