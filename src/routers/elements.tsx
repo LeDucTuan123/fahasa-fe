@@ -2,9 +2,9 @@ import { ElementType, Suspense, lazy } from 'react';
 
 // ------------------------------------------------------------------------------
 const Loadable = (Component: ElementType) => (props: any) => (
-    <Suspense fallback="Loading...">
-        <Component {...props} />
-    </Suspense>
+  <Suspense fallback="Loading...">
+    <Component {...props} />
+  </Suspense>
 );
 
 // Main
@@ -15,6 +15,7 @@ export const Register = Loadable(lazy(() => import('../sections/e-commerce/login
 export const Error = Loadable(lazy(() => import('../pages/Error404')));
 
 export const Cart = Loadable(lazy(() => import('../pages/CartPage')));
+export const Payment = Loadable(lazy(() => import('../pages/PaymentPage')));
 
 export const Products = Loadable(lazy(() => import('../pages/ProductsPage')));
 export const Profile = Loadable(lazy(() => import('../pages/ProfilePage')));
