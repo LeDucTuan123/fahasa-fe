@@ -1,6 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'src/components/Link';
+import search from 'src/layouts/main/header/search';
+import { RootState } from 'src/redux/store';
+import { apiPaths } from 'src/services/api/path-api';
+import fetch from 'src/services/axios/Axios';
+import { BookType } from 'src/types/book';
 
-export default function products() {
+export default function Products() {
+  const [searchResult, setSearchResult] = useState<BookType[]>([]);
+
+  const cate = useSelector((state: RootState) => state.common.category);
+  const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
+
+  useEffect(() => {
+    if (cate === 'book') {
+      fetch
+        .get(`${apiPaths.book}/search?q=${searchInputText}`)
+        .then((res) => {
+          setSearchResult(res.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    } else {
+      fetch
+        .get(`${apiPaths.school}/search?q=${searchInputText}`)
+        .then((res) => {
+          setSearchResult(res.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  }, [cate, searchInputText]);
+
+  console.log(searchResult);
+
   return (
     <div>
       <div>
@@ -18,301 +54,35 @@ export default function products() {
       <div>
         <div>Sắp xếp theo</div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
+        {searchResult.map((item) => (
+          <div
+            key={item.id}
+            className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+          >
+            <Link to={`/detailproduct/${item.id}`}>
+              <img
+                src={item.images}
+                alt={'img'}
+                className="w-full max-h-[190px] object-cover"
+              />
+            </Link>
+            <div className="pt-2 ">
+              <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+              <p className="text-lg font-semibold text-[#C92127] mt-2">
+                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                  item.price - (item.price * item.discount) / 100,
+                )}
+              </p>
+              <p className="text-sm text-[#888888] line-through">
+                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+              </p>
+              <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+                {item.discount}%
+              </span>
             </div>
-            <div className="line-through">47.000 đ</div>
           </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-4 gap-4">
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-4 gap-4">
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-4 gap-4">
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
-        <div className="border-2 rounded-md">
-          <div>
-            <img
-              src="https://cdn0.fahasa.com/media/catalog/product/n/x/nxbtre_full_27332023_033315.jpg"
-              alt=""
-            />
-          </div>
-          <div>
-            <span>Naruto và những người bạn</span>
-          </div>
-          <div className="grid gap-4 grid-cols-2">
-            <div>47.000 đ</div>
-            <div>
-              <span className="bg-slate-400 rounded-md p-1">Tập 1</span>
-            </div>
-            <div className="line-through">47.000 đ</div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

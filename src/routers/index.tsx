@@ -30,6 +30,7 @@ export default function Route() {
         { path: '/:level1', element: <Products /> },
         { path: '/:level1/:level2', element: <Products /> },
         { path: '/:level1/:level2/:level3', element: <Products /> },
+        { path: '/products/:search', element: <Products /> },
         { path: '/*', element: <Error /> },
         { path: '/cart', element: <Cart /> },
       ],
