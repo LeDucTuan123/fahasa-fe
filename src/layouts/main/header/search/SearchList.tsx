@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'src/components/Link';
+import { setIsShowSearch } from 'src/redux/slice/commonSlice';
+import { useAppDispatch } from 'src/redux/store';
 import { BookType } from 'src/types/book';
 import { ToolType } from 'src/types/tool';
 
@@ -9,6 +11,8 @@ interface Props {
 }
 
 export function SearchDefault({ data }: Props) {
+  const dispatch = useAppDispatch();
+
   return (
     <>
       <p className="text-xl font-bold">Từ khóa hot</p>
@@ -17,9 +21,10 @@ export function SearchDefault({ data }: Props) {
           {data &&
             data.slice(0, 6).map((item) => (
               <Link
-                to="#"
+                to={`/detailproduct/${item.id}`}
                 className="max-w-[200px] p-2 max-h-[70px] flex flex-row items-center bg-white border border-gray-200 rounded-lg shadow  hover:bg-gray-100"
                 key={item.id}
+                onClick={() => dispatch(setIsShowSearch(false))}
               >
                 <img
                   className="object-cover w-14 rounded-t-lg h-14 md:h-auto "
@@ -39,9 +44,10 @@ export function SearchDefault({ data }: Props) {
           {data &&
             data.slice(10, 14).map((item) => (
               <Link
-                to="#"
+                to={`/detailproduct/${item.id}`}
                 className="w-full p-2  flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow  hover:bg-gray-100"
                 key={item.id}
+                onClick={() => dispatch(setIsShowSearch(false))}
               >
                 <img
                   className="object-cover w-full rounded-t-lg h-20"
@@ -58,6 +64,8 @@ export function SearchDefault({ data }: Props) {
 }
 
 export const SearchInput = ({ searchResult }: Props) => {
+  const dispatch = useAppDispatch();
+
   return (
     <>
       <p className="text-xl font-bold pb-3">Sản phẩm</p>
@@ -66,9 +74,10 @@ export const SearchInput = ({ searchResult }: Props) => {
           {searchResult &&
             searchResult.slice(0, 6).map((item) => (
               <Link
-                to="#"
+                to={`/detailproduct/${item.id}`}
                 className="max-w-[200px] p-2 max-h-[70px] flex flex-row items-center bg-white border border-gray-200 rounded-lg shadow  hover:bg-gray-100"
                 key={item.id}
+                onClick={() => dispatch(setIsShowSearch(false))}
               >
                 <img
                   className="object-cover w-14 rounded-t-lg h-14 md:h-auto "
