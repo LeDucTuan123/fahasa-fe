@@ -18,7 +18,7 @@ export default function FormPayment() {
             <div className="mb-1">
               <label
                 htmlFor="firstname"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Họ
               </label>
@@ -33,7 +33,7 @@ export default function FormPayment() {
             <div className="mb-1">
               <label
                 htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Mật khẩu
               </label>
@@ -50,7 +50,7 @@ export default function FormPayment() {
             <div className="mb-1 ">
               <label
                 htmlFor="phone"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Số điện thoại
               </label>
@@ -62,14 +62,14 @@ export default function FormPayment() {
             </div>
             <div className="mb-1">
               <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                htmlFor="email"
+                className="block mb-2 text-sm font-medium text-gray-900 "
               >
-                Your password
+                Email
               </label>
               <input
-                type="password"
-                id="password"
+                type="email"
+                id="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5 focus:border-gray-500 outline-none"
                 required
               />
@@ -77,13 +77,13 @@ export default function FormPayment() {
           </div>
           <div className="grid md:grid-cols gap-2 pt-2">
             <label
-              htmlFor="message"
-              className="block text-sm font-medium text-gray-900 dark:text-white"
+              htmlFor="noidung"
+              className="block text-sm font-medium text-gray-900 "
             >
-              Your message
+              Nội dung
             </label>
             <textarea
-              id="message"
+              id="noidung"
               rows={4}
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:border-gray-500 outline-none"
               placeholder="Leave a comment..."
