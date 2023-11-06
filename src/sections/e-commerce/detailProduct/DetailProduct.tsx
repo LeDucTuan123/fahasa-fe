@@ -5,6 +5,7 @@ import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import { LatestBooks } from '../home';
 import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
@@ -12,10 +13,11 @@ export default function DetailProduct() {
   const navigate = useNavigate();
   // Lấy danh sách book trong redux bookSlice
   const books: BookType[] = useSelector((state: any) => state.book.books);
+  const cate = useSelector((state: RootState) => state.common.category);
 
   const { id } = useParams();
 
-  const fetchData = useCallback(() => fetch.get(`/rest/book/${id}`).then((res) => setData(res.data)), [id]);
+  const fetchData = useCallback(() => fetch.get(`/rest/${cate}/${id}`).then((res) => setData(res.data)), [cate, id]);
 
   useEffect(() => {
     fetchData();
