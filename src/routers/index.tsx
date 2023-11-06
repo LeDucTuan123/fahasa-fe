@@ -2,7 +2,7 @@ import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/main';
 
-import { AdminDashboard, AdminFeedback, AdminOrther, AdminProduct, AdminUser, Cart } from './elements';
+import { AdminDashboard, AdminFeedback, AdminOrther, AdminProduct, AdminUser, Cart, Payment } from './elements';
 
 import {
   DetailProductPage,
@@ -33,6 +33,7 @@ export default function Route() {
         { path: '/products/:search', element: <Products /> },
         { path: '/*', element: <Error /> },
         { path: '/cart', element: <Cart /> },
+        { path: '/payment', element: <Payment /> },
       ],
     },
     // login

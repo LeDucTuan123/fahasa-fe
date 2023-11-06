@@ -39,7 +39,7 @@ export default function Search() {
   const handleCloseSearch = useCallback(() => {
     if (isShowSearch) {
       dispatch(setIsShowSearch(false));
-      setCate('book');
+      // setCate('book');
     }
   }, [dispatch, isShowSearch]);
 
@@ -148,24 +148,27 @@ export default function Search() {
           action=""
           className="relative w-full flex-center flex items-center mx-2 border border-[#d3d4d5] rounded-lg bg-white"
         >
-          {isShowSearch && (
-            <div className="absolute top-0 w-16 h-full">
-              <select
-                id="countries"
-                className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                onChange={handleOnchangeCategory}
-              >
-                <option value="book">Sách</option>
-                <option value="tool">Dụng cụ</option>
-              </select>
-            </div>
-          )}
+          {/* {isShowSearch && ( */}
+          <div className="absolute top-0 w-16 h-full">
+            <select
+              disabled={isShowSearch ? false : true}
+              id="countries"
+              className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={handleOnchangeCategory}
+            >
+              <option value="book">Sách</option>
+              <option value="schooltool">Dụng cụ</option>
+            </select>
+          </div>
+          {/* )} */}
           <input
             type="text"
             autoComplete="off"
             placeholder="Tìm kiếm.."
             value={searchValue}
-            className={`${isShowSearch ? 'pl-20' : 'pl-2'} px-4 py-1 border-none outline-none w-full bg-transparent`}
+            className={`${
+              isShowSearch ? '' : 'text-gray-400'
+            } pl-20 px-4 py-1 border-none outline-none w-full bg-transparent`}
             onChange={onChangeSearchValue}
             onClick={() => dispatch(setIsShowSearch(true))}
             onKeyPress={handleOnKeyUp}
