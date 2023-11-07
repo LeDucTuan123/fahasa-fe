@@ -1,14 +1,14 @@
 import { Icon } from '@iconify/react';
 import React from 'react';
 
-export default function User() {
+export default function Feedback() {
   return (
     <>
       <p className="text-xl pb-5 flex items-center gap-3">
-        Quản lí người dùng{' '}
+        Quản lí hóa đơn{' '}
         <span>
           <Icon
-            icon={'mdi:user'}
+            icon={'solar:bill-list-bold'}
             fontSize={24}
           />
         </span>{' '}
@@ -27,38 +27,33 @@ export default function User() {
                 scope="col"
                 className="px-6 py-3"
               >
-                Họ
+                Mã voucher
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Tên
+                Ngày hết hạn
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Mật khẩu
+                Tình trạng
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Email
+                Active
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Số điện thoại
+                Số lượng
               </th>
-              <th
-                scope="col"
-                className="px-6 py-3"
-              >
-                Địa chỉ
-              </th>
+
               <th
                 scope="col"
                 className="px-6 py-3"
@@ -78,7 +73,6 @@ export default function User() {
               <td className="px-6 py-4 max-w-[170px]">Nguyen Van</td>
               <td className="px-6 py-4 max-w-[170px]">An</td>
               <td className="px-6 py-4 max-w-[170px]">123456</td>
-              <td className="px-6 py-4 max-w-[170px]">klkklkl@gmail.com</td>
               <td className="px-6 py-4 max-w-[170px]">01234567890</td>
               <td className="px-6 py-4 max-w-[170px]">Sg Ho Chi Minh</td>
               <td className="px-6 py-4 max-w-[170px] text-left">
@@ -95,7 +89,6 @@ export default function User() {
               <td className="px-6 max-w-[170px] py-4">Nguyen Van</td>
               <td className="px-6 max-w-[170px] py-4">An</td>
               <td className="px-6 max-w-[170px] py-4">123456</td>
-              <td className="px-6 max-w-[170px] py-4">klkklkl@gmail.com</td>
               <td className="px-6 max-w-[170px] py-4">01234567890</td>
               <td className="px-6 max-w-[170px] py-4">Sg Ho Chi Minh</td>
               <td className="px-6 max-w-[170px] py-4 text-left">
@@ -112,7 +105,6 @@ export default function User() {
               <td className="px-6 py-4 max-w-[170px]">Nguyen Van</td>
               <td className="px-6 py-4 max-w-[170px]">An</td>
               <td className="px-6 py-4 max-w-[170px]">123456</td>
-              <td className="px-6 py-4 max-w-[170px]">klkklkl@gmail.com</td>
               <td className="px-6 py-4 max-w-[170px]">01234567890</td>
               <td className="px-6 py-4 max-w-[170px]">Sg Ho Chi Minh Sg Ho Chi Minh Sg Ho Chi Minh Sg Ho Chi Minh</td>
               <td className="px-6 py-4 max-w-[170px] text-left">

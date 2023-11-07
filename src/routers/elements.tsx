@@ -25,5 +25,6 @@ export const ProfileAddress = Loadable(lazy(() => import('../pages/ProfileAddres
 export const AdminDashboard = Loadable(lazy(() => import('../pages/AdminDashboardPage')));
 export const AdminProduct = Loadable(lazy(() => import('../pages/AdminProductPage')));
 export const AdminUser = Loadable(lazy(() => import('../pages/AdminUserPage')));
-export const AdminFeedback = Loadable(lazy(() => import('../pages/AdminFeedbackPage')));
+export const AdminBill = Loadable(lazy(() => import('../pages/AdminBillPage')));
 export const AdminOrther = Loadable(lazy(() => import('../pages/AdminOrtherPage')));
+export const AdminVoucher = Loadable(lazy(() => import('../pages/AdminVoucherPage')));
