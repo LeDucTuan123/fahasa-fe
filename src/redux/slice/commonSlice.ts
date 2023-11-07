@@ -15,6 +15,8 @@ interface CommonState {
   category: string;
   textSearchValue: string;
   isShowSearch: boolean;
+  textCateName: string;
+  parentId: number | null;
 }
 
 const initialState: CommonState = {
@@ -27,6 +29,8 @@ const initialState: CommonState = {
   category: 'book',
   textSearchValue: '',
   isShowSearch: false,
+  textCateName: '',
+  parentId: null,
 
   // category: [],
 };
@@ -52,6 +56,12 @@ export const commonSlice = createSlice({
     setTextSearchValue: (state, action: PayloadAction<string>) => {
       state.textSearchValue = action.payload;
     },
+    setTextCateName: (state, action: PayloadAction<string>) => {
+      state.textCateName = action.payload;
+    },
+    setParentId: (state, action: PayloadAction<number>) => {
+      state.parentId = action.payload;
+    },
   },
   // extraReducers: (builder) => {
   //   builder.addCase(getCategory.fulfilled, (state, action: any) => {
@@ -61,6 +71,6 @@ export const commonSlice = createSlice({
 });
 
 const commonReducer = commonSlice.reducer;
-export const { setIsShowSearch, setCategory, setTextSearchValue } = commonSlice.actions;
+export const { setIsShowSearch, setCategory, setTextSearchValue, setParentId, setTextCateName } = commonSlice.actions;
 
 export default commonReducer;

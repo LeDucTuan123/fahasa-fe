@@ -12,6 +12,22 @@ export default function Products() {
 
   const cate = useSelector((state: RootState) => state.common.category);
   const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
+  const textParentCate = useSelector((state: RootState) => state.common.textCateName);
+  const textParentCate2 = useSelector((state: RootState) => state.common.parentId);
+
+  useEffect(() => {
+    if (textParentCate === 'Sách trong nước') {
+      fetch.get('http://localhost:8080/rest/book/search?q=mùa').then((res) => setSearchResult(res.data));
+    } else if (textParentCate === 'Sách nước ngoài') {
+      fetch.get('http://localhost:8080/rest/book/search?q=b').then((res) => setSearchResult(res.data));
+    } else {
+      fetch.get('http://localhost:8080/rest/schooltool/search?q=c').then((res) => setSearchResult(res.data));
+    }
+  }, [textParentCate]);
+
+  useEffect(() => {
+    console.log(textParentCate2);
+  }, [textParentCate2]);
 
   useEffect(() => {
     if (cate === 'book') {

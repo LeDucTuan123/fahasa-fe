@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { links } from './List_Item';
 import fetch from 'src/services/axios';
 import { CategoryType } from 'src/types';
+import { useAppDispatch } from 'src/redux/store';
+import { setParentId, setTextCateName } from 'src/redux/slice/commonSlice';
 
 interface Props {
   onMouse: () => void;
@@ -24,6 +26,15 @@ const MegaMenu = ({
   currentCategory,
   handleOnMouseEnterChange,
 }: Props) => {
+  const dispatch = useAppDispatch();
+  const handelOnClickCate = (e: CategoryType) => {
+    dispatch(setTextCateName(e.categoryname));
+  };
+
+  const handelOnClickCate2 = (e: CategoryType) => {
+    dispatch(setParentId(e.id));
+  };
+
   return (
     <>
       <div
@@ -54,7 +65,12 @@ const MegaMenu = ({
                           to={updatedUrl}
                           className="w-full px-2"
                         >
-                          <span className="menu-title capitalize text-lg">{item.categoryname} </span>
+                          <span
+                            className="menu-title capitalize text-lg"
+                            onClick={() => handelOnClickCate(item)}
+                          >
+                            {item.categoryname}{' '}
+                          </span>
                         </Link>
                       </div>
                     );
@@ -71,7 +87,10 @@ const MegaMenu = ({
 
               return (
                 <div className="xl:w-[200px] lg:w-[150px] mt-5">
-                  <Link to={`${updatedUrl1}/${updatedUrl}`}>
+                  <Link
+                    to={`${updatedUrl1}/${updatedUrl}`}
+                    onClick={() => handelOnClickCate2(item)}
+                  >
                     <span className="text-[13px] font-bold text-[#333333] uppercase">{item.categoryname}</span>
                   </Link>
                   <ul className="mt-2">
@@ -87,6 +106,7 @@ const MegaMenu = ({
                               <Link
                                 to={`${updatedUrl2}/${updatedUrl1}/${updatedUrl}`}
                                 className=" hover:text-[#bf9a61]"
+                                onClick={() => handelOnClickCate2(item)}
                               >
                                 <p className="truncate ... text-[13px]">{item.categoryname}</p>
                               </Link>
