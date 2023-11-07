@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react';
 import React, { useState } from 'react';
 
 export default function Header() {
-  const [isShow, setIshow] = useState(false);
+  const [isShow, setIshow] = useState(true);
 
   return (
     <>
