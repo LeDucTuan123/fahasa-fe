@@ -1,12 +1,15 @@
 import { Icon } from '@iconify/react';
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import ModalVoucher from './ModalVoucher';
+import ProgressBar from './ProgressBar';
 
 export default function Cart() {
   // const IsmUp = useResponsive('up', 'md');
   const [product, setProduct] = useState<Array<any>>([]);
   const [productPay, setProductPay] = useState<Array<any>>([]);
   const [checkAll, setCheckAll] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     // nếu không đăng nhập
@@ -90,6 +93,10 @@ export default function Cart() {
       localStorage.setItem('cart', JSON.stringify(cart));
       setProduct(cart);
     }
+  }
+
+  function handleCloseModal() {
+    setOpenModal(false);
   }
 
   return (
@@ -262,9 +269,15 @@ export default function Cart() {
                   <p className="col-span-4 ms-2 mt-1">Khuyến mãi</p>
                 </div>
                 <div className="text-right col-span-1 grid grid-cols-5">
-                  <p className="col-span-4 me-1 mt-1">Xem thêm</p>
+                  <p
+                    onClick={() => setOpenModal(true)}
+                    className="col-span-4 me-1 mt-1 hover:cursor-pointer"
+                  >
+                    Xem thêm
+                  </p>
                   <svg
-                    className="mt-2"
+                    className="mt-2 hover:cursor-pointer"
+                    onClick={() => setOpenModal(true)}
                     xmlns="http://www.w3.org/2000/svg"
                     height="1em"
                     viewBox="0 0 320 512"
@@ -279,19 +292,16 @@ export default function Cart() {
                   <div className="grid grid-rows-2">
                     <div className="grid grid-cols-5">
                       <h2 className="col-span-4 font-semibold">MÃ GIẢM 30K - ĐƠN HÀNG TỪ 270K</h2>
-                      <a
-                        className="underline text-blue-600 text-sm text-right m-auto"
-                        href="#"
-                      >
-                        Chi tiết
-                      </a>
                     </div>
                     <div className="font-extralight text-sm mt-1">ÁP DỤNG THỨ 2 ĐẾN THỨ 4 HÀNG TUẦN</div>
                   </div>
                   <div className="grid grid-cols-3 mt-5">
                     <div className="col-span-2 grid grid-rows-2">
                       {/* <div className="h-[5px] w-56 bg-gradient-to-r from-blue-500 to-blue-900 animate-pulse"></div>*/}
-                      <div className="h-[5px] w-56 bg-gradient-to-r from-blue-200 to-blue-900 animate-progress active"></div>
+                      <ProgressBar
+                        totalMoney={250000}
+                        currentMoney={10000}
+                      />
                       <div className="grid grid-cols-3">
                         <p className="col-span-2 text-[10px]">Mua thêm 270.000đ để nhận mã</p>
                         <p className="text-[10px]">270.000 đ</p>
@@ -307,12 +317,6 @@ export default function Cart() {
                   <div className="grid grid-rows-2">
                     <div className="grid grid-cols-5">
                       <h2 className="col-span-4 font-semibold">MÃ GIẢM 30K - ĐƠN HÀNG TỪ 270K</h2>
-                      <a
-                        className="underline text-blue-600 text-sm text-right m-auto"
-                        href="#"
-                      >
-                        Chi tiết
-                      </a>
                     </div>
                     <div className="font-extralight text-sm mt-1">ÁP DỤNG THỨ 2 ĐẾN THỨ 4 HÀNG TUẦN</div>
                   </div>
@@ -331,7 +335,10 @@ export default function Cart() {
               </div>
               {/* footer khuyến mãi */}
               <div className="grid grid-rows-2 p-2 text-left">
-                <button className="grid grid-cols-5 row-span-2 h-10 bg-blue-300 text-blue-900 font-medium text-sm text-left ps-1 rounded-lg">
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="grid grid-cols-5 row-span-2 h-10 bg-blue-300 text-blue-900 font-medium text-sm text-left ps-1 rounded-lg"
+                >
                   <div className="col-span-4 grid grid-cols-3 m-[10px]">
                     <p className="col-span-2">1 khuyến mãi đủ điều kiện</p>
                     <svg
@@ -408,6 +415,10 @@ export default function Cart() {
           </div>
         </div>
       </div>
+      <ModalVoucher
+        openModal={openModal}
+        setOpenModal={handleCloseModal}
+      />
     </>
   );
 }
