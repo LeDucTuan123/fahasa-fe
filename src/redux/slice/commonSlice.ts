@@ -15,6 +15,10 @@ interface CommonState {
   category: string;
   textSearchValue: string;
   isShowSearch: boolean;
+
+  catelvId: number | null;
+  id: number | null;
+  parenCategory: string | null;
 }
 
 const initialState: CommonState = {
@@ -27,17 +31,12 @@ const initialState: CommonState = {
   category: 'book',
   textSearchValue: '',
   isShowSearch: false,
+  catelvId: null,
+  id: null,
+  parenCategory: '',
 
   // category: [],
 };
-
-// export const getCategory = createAsyncThunk('cate/getcategory', async (_, thunkApi) => {
-//   const res = await fetch.get('/rest/category', {
-//     signal: thunkApi.signal,
-//   });
-
-//   return res.data;
-// });
 
 export const commonSlice = createSlice({
   name: 'common',
@@ -52,6 +51,15 @@ export const commonSlice = createSlice({
     setTextSearchValue: (state, action: PayloadAction<string>) => {
       state.textSearchValue = action.payload;
     },
+    setCatelvId: (state, action: PayloadAction<number>) => {
+      state.catelvId = action.payload;
+    },
+    setId: (state, action: PayloadAction<number>) => {
+      state.id = action.payload;
+    },
+    setParentCategory: (state, action: PayloadAction<string>) => {
+      state.parenCategory = action.payload;
+    },
   },
   // extraReducers: (builder) => {
   //   builder.addCase(getCategory.fulfilled, (state, action: any) => {
@@ -61,6 +69,7 @@ export const commonSlice = createSlice({
 });
 
 const commonReducer = commonSlice.reducer;
-export const { setIsShowSearch, setCategory, setTextSearchValue } = commonSlice.actions;
+export const { setIsShowSearch, setCategory, setTextSearchValue, setCatelvId, setParentCategory, setId } =
+  commonSlice.actions;
 
 export default commonReducer;
