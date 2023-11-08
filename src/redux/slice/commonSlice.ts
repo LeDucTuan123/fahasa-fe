@@ -12,6 +12,8 @@ interface IPositionSearch {
 interface CommonState {
   positionSearch: IPositionSearch;
   // category: CategoryType[];
+  category: string;
+  textSearchValue: string;
   isShowSearch: boolean;
 }
 
@@ -22,7 +24,10 @@ const initialState: CommonState = {
     width: 0,
     height: 0,
   },
+  category: 'book',
+  textSearchValue: '',
   isShowSearch: false,
+
   // category: [],
 };
 
@@ -41,6 +46,12 @@ export const commonSlice = createSlice({
     setIsShowSearch: (state, action: PayloadAction<boolean>) => {
       state.isShowSearch = action.payload;
     },
+    setCategory: (state, action: PayloadAction<string>) => {
+      state.category = action.payload;
+    },
+    setTextSearchValue: (state, action: PayloadAction<string>) => {
+      state.textSearchValue = action.payload;
+    },
   },
   // extraReducers: (builder) => {
   //   builder.addCase(getCategory.fulfilled, (state, action: any) => {
@@ -50,6 +61,6 @@ export const commonSlice = createSlice({
 });
 
 const commonReducer = commonSlice.reducer;
-export const { setIsShowSearch } = commonSlice.actions;
+export const { setIsShowSearch, setCategory, setTextSearchValue } = commonSlice.actions;
 
 export default commonReducer;

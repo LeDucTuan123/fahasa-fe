@@ -3,13 +3,14 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useDebounce from 'src/hooks/useDebounce';
-import { setIsShowSearch } from 'src/redux/slice/commonSlice';
+import { setCategory, setIsShowSearch, setTextSearchValue } from 'src/redux/slice/commonSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 
 import { SearchDefault, SearchInput } from './SearchList';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -18,28 +19,31 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
     </div>
   );
 };
+
 export default function Search() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const isShowSearch = useSelector((state: RootState) => state.common.isShowSearch);
+  const dataBooks = useSelector((state: RootState) => state.book.books);
+  const dataTools = useSelector((state: RootState) => state.tool.tools);
 
   const [searchValue, setsearchValue] = useState('');
   const [cate, setCate] = useState('book');
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const debounceValue = useDebounce(searchValue, 500);
+  const debounceValue = useDebounce(searchValue, 500); //delay 500ms khi gõ tìm kiếm
   const scrollYRef = useRef(0);
-
-  const isShowSearch = useSelector((state: RootState) => state.common.isShowSearch);
-  const dataBooks = useSelector((state: RootState) => state.book.books);
-  const dataTools = useSelector((state: RootState) => state.tool.tools);
 
   const handleCloseSearch = useCallback(() => {
     if (isShowSearch) {
       dispatch(setIsShowSearch(false));
-      setCate('book');
+      // setCate('book');
     }
   }, [dispatch, isShowSearch]);
 
+  //khi nguoi dùng lăng chuột thì sẽ tắt search
   useEffect(() => {
     const handleScroll = () => {
       scrollYRef.current = window.scrollY;
@@ -57,6 +61,7 @@ export default function Search() {
   /////////////////////////////////////////////
   //fetch data search
   // const fetchData = useCallback(() => {}, [cate, debounceValue]);
+
   useEffect(() => {
     setLoading(true);
     if (cate === 'book') {
@@ -86,9 +91,30 @@ export default function Search() {
     setsearchValue(e.target.value);
   };
 
+  const handleOnchangeCategory = (e: any) => {
+    setCate(e.target.value);
+    dispatch(setCategory(e.target.value));
+  };
+
   const handleCloseSearchInput = () => {
     setsearchValue('');
     // focusInput.current.focus();
+  };
+
+  const handleOnKeyUp = (event: any) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      dispatch(setIsShowSearch(false));
+      dispatch(setTextSearchValue(debounceValue));
+      navigate(`/products/searchengine?q=${debounceValue}`);
+    }
+  };
+
+  const handleOnClickSearchh = (event: any) => {
+    event.preventDefault();
+    dispatch(setIsShowSearch(false));
+    dispatch(setTextSearchValue(debounceValue));
+    navigate(`/products/searchengine?q=${debounceValue}`);
   };
 
   return (
@@ -122,34 +148,41 @@ export default function Search() {
           action=""
           className="relative w-full flex-center flex items-center mx-2 border border-[#d3d4d5] rounded-lg bg-white"
         >
-          {isShowSearch && (
-            <div className="absolute top-0 w-16 h-full">
-              <select
-                id="countries"
-                className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                onChange={(e) => setCate(e.target.value)}
-              >
-                <option value="book">Sách</option>
-                <option value="tool">Dụng cụ</option>
-              </select>
-            </div>
-          )}
+          {/* {isShowSearch && ( */}
+          <div className="absolute top-0 w-16 h-full">
+            <select
+              disabled={isShowSearch ? false : true}
+              id="countries"
+              className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={handleOnchangeCategory}
+            >
+              <option value="book">Sách</option>
+              <option value="schooltool">Dụng cụ</option>
+            </select>
+          </div>
+          {/* )} */}
           <input
-            // type="search"
+            type="text"
             autoComplete="off"
             placeholder="Tìm kiếm.."
             value={searchValue}
-            className={`${isShowSearch ? 'pl-20' : 'pl-2'} px-4 py-1 border-none outline-none w-full bg-transparent`}
+            className={`${
+              isShowSearch ? '' : 'text-gray-400'
+            } pl-20 px-4 py-1 border-none outline-none w-full bg-transparent`}
             onChange={onChangeSearchValue}
             onClick={() => dispatch(setIsShowSearch(true))}
+            onKeyPress={handleOnKeyUp}
           />
-          <div className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 lg:px-6 lg:py-1 ">
+          <div
+            className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 lg:px-6 lg:py-1 "
+            onClick={handleOnClickSearchh}
+          >
             <Icon
               icon="tabler:search"
               className="bx bx-search text-sm"
             />
           </div>
-          {!!searchValue && !loading && (
+          {!!searchValue && !loading && isShowSearch && (
             <Icon
               icon="iconamoon:close-fill"
               fontSize={24}
@@ -157,7 +190,7 @@ export default function Search() {
               onClick={handleCloseSearchInput}
             />
           )}
-          {loading && (
+          {loading && isShowSearch && (
             <Icon
               icon="ep:loading"
               fontSize={24}

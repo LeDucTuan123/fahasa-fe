@@ -2,9 +2,15 @@ import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/main';
 
-import { AdminDashboard, AdminFeedback, AdminOrther, AdminProduct, AdminUser, Cart } from './elements';
-
 import {
+  AdminBill,
+  AdminDashboard,
+  AdminOrther,
+  AdminProduct,
+  AdminUser,
+  AdminVoucher,
+  Cart,
+  Payment,
   DetailProductPage,
   Error,
   HomePage,
@@ -15,6 +21,7 @@ import {
   ProfileOrder,
   Register,
 } from './elements';
+
 import ProfileLayout from 'src/layouts/ProfileLayout';
 import AdminLayout from 'src/layouts/AdminLayout';
 
@@ -30,8 +37,10 @@ export default function Route() {
         { path: '/:level1', element: <Products /> },
         { path: '/:level1/:level2', element: <Products /> },
         { path: '/:level1/:level2/:level3', element: <Products /> },
+        { path: '/products/:search', element: <Products /> },
         { path: '/*', element: <Error /> },
         { path: '/cart', element: <Cart /> },
+        { path: '/payment', element: <Payment /> },
       ],
     },
     // login
@@ -54,8 +63,9 @@ export default function Route() {
         { path: '/admin/dashboard', element: <AdminDashboard /> },
         { path: '/admin/products', element: <AdminProduct /> },
         { path: '/admin/user', element: <AdminUser /> },
-        { path: '/admin/feedback', element: <AdminFeedback /> },
+        { path: '/admin/bill', element: <AdminBill /> },
         { path: '/admin/orther', element: <AdminOrther /> },
+        { path: '/admin/voucher', element: <AdminVoucher /> },
       ],
     },
     // profile layout

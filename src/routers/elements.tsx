@@ -2,9 +2,9 @@ import { ElementType, Suspense, lazy } from 'react';
 
 // ------------------------------------------------------------------------------
 const Loadable = (Component: ElementType) => (props: any) => (
-    <Suspense fallback="Loading...">
-        <Component {...props} />
-    </Suspense>
+  <Suspense fallback="Loading...">
+    <Component {...props} />
+  </Suspense>
 );
 
 // Main
@@ -15,6 +15,7 @@ export const Register = Loadable(lazy(() => import('../sections/e-commerce/login
 export const Error = Loadable(lazy(() => import('../pages/Error404')));
 
 export const Cart = Loadable(lazy(() => import('../pages/CartPage')));
+export const Payment = Loadable(lazy(() => import('../pages/PaymentPage')));
 
 export const Products = Loadable(lazy(() => import('../pages/ProductsPage')));
 export const Profile = Loadable(lazy(() => import('../pages/ProfilePage')));
@@ -24,5 +25,6 @@ export const ProfileAddress = Loadable(lazy(() => import('../pages/ProfileAddres
 export const AdminDashboard = Loadable(lazy(() => import('../pages/AdminDashboardPage')));
 export const AdminProduct = Loadable(lazy(() => import('../pages/AdminProductPage')));
 export const AdminUser = Loadable(lazy(() => import('../pages/AdminUserPage')));
-export const AdminFeedback = Loadable(lazy(() => import('../pages/AdminFeedbackPage')));
+export const AdminBill = Loadable(lazy(() => import('../pages/AdminBillPage')));
 export const AdminOrther = Loadable(lazy(() => import('../pages/AdminOrtherPage')));
+export const AdminVoucher = Loadable(lazy(() => import('../pages/AdminVoucherPage')));
