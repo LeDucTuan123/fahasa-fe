@@ -12,6 +12,26 @@ export default function Products() {
 
   const cate = useSelector((state: RootState) => state.common.category);
   const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
+  const level = useSelector((state: RootState) => state.common.catelvId);
+  const id = useSelector((state: RootState) => state.common.id);
+  const parencate = useSelector((state: RootState) => state.common.parenCategory);
+
+  useEffect(() => {
+    if (id === 1 || id === 2) {
+      fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setSearchResult(res.data));
+    } else if (id === 3) {
+      fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setSearchResult(res.data));
+    }
+    if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+      fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setSearchResult(res.data));
+    } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
+      fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setSearchResult(res.data));
+    } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+      fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setSearchResult(res.data));
+    } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
+      fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setSearchResult(res.data));
+    }
+  }, [id, level, parencate]);
 
   useEffect(() => {
     if (cate === 'book') {
