@@ -117,6 +117,10 @@ export default function Cart() {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(money);
   }
 
+  function handleApplyVoucher(id: number) {
+    console.log(id);
+  }
+
   return (
     <>
       <div>
@@ -269,6 +273,8 @@ export default function Cart() {
             <Voucher
               vouchers={vouchers}
               handleOpenModal={handleOpenModal}
+              productPay={productPay}
+              handleApplyVoucher={handleApplyVoucher}
             />
             {/* thành tiền */}
             <div className="bg-gray-100 mt-2 max-h-48 rounded-lg">
@@ -324,6 +330,9 @@ export default function Cart() {
       <ModalVoucher
         openModal={openModal}
         setOpenModal={handleCloseModal}
+        vouchers={vouchers}
+        productPay={productPay}
+        handleApplyVoucher={handleApplyVoucher}
       />
     </>
   );

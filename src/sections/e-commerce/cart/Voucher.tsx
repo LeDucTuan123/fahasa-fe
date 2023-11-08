@@ -1,11 +1,33 @@
+import { useEffect, useState } from 'react';
 import ProgressBar from './ProgressBar';
+import { Link } from 'react-router-dom';
 
 interface VoucherProps {
   vouchers: any;
   handleOpenModal: () => void;
+  productPay: Array<any>;
+  handleApplyVoucher: (id: number) => void;
 }
 
-function Voucher({ vouchers, handleOpenModal }: VoucherProps) {
+function Voucher({ vouchers, handleOpenModal, productPay, handleApplyVoucher }: VoucherProps) {
+  const [countVoucher, setCountVoucher] = useState(0);
+
+  useEffect(() => {
+    let sum = productPay?.reduce((accum, currentValue) => {
+      return accum + (currentValue.price - (currentValue.price * currentValue.discount) / 100) * currentValue.quantity;
+    }, 0);
+    let index = vouchers.findIndex((item: any) => {
+      return item.condition > sum;
+    });
+    setCountVoucher(index === -1 ? vouchers.length : index);
+  }, [productPay, vouchers]);
+
+  function ConvertToVietNamDong(money: number) {
+    if (money < 0) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0);
+    }
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(money);
+  }
   return (
     <>
       {/* Cụm mã giảm giá */}
@@ -41,37 +63,155 @@ function Voucher({ vouchers, handleOpenModal }: VoucherProps) {
           </div>
         </div>
         {/* mã giảm giá */}
-        {vouchers &&
-          vouchers.slice(0, 2).map((item: any) => {
-            return (
-              <div className="border-b-2 ">
-                <div className="grid grid-rows-1 ms-2 mb-2">
-                  <div className="grid grid-rows-2">
-                    <div className="grid grid-cols-5">
-                      <h2 className="col-span-4 font-semibold">
-                        MÃ GIẢM {item.valuev / 1000}K - ĐƠN HÀNG TỪ {item.condition / 1000}K
-                      </h2>
-                    </div>
-                    <div className="font-extralight text-sm mt-1">Số lượng: {item.quantity}</div>
-                  </div>
-                  <div className="grid grid-cols-3 mt-5">
-                    <div className="col-span-2 grid grid-rows-2">
-                      {/* <div className="h-[5px] w-56 bg-gradient-to-r from-blue-500 to-blue-900 animate-pulse"></div>*/}
-                      <ProgressBar
-                        totalMoney={250000}
-                        currentMoney={10000}
-                      />
-                      <div className="grid grid-cols-3">
-                        <p className="col-span-2 text-[10px]">Mua thêm 270.000đ để nhận mã</p>
-                        <p className="text-[10px]">270.000 đ</p>
+        {vouchers && countVoucher < vouchers.length
+          ? vouchers.slice(countVoucher, countVoucher + 2).map((item: any) => {
+              return (
+                <div
+                  key={item.id}
+                  className="border-b-2 "
+                >
+                  <div className="grid grid-rows-1 ms-2 mb-2">
+                    <div className="grid grid-rows-2">
+                      <div className="grid grid-cols-5">
+                        <h2 className="col-span-4 font-semibold">
+                          MÃ GIẢM {item.valuev / 1000}K - ĐƠN HÀNG TỪ {item.condition / 1000}K
+                        </h2>
                       </div>
+                      <div className="font-extralight text-sm mt-1">Số lượng: {item.quantity}</div>
                     </div>
-                    <button className="bg-blue-500 text-white rounded-lg me-2">Mua thêm</button>
+                    <div className="grid grid-cols-3 mt-5">
+                      <div className="col-span-2 grid grid-rows-2">
+                        {/* <div className="h-[5px] w-56 bg-gradient-to-r from-blue-500 to-blue-900 animate-pulse"></div>*/}
+                        <ProgressBar
+                          totalMoney={item.condition}
+                          currentMoney={productPay?.reduce((accum, currentValue) => {
+                            return (
+                              accum +
+                              (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                currentValue.quantity
+                            );
+                          }, 0)}
+                        />
+                        <div className="grid grid-cols-3">
+                          <p className="col-span-2 text-[10px]">
+                            Mua thêm{' '}
+                            {ConvertToVietNamDong(
+                              item.condition -
+                                productPay?.reduce((accum, currentValue) => {
+                                  return (
+                                    accum +
+                                    (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                      currentValue.quantity
+                                  );
+                                }, 0),
+                            )}{' '}
+                            để nhận mã
+                          </p>
+                          <p className="text-[10px]">{ConvertToVietNamDong(item.condition)}</p>
+                        </div>
+                      </div>
+                      {item.condition -
+                        productPay?.reduce((accum, currentValue) => {
+                          return (
+                            accum +
+                            (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                              currentValue.quantity
+                          );
+                        }, 0) <
+                      0 ? (
+                        <button
+                          onClick={() => handleApplyVoucher(item.id)}
+                          className="bg-blue-500 text-white rounded-lg me-2"
+                        >
+                          Áp dụng
+                        </button>
+                      ) : (
+                        <Link
+                          to={'/'}
+                          className="bg-blue-500 text-white rounded-lg me-2 leading-[30px] text-center"
+                        >
+                          Mua thêm
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          : vouchers.slice(vouchers.length - 2).map((item: any) => {
+              return (
+                <div
+                  key={item.id}
+                  className="border-b-2 "
+                >
+                  <div className="grid grid-rows-1 ms-2 mb-2">
+                    <div className="grid grid-rows-2">
+                      <div className="grid grid-cols-5">
+                        <h2 className="col-span-4 font-semibold">
+                          MÃ GIẢM {item.valuev / 1000}K - ĐƠN HÀNG TỪ {item.condition / 1000}K
+                        </h2>
+                      </div>
+                      <div className="font-extralight text-sm mt-1">Số lượng: {item.quantity}</div>
+                    </div>
+                    <div className="grid grid-cols-3 mt-5">
+                      <div className="col-span-2 grid grid-rows-2">
+                        {/* <div className="h-[5px] w-56 bg-gradient-to-r from-blue-500 to-blue-900 animate-pulse"></div>*/}
+                        <ProgressBar
+                          totalMoney={item.condition}
+                          currentMoney={productPay?.reduce((accum, currentValue) => {
+                            return (
+                              accum +
+                              (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                currentValue.quantity
+                            );
+                          }, 0)}
+                        />
+                        <div className="grid grid-cols-3">
+                          <p className="col-span-2 text-[10px]">
+                            Mua thêm{' '}
+                            {ConvertToVietNamDong(
+                              item.condition -
+                                productPay?.reduce((accum, currentValue) => {
+                                  return (
+                                    accum +
+                                    (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                      currentValue.quantity
+                                  );
+                                }, 0),
+                            )}{' '}
+                            để nhận mã
+                          </p>
+                          <p className="text-[10px]">{ConvertToVietNamDong(item.condition)}</p>
+                        </div>
+                      </div>
+                      {item.condition -
+                        productPay?.reduce((accum, currentValue) => {
+                          return (
+                            accum +
+                            (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                              currentValue.quantity
+                          );
+                        }, 0) <
+                      0 ? (
+                        <button
+                          onClick={() => handleApplyVoucher(item.id)}
+                          className="bg-blue-500 text-white rounded-lg me-2"
+                        >
+                          Áp dụng
+                        </button>
+                      ) : (
+                        <Link
+                          to={'/'}
+                          className="bg-blue-500 text-white rounded-lg me-2 text-center leading-[30px]"
+                        >
+                          Mua thêm
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
         {/* footer khuyến mãi */}
         <div className="grid grid-rows-2 p-2 text-left">
           <button
@@ -79,7 +219,7 @@ function Voucher({ vouchers, handleOpenModal }: VoucherProps) {
             className="grid grid-cols-5 row-span-2 h-10 bg-blue-300 text-blue-900 font-medium text-sm text-left ps-1 rounded-lg"
           >
             <div className="col-span-4 grid grid-cols-3 m-[10px]">
-              <p className="col-span-2">1 khuyến mãi đủ điều kiện</p>
+              <p className="col-span-2">{countVoucher} khuyến mãi đủ điều kiện</p>
               <svg
                 className="col-span-1 mt-1"
                 xmlns="http://www.w3.org/2000/svg"
