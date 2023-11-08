@@ -93,11 +93,13 @@ const MegaMenu = ({
 
               return (
                 <div className="xl:w-[200px] lg:w-[150px] mt-5">
-                  <Link
-                    to={`${updatedUrl1}/${updatedUrl}`}
-                    onClick={() => handelOnClickCate2(item)}
-                  >
-                    <span className="text-[13px] font-bold text-[#333333] uppercase">{item.categoryname}</span>
+                  <Link to={`${updatedUrl1}/${updatedUrl}`}>
+                    <span
+                      onClick={() => handelOnClickCate2(item)}
+                      className="text-[13px] font-bold text-[#333333] uppercase"
+                    >
+                      {item.categoryname}
+                    </span>
                   </Link>
                   <ul className="mt-2">
                     <div>
@@ -112,9 +114,13 @@ const MegaMenu = ({
                               <Link
                                 to={`${updatedUrl2}/${updatedUrl1}/${updatedUrl}`}
                                 className=" hover:text-[#bf9a61]"
-                                onClick={() => handelOnClickCate3(item)}
                               >
-                                <p className="truncate ... text-[13px]">{item.categoryname}</p>
+                                <p
+                                  onClick={() => handelOnClickCate3(item)}
+                                  className="truncate ... text-[13px]"
+                                >
+                                  {item.categoryname}
+                                </p>
                               </Link>
                             </li>
                           );
