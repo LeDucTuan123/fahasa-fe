@@ -16,8 +16,8 @@ interface CommonState {
   textSearchValue: string;
   isShowSearch: boolean;
 
-  catelvId: number;
-  id: number;
+  catelvId: number | null;
+  id: number | null;
   parenCategory: string | null;
 }
 
@@ -31,8 +31,8 @@ const initialState: CommonState = {
   category: 'book',
   textSearchValue: '',
   isShowSearch: false,
-  catelvId: 1,
-  id: 1,
+  catelvId: null,
+  id: null,
   parenCategory: '',
 
   // category: [],
