@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 import search from 'src/layouts/main/header/search';
@@ -9,6 +9,8 @@ import { BookType } from 'src/types/book';
 
 export default function Products() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
+  const [categoryResult, setCategoryResult] = useState<BookType[]>([]); // Kết quả lọc theo category
+  const [sortCriteria, setSortCriteria] = useState('new'); // Sắp xếp theo tiêu chí 'new' ban đầu
 
   const cate = useSelector((state: RootState) => state.common.category);
   const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
@@ -16,46 +18,61 @@ export default function Products() {
   const id = useSelector((state: RootState) => state.common.id);
   const parencate = useSelector((state: RootState) => state.common.parenCategory);
 
-  useEffect(() => {
-    if (id === 1 || id === 2) {
-      fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setSearchResult(res.data));
-    } else if (id === 3) {
-      fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setSearchResult(res.data));
-    }
-    if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-      fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setSearchResult(res.data));
-    } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
-      fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setSearchResult(res.data));
-    } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-      fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setSearchResult(res.data));
-    } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
-      fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setSearchResult(res.data));
-    }
-  }, [id, level, parencate]);
+ // Thêm sự kiện lắng nghe cho select box
+ const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  setSortCriteria(e.target.value);
+};
 
-  useEffect(() => {
-    if (cate === 'book') {
-      fetch
-        .get(`${apiPaths.book}/search?q=${searchInputText}`)
-        .then((res) => {
-          setSearchResult(res.data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    } else {
-      fetch
-        .get(`${apiPaths.school}/search?q=${searchInputText}`)
-        .then((res) => {
-          setSearchResult(res.data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    }
-  }, [cate, searchInputText]);
+useEffect(() => {
+  // Lọc sản phẩm theo category trước
+  if (id === 1 || id === 2) {
+    fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setCategoryResult(res.data));
+  } else if (id === 3) {
+    fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setCategoryResult(res.data));
+  }
+  if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+    fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setCategoryResult(res.data));
+  } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
+    fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setCategoryResult(res.data));
+  } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+    fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setCategoryResult(res.data));
+  } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
+    fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setCategoryResult(res.data));
+  }
+}, [id, level, parencate]);
 
-  console.log(searchResult);
+useEffect(() => {
+  // Lọc sản phẩm theo category sau đó áp dụng sắp xếp
+  if (cate === 'book') {
+    setCategoryResult(categoryResult); // Sử dụng kết quả lọc theo category
+  } else {
+    fetch
+      .get(`${apiPaths.school}/search?q=${searchInputText}`)
+      .then((res) => {
+        setCategoryResult(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
+}, [cate, searchInputText, categoryResult]);
+
+// Sắp xếp danh sách sản phẩm dựa trên tiêu chí sắp xếp
+useEffect(() => {
+  const sortedCategoryResult = [...categoryResult];
+  if (sortCriteria === 'high-to-low') {
+    sortedCategoryResult.sort((a, b) => b.price - a.price);
+  } else if (sortCriteria === 'low-to-high') {
+    sortedCategoryResult.sort((a, b) => a.price - b.price);
+  } else if (sortCriteria === 'a-to-z') {
+    sortedCategoryResult.sort((a, b) => a.title.localeCompare(b.title));
+  } else if (sortCriteria === 'z-to-a') {
+    sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
+  }
+  setSearchResult(sortedCategoryResult);
+}, [sortCriteria, categoryResult]);
+
+console.log(searchResult);
 
   return (
     <div>
@@ -71,8 +88,22 @@ export default function Products() {
           />
         </div>
       </div>
-      <div>
-        <div>Sắp xếp theo</div>
+      <div className="grid grid-cols-2 m-3">
+        <div>Sắp xếp theo: </div>
+        <div className='flex justify-end'>
+          <select
+            name="sort"
+            className="w-72"
+            value={sortCriteria}
+            onChange={handleSortChange}
+          >           
+            <option value="default">Mặc định</option>
+            <option value="high-to-low">Giá (Cao đến thấp)</option>
+            <option value="low-to-high">Giá (Thấp đến cao)</option>
+            <option value="a-to-z">Tên (Từ a - z)</option>
+            <option value="z-to-a">Tên (Từ z - a)</option>
+          </select>
+        </div>
       </div>
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
         {searchResult.map((item) => (

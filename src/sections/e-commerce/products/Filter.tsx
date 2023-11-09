@@ -1,6 +1,6 @@
-import React from 'react';
 
 export default function filter() {
+
   return (
     <div className="hidden sm:flex ">
       <div className="border-2 w-64 bg-slate-100">
@@ -23,44 +23,19 @@ export default function filter() {
           GIÁ
           <ol className="ml-2 mt-1 text-slate-400">
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                0đ - 150,000đ
-              </a>
+              <input type='radio' name="price"/> 0đ - 150,000đ
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                150,000đ - 300,000đ
-              </a>
+            <input type='radio' name="price"/> 150,000đ - 300,000đ
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                300,000đ - 500,000đ
-              </a>
+            <input type='radio' name="price"/> 300,000đ - 500,000đ
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                500,000đ - 700,000đ
-              </a>
+            <input type='radio' name="price"/> 500,000đ - 700,000đ
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                700,000đ - Trở lên
-              </a>
+            <input type='radio' name="price"/> 700,000đ - Trở lên
             </li>
           </ol>
         </div>
