@@ -40,6 +40,7 @@ export default function Products() {
     }
   }, [id, level, parencate]);
 
+<<<<<<< HEAD
   const fetchApiSearch = useCallback(async () => {
     if (cate === 'book') {
       const res = await fetch.get(`${apiPaths.book}/search?q=${searchInputText}`);
@@ -49,6 +50,31 @@ export default function Products() {
       setCategoryResult(res.data);
     }
   }, [cate, searchInputText]);
+=======
+useEffect(() => {
+  // Lọc sản phẩm theo category sau đó áp dụng sắp xếp
+  if (cate === 'book') {
+    fetch
+        .get(`${apiPaths.book}/search?q=${searchInputText}`)
+        .then((res) => {
+          setCategoryResult(res.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    setCategoryResult(categoryResult); // Sử dụng kết quả lọc theo category
+  } else {
+    fetch
+      .get(`${apiPaths.school}/search?q=${searchInputText}`)
+      .then((res) => {
+        setCategoryResult(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
+}, [cate, searchInputText, categoryResult]);
+>>>>>>> origin/thinhsort
 
   useEffect(() => {
     // Lọc sản phẩm theo category sau đó áp dụng sắp xếp
