@@ -6,6 +6,7 @@ import { RootState } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
+import Filter from './Filter'; // Hãy đảm bảo rằng bạn đã import thành phần Filter đúng cách
 
 export default function Products() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
@@ -18,6 +19,12 @@ export default function Products() {
 
   const [categoryResult, setCategoryResult] = useState<BookType[]>([]); // Kết quả lọc theo category
   const [sortCriteria, setSortCriteria] = useState('new'); // Sắp xếp theo tiêu chí 'new' ban đầu
+
+  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+
+  const handlePriceFilter = (priceRange: string) => {
+    setSelectedPriceRange(priceRange);
+  };
 
   const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortCriteria(e.target.value);
@@ -37,7 +44,18 @@ export default function Products() {
 
   useEffect(() => {
     fetchApiSearch();
-  }, [fetchApiSearch]);
+  }, [fetchApiSearch, selectedPriceRange]);
+
+
+  // Lọc kết quả tìm kiếm dựa trên phạm vi giá được chọn
+  const filteredResults = selectedPriceRange
+    ? categoryResult.filter((item) => {
+      const [minPrice, maxPrice] = selectedPriceRange.split('-');
+      const itemPrice = item.price - (item.price * item.discount) / 100;
+      return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
+    })
+    : categoryResult;
+
 
   useEffect(() => {
     if (id === 1 || id === 2) {
@@ -57,7 +75,7 @@ export default function Products() {
   }, [id, level, parencate]);
 
   useEffect(() => {
-    const sortedCategoryResult = [...categoryResult];
+    const sortedCategoryResult = [...filteredResults];
     if (sortCriteria === 'high-to-low') {
       sortedCategoryResult.sort((a, b) => b.price - a.price);
     } else if (sortCriteria === 'low-to-high') {
@@ -68,69 +86,73 @@ export default function Products() {
       sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
     }
     setSearchResult(sortedCategoryResult);
-  }, [sortCriteria, categoryResult]);
+  }, [sortCriteria, filteredResults]);
 
   return (
-    <div>
-      <div>
-        <div className="columns-2">
-          <img
-            alt=""
-            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/SaiGonbookT1023_Social_1080x1080.png"
-          />
-          <img
-            alt=""
-            src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/NCC1980BooksT1023_Gold_BannerSocial_1080x1080.png"
-          />
-        </div>
-      </div>
+    <div className='grid grid-cols-4'>
+      <div> <Filter handlePriceFilter={handlePriceFilter} /></div>
 
-      <div className="grid grid-cols-2 m-3">
-        <div>Sắp xếp theo: </div>
-        <div className="flex justify-end">
-          <select
-            name="sort"
-            className="w-72"
-            value={sortCriteria}
-            onChange={handleSortChange}
-          >
-            <option value="default">Mặc định</option>
-            <option value="high-to-low">Giá (Cao đến thấp)</option>
-            <option value="low-to-high">Giá (Thấp đến cao)</option>
-            <option value="a-to-z">Tên (Từ a - z)</option>
-            <option value="z-to-a">Tên (Từ z - a)</option>
-          </select>
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
-        {searchResult.map((item) => (
-          <div
-            key={item.id}
-            className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
-          >
-            <Link to={`/detailproduct/${item.id}`}>
-              <img
-                src={item.images}
-                alt={'img'}
-                className="w-full max-h-[190px] object-cover"
-              />
-            </Link>
-            <div className="pt-2 ">
-              <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
-              <p className="text-lg font-semibold text-[#C92127] mt-2">
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-                  item.price - (item.price * item.discount) / 100,
-                )}
-              </p>
-              <p className="text-sm text-[#888888] line-through">
-                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
-              </p>
-              <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
-                {item.discount}%
-              </span>
-            </div>
+      <div className='col-span-3'>
+        <div>
+          <div className="columns-2">
+            <img
+              alt=""
+              src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/SaiGonbookT1023_Social_1080x1080.png"
+            />
+            <img
+              alt=""
+              src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/NCC1980BooksT1023_Gold_BannerSocial_1080x1080.png"
+            />
           </div>
-        ))}
+        </div>
+
+        <div className="grid grid-cols-2 m-3">
+          <div>Sắp xếp theo: </div>
+          <div className="flex justify-end">
+            <select
+              name="sort"
+              className="w-72"
+              value={sortCriteria}
+              onChange={handleSortChange}
+            >
+              <option value="default">Mặc định</option>
+              <option value="high-to-low">Giá (Cao đến thấp)</option>
+              <option value="low-to-high">Giá (Thấp đến cao)</option>
+              <option value="a-to-z">Tên (Từ a - z)</option>
+              <option value="z-to-a">Tên (Từ z - a)</option>
+            </select>
+          </div>
+        </div>
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
+          {searchResult.map((item) => (
+            <div
+              key={item.id}
+              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+            >
+              <Link to={`/detailproduct/${item.id}`}>
+                <img
+                  src={item.images}
+                  alt={'img'}
+                  className="w-full max-h-[190px] object-cover"
+                />
+              </Link>
+              <div className="pt-2 ">
+                <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+                <p className="text-lg font-semibold text-[#C92127] mt-2">
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                    item.price - (item.price * item.discount) / 100,
+                  )}
+                </p>
+                <p className="text-sm text-[#888888] line-through">
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                </p>
+                <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+                  {item.discount}%
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

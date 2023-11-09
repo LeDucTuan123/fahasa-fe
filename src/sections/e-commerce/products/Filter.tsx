@@ -1,6 +1,14 @@
 import React from 'react';
 
-export default function filter() {
+interface FilterProps {
+  handlePriceFilter: (priceRange: string) => void;
+}
+
+export default function Filter({ handlePriceFilter }: FilterProps) {
+  const handlePriceChange = (priceRange: string) => {
+    handlePriceFilter(priceRange);
+  };
+
   return (
     <div className="hidden sm:flex ">
       <div className="border-2 w-64 bg-slate-100">
@@ -22,45 +30,60 @@ export default function filter() {
         <div className="font-medium m-2">
           GIÁ
           <ol className="ml-2 mt-1 text-slate-400">
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
+          <li>
+              <label>
+                <input
+                  type="radio"
+                  name="price"
+                  value="0-150000"
+                  onChange={() => handlePriceChange('0-150000')}
+                />{' '}
                 0đ - 150,000đ
-              </a>
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
+              <label>
+                <input
+                  type="radio"
+                  name="price"
+                  value="150000-300000"
+                  onChange={() => handlePriceChange('150000-300000')}
+                />{' '}
                 150,000đ - 300,000đ
-              </a>
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
+              <label>
+                <input
+                  type="radio"
+                  name="price"
+                  value="300000-500000"
+                  onChange={() => handlePriceChange('300000-500000')}
+                />{' '}
                 300,000đ - 500,000đ
-              </a>
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
+              <label>
+                <input
+                  type="radio"
+                  name="price"
+                  value="500000-700000"
+                  onChange={() => handlePriceChange('500000-700000')}
+                />{' '}
                 500,000đ - 700,000đ
-              </a>
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
+              <label>
+                <input
+                  type="radio"
+                  name="price"
+                  value="700000-"
+                  onChange={() => handlePriceChange('700000-')}
+                />{' '}
                 700,000đ - Trở lên
-              </a>
+              </label>
             </li>
           </ol>
         </div>
