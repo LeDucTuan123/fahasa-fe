@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 import search from 'src/layouts/main/header/search';
@@ -16,6 +16,22 @@ export default function Products() {
   const id = useSelector((state: RootState) => state.common.id);
   const parencate = useSelector((state: RootState) => state.common.parenCategory);
 
+  const fetchApiSearch = useCallback(async () => {
+    if (searchInputText) {
+      if (cate === 'book') {
+        const res = await fetch.get(`${apiPaths.book}/search?q=${searchInputText}`);
+        return setSearchResult(res.data);
+      } else {
+        const res = await fetch.get(`${apiPaths.school}/search?q=${searchInputText}`);
+        return setSearchResult(res.data);
+      }
+    }
+  }, [cate, searchInputText]);
+
+  useEffect(() => {
+    fetchApiSearch();
+  }, [fetchApiSearch]);
+
   useEffect(() => {
     if (id === 1 || id === 2) {
       fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setSearchResult(res.data));
@@ -32,30 +48,6 @@ export default function Products() {
       fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setSearchResult(res.data));
     }
   }, [id, level, parencate]);
-
-  useEffect(() => {
-    if (cate === 'book') {
-      fetch
-        .get(`${apiPaths.book}/search?q=${searchInputText}`)
-        .then((res) => {
-          setSearchResult(res.data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    } else {
-      fetch
-        .get(`${apiPaths.school}/search?q=${searchInputText}`)
-        .then((res) => {
-          setSearchResult(res.data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-    }
-  }, [cate, searchInputText]);
-
-  console.log(searchResult);
 
   return (
     <div>
