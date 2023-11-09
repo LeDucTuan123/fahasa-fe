@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
-import search from 'src/layouts/main/header/search';
 import { RootState } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
@@ -18,61 +17,58 @@ export default function Products() {
   const id = useSelector((state: RootState) => state.common.id);
   const parencate = useSelector((state: RootState) => state.common.parenCategory);
 
- // Thêm sự kiện lắng nghe cho select box
- const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
-  setSortCriteria(e.target.value);
-};
+  // Thêm sự kiện lắng nghe cho select box
+  const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSortCriteria(e.target.value);
+  };
 
-useEffect(() => {
-  // Lọc sản phẩm theo category trước
-  if (id === 1 || id === 2) {
-    fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setCategoryResult(res.data));
-  } else if (id === 3) {
-    fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setCategoryResult(res.data));
-  }
-  if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-    fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setCategoryResult(res.data));
-  } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
-    fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setCategoryResult(res.data));
-  } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-    fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setCategoryResult(res.data));
-  } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
-    fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setCategoryResult(res.data));
-  }
-}, [id, level, parencate]);
+  useEffect(() => {
+    // Lọc sản phẩm theo category trước
+    if (id === 1 || id === 2) {
+      fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setCategoryResult(res.data));
+    } else if (id === 3) {
+      fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setCategoryResult(res.data));
+    }
+    if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+      fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setCategoryResult(res.data));
+    } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
+      fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setCategoryResult(res.data));
+    } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+      fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setCategoryResult(res.data));
+    } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
+      fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setCategoryResult(res.data));
+    }
+  }, [id, level, parencate]);
 
-useEffect(() => {
-  // Lọc sản phẩm theo category sau đó áp dụng sắp xếp
-  if (cate === 'book') {
-    setCategoryResult(categoryResult); // Sử dụng kết quả lọc theo category
-  } else {
-    fetch
-      .get(`${apiPaths.school}/search?q=${searchInputText}`)
-      .then((res) => {
-        setCategoryResult(res.data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }
-}, [cate, searchInputText, categoryResult]);
+  const fetchApiSearch = useCallback(async () => {
+    if (cate === 'book') {
+      const res = await fetch.get(`${apiPaths.book}/search?q=${searchInputText}`);
+      setCategoryResult(res.data); // Sử dụng kết quả lọc theo category
+    } else {
+      const res = await fetch.get(`${apiPaths.school}/search?q=${searchInputText}`);
+      setCategoryResult(res.data);
+    }
+  }, [cate, searchInputText]);
 
-// Sắp xếp danh sách sản phẩm dựa trên tiêu chí sắp xếp
-useEffect(() => {
-  const sortedCategoryResult = [...categoryResult];
-  if (sortCriteria === 'high-to-low') {
-    sortedCategoryResult.sort((a, b) => b.price - a.price);
-  } else if (sortCriteria === 'low-to-high') {
-    sortedCategoryResult.sort((a, b) => a.price - b.price);
-  } else if (sortCriteria === 'a-to-z') {
-    sortedCategoryResult.sort((a, b) => a.title.localeCompare(b.title));
-  } else if (sortCriteria === 'z-to-a') {
-    sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
-  }
-  setSearchResult(sortedCategoryResult);
-}, [sortCriteria, categoryResult]);
+  useEffect(() => {
+    // Lọc sản phẩm theo category sau đó áp dụng sắp xếp
+    fetchApiSearch();
+  }, [fetchApiSearch]);
 
-console.log(searchResult);
+  // Sắp xếp danh sách sản phẩm dựa trên tiêu chí sắp xếp
+  useEffect(() => {
+    const sortedCategoryResult = [...categoryResult];
+    if (sortCriteria === 'high-to-low') {
+      sortedCategoryResult.sort((a, b) => b.price - a.price);
+    } else if (sortCriteria === 'low-to-high') {
+      sortedCategoryResult.sort((a, b) => a.price - b.price);
+    } else if (sortCriteria === 'a-to-z') {
+      sortedCategoryResult.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortCriteria === 'z-to-a') {
+      sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
+    }
+    setSearchResult(sortedCategoryResult);
+  }, [sortCriteria, categoryResult]);
 
   return (
     <div>
@@ -90,13 +86,13 @@ console.log(searchResult);
       </div>
       <div className="grid grid-cols-2 m-3">
         <div>Sắp xếp theo: </div>
-        <div className='flex justify-end'>
+        <div className="flex justify-end">
           <select
             name="sort"
             className="w-72"
             value={sortCriteria}
             onChange={handleSortChange}
-          >           
+          >
             <option value="default">Mặc định</option>
             <option value="high-to-low">Giá (Cao đến thấp)</option>
             <option value="low-to-high">Giá (Thấp đến cao)</option>
