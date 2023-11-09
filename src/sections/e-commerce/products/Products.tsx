@@ -44,6 +44,14 @@ useEffect(() => {
 useEffect(() => {
   // Lọc sản phẩm theo category sau đó áp dụng sắp xếp
   if (cate === 'book') {
+    fetch
+        .get(`${apiPaths.book}/search?q=${searchInputText}`)
+        .then((res) => {
+          setCategoryResult(res.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
     setCategoryResult(categoryResult); // Sử dụng kết quả lọc theo category
   } else {
     fetch
@@ -96,7 +104,7 @@ console.log(searchResult);
             className="w-72"
             value={sortCriteria}
             onChange={handleSortChange}
-          >           
+          >
             <option value="default">Mặc định</option>
             <option value="high-to-low">Giá (Cao đến thấp)</option>
             <option value="low-to-high">Giá (Thấp đến cao)</option>
