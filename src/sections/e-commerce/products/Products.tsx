@@ -2,13 +2,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 import search from 'src/layouts/main/header/search';
-import { RootState } from 'src/redux/store';
+import { setCategory } from 'src/redux/slice/commonSlice';
+import { RootState, useAppDispatch } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 
 export default function Products() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
+  const dispatch = useAppDispatch();
 
   const cate = useSelector((state: RootState) => state.common.category);
   const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
@@ -34,20 +36,26 @@ export default function Products() {
 
   useEffect(() => {
     if (id === 1 || id === 2) {
+      dispatch(setCategory('book'));
       fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setSearchResult(res.data));
     } else if (id === 3) {
+      dispatch(setCategory('schooltool'));
       fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setSearchResult(res.data));
     }
     if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+      dispatch(setCategory('book'));
       fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setSearchResult(res.data));
     } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
+      dispatch(setCategory('schooltool'));
       fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setSearchResult(res.data));
     } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+      dispatch(setCategory('book'));
       fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setSearchResult(res.data));
     } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
+      dispatch(setCategory('schooltool'));
       fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setSearchResult(res.data));
     }
-  }, [id, level, parencate]);
+  }, [dispatch, id, level, parencate]);
 
   return (
     <div>
