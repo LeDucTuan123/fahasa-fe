@@ -1,11 +1,10 @@
-import React from 'react';
 
 interface FilterProps {
   handlePriceFilter: (priceRange: string) => void;
   selectedPriceRange: string; // Thêm prop này
 }
 
-export default function Filter({ handlePriceFilter, selectedPriceRange}: FilterProps) {
+export default function Filter({ handlePriceFilter, selectedPriceRange }: FilterProps) {
   const handlePriceChange = (priceRange: string) => {
     handlePriceFilter(priceRange);
   };
@@ -31,19 +30,19 @@ export default function Filter({ handlePriceFilter, selectedPriceRange}: FilterP
         <div className="font-medium m-2">
           GIÁ
           <ol className="ml-2 mt-1 text-slate-400">
-          <li>
+            <li>
               <label>
                 <input
                   type="radio"
                   name="price"
-                  value="0-150000000" 
+                  value="0-150000000"
                   onChange={() => handlePriceChange('0-150000000')}
-                  checked={selectedPriceRange === '0-150000000'} 
+                  checked={selectedPriceRange === '0-150000000'}
                 />{' '}
                 Tất cả
               </label>
             </li>
-          <li>
+            <li>
               <label>
                 <input
                   type="radio"
@@ -109,12 +108,9 @@ export default function Filter({ handlePriceFilter, selectedPriceRange}: FilterP
           Danh mục
           <ol className="ml-2 mt-1 text-slate-400">
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Comedy
-              </a>
+              <label htmlFor="">
+                <input type="text" name="" /> Văn học
+              </label>
             </li>
             <li>
               <a
