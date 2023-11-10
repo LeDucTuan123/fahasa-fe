@@ -17,7 +17,6 @@ export default function Products() {
 
   const dispatch = useAppDispatch();
 
-
   const cate = useSelector((state: RootState) => state.common.category);
   const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
   const level = useSelector((state: RootState) => state.common.catelvId);
@@ -33,7 +32,6 @@ export default function Products() {
   };
 
   const emptyCartImageUrl = 'http://www.muctamloc.com/assets/images/empty_cart.png';
-
 
   const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortCriteria(e.target.value);
@@ -59,20 +57,17 @@ export default function Products() {
     fetchApiSearch();
   }, [fetchApiSearch, selectedPriceRange]);
 
-
   // Lọc kết quả tìm kiếm dựa trên phạm vi giá được chọn
   const filteredResults = selectedPriceRange
     ? categoryResult.filter((item) => {
-      const [minPrice, maxPrice] = selectedPriceRange.split('-');
-      const itemPrice = item.price - (item.price * item.discount) / 100;
-      return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
-    })
+        const [minPrice, maxPrice] = selectedPriceRange.split('-');
+        const itemPrice = item.price - (item.price * item.discount) / 100;
+        return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
+      })
     : categoryResult;
-
 
   useEffect(() => {
     if (id === 1 || id === 2) {
-
       fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setCategoryResult(res.data));
     } else if (id === 3) {
       fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setCategoryResult(res.data));
@@ -88,23 +83,6 @@ export default function Products() {
 
       dispatch(setCategory('book'));
       fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setSearchResult(res.data));
-    } else if (id === 3) {
-      dispatch(setCategory('schooltool'));
-      fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setSearchResult(res.data));
-    }
-    if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-      dispatch(setCategory('book'));
-      fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setSearchResult(res.data));
-    } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
-      dispatch(setCategory('schooltool'));
-      fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setSearchResult(res.data));
-    } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-      dispatch(setCategory('book'));
-      fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setSearchResult(res.data));
-    } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
-      dispatch(setCategory('schooltool'));
-      fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setSearchResult(res.data));
-
     }
   }, [dispatch, id, level, parencate]);
 
@@ -123,10 +101,16 @@ export default function Products() {
   }, [sortCriteria, filteredResults]);
 
   return (
-    <div className='grid grid-cols-4'>
-      <div> <Filter handlePriceFilter={handlePriceFilter} selectedPriceRange={selectedPriceRange} /></div>
+    <div className="grid grid-cols-4">
+      <div>
+        {' '}
+        <Filter
+          handlePriceFilter={handlePriceFilter}
+          selectedPriceRange={selectedPriceRange}
+        />
+      </div>
 
-      <div className='col-span-3'>
+      <div className="col-span-3">
         <div>
           <div className="columns-2">
             <img
@@ -139,7 +123,6 @@ export default function Products() {
             />
           </div>
         </div>
-
 
         <div className="grid grid-cols-2 m-3">
           <div>Sắp xếp theo: </div>
@@ -167,15 +150,17 @@ export default function Products() {
               <option value={24}>24 sản phẩm</option>
               <option value={12}>12 sản phẩm</option>
               <option value={4}>4 sản phẩm</option>
-
             </select>
           </div>
         </div>
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
           {searchResult.length === 0 ? (
-            <div className='text-center'>
-              <img src={emptyCartImageUrl} alt="Empty Cart" />
-              <p className='m-1'>Không có sản phẩm</p>
+            <div className="text-center">
+              <img
+                src={emptyCartImageUrl}
+                alt="Empty Cart"
+              />
+              <p className="m-1">Không có sản phẩm</p>
             </div>
           ) : (
             searchResult.map((item) => (
