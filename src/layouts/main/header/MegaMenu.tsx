@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { CategoryType } from 'src/types';
 import { useAppDispatch } from 'src/redux/store';
-import { setCatelvId, setId, setParentCategory } from 'src/redux/slice/commonSlice';
+import { setCategory, setCatelvId, setId, setParentCategory } from 'src/redux/slice/commonSlice';
 
 interface Props {
   onMouse: () => void;
@@ -26,17 +26,32 @@ const MegaMenu = ({
   const dispatch = useAppDispatch();
 
   const handelOnClickCate1 = (e: CategoryType) => {
+    if (e.id === 1 || e.id === 2) {
+      dispatch(setCategory('book'));
+    } else if (e.id === 3) {
+      dispatch(setCategory('schooltool'));
+    }
     dispatch(setCatelvId(e.level));
     dispatch(setId(e.id));
   };
 
   const handelOnClickCate2 = (e: CategoryType) => {
+    if (e.id === 1 || e.id === 2) {
+      dispatch(setCategory('book'));
+    } else if (e.id === 3) {
+      dispatch(setCategory('schooltool'));
+    }
     dispatch(setCatelvId(e.level));
     dispatch(setId(e.id));
     dispatch(setParentCategory(e.parent.categoryname));
   };
 
   const handelOnClickCate3 = (e: CategoryType) => {
+    if (e.id === 1 || e.id === 2) {
+      dispatch(setCategory('book'));
+    } else if (e.id === 3) {
+      dispatch(setCategory('schooltool'));
+    }
     dispatch(setCatelvId(e.level));
     dispatch(setId(e.id));
     dispatch(setParentCategory(e.parent.parent.categoryname));
