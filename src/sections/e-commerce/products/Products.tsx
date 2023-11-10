@@ -2,9 +2,6 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 
-import { RootState } from 'src/redux/store';
-=======
-import search from 'src/layouts/main/header/search';
 import { setCategory } from 'src/redux/slice/commonSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
 

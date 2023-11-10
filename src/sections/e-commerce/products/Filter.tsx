@@ -109,37 +109,37 @@ export default function Filter({ handlePriceFilter, selectedPriceRange }: Filter
           <ol className="ml-2 mt-1 text-slate-400">
             <li>
               <label htmlFor="">
-                <input type="text" name="" /> Văn học
+                <input type="radio" name="filtercate" /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="text" name="" /> Văn học
+                <input type="radio" name="filtercate" /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="text" name="" /> Văn học
+                <input type="radio" name="filtercate" /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="text" name="" /> Văn học
+                <input type="radio" name="filtercate" /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="text" name="" /> Văn học
+                <input type="radio" name="filtercate" /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="text" name="" /> Văn học
+                <input type="radio" name="filtercate" /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="text" name="" /> Văn học
+                <input type="radio" name="filtercate" /> Văn học
               </label>
             </li>
           </ol>
