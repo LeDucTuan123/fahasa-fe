@@ -12,6 +12,7 @@ export default function Cart() {
   const [checkAll, setCheckAll] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [vouchers, setVouchers] = useState([]);
+  const [applyVoucher, setApplyVoucher] = useState<any>();
 
   useEffect(() => {
     // lấy dữ liệu voucher
@@ -118,7 +119,15 @@ export default function Cart() {
   }
 
   function handleApplyVoucher(id: number) {
-    console.log(id);
+    setApplyVoucher(
+      vouchers.find((item: any) => {
+        return item.id === id;
+      }),
+    );
+  }
+
+  function removeApplyVoucher() {
+    setApplyVoucher(undefined);
   }
 
   return (
@@ -275,6 +284,8 @@ export default function Cart() {
               handleOpenModal={handleOpenModal}
               productPay={productPay}
               handleApplyVoucher={handleApplyVoucher}
+              applyVoucher={applyVoucher}
+              removeApplyVoucher={removeApplyVoucher}
             />
             {/* thành tiền */}
             <div className="bg-gray-100 mt-2 max-h-48 rounded-lg">
@@ -294,20 +305,44 @@ export default function Cart() {
                     )}
                 </div>
               </div>
-              <div className="grid grid-cols-5 max-h-12">
+              {applyVoucher && (
+                <div className="grid grid-cols-2 border-b-2 min-h-12">
+                  <div className="text-left p-2">
+                    Mã giảm {applyVoucher && applyVoucher.valuev / 1000}K - Đơn hàng từ{' '}
+                    {applyVoucher && applyVoucher.condition / 1000}K
+                  </div>
+                  <div className="text-right p-2">{ConvertToVietNamDong(applyVoucher && applyVoucher.valuev)}</div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-5 min-h-12">
                 <strong className="col-span-3 text-left text-base p-2">Tổng số tiền (gồm VAT)</strong>
                 <strong className="col-span-2 text-right p-2 text-red-700 text-xl">
-                  {productPay &&
-                    productPay?.length > 0 &&
-                    ConvertToVietNamDong(
-                      productPay?.reduce((accum, currentValue) => {
-                        return (
-                          accum +
-                          (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
-                            currentValue.quantity
-                        );
-                      }, 0),
-                    )}
+                  {productPay && productPay?.length > 0 && applyVoucher ? (
+                    <>
+                      {ConvertToVietNamDong(
+                        productPay?.reduce((accum, currentValue) => {
+                          return (
+                            accum +
+                            (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                              currentValue.quantity
+                          );
+                        }, 0) - applyVoucher.valuev,
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {ConvertToVietNamDong(
+                        productPay?.reduce((accum, currentValue) => {
+                          return (
+                            accum +
+                            (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                              currentValue.quantity
+                          );
+                        }, 0),
+                      )}
+                    </>
+                  )}
                 </strong>
               </div>
               <div className="grid grid-rows-2 m-2 h-28">
@@ -332,7 +367,9 @@ export default function Cart() {
         setOpenModal={handleCloseModal}
         vouchers={vouchers}
         productPay={productPay}
+        applyVoucher={applyVoucher}
         handleApplyVoucher={handleApplyVoucher}
+        removeApplyVoucher={removeApplyVoucher}
       />
     </>
   );

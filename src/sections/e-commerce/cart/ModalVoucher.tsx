@@ -8,10 +8,20 @@ interface modalVoucherProps {
   setOpenModal: () => void;
   vouchers: any;
   productPay: Array<any>;
+  applyVoucher: any;
   handleApplyVoucher: (id: number) => void;
+  removeApplyVoucher: () => void;
 }
 
-function ModalVoucher({ openModal, setOpenModal, vouchers, productPay, handleApplyVoucher }: modalVoucherProps) {
+function ModalVoucher({
+  openModal,
+  setOpenModal,
+  vouchers,
+  productPay,
+  applyVoucher,
+  handleApplyVoucher,
+  removeApplyVoucher,
+}: modalVoucherProps) {
   function formatDateToDDMMYYYY(inputDate: string) {
     const date = new Date(inputDate);
 
@@ -104,28 +114,39 @@ function ModalVoucher({ openModal, setOpenModal, vouchers, productPay, handleApp
                           <p className="text-[10px]">{ConvertToVietNamDong(item.condition)}</p>
                         </div>
                       </div>
-                      {item.condition -
-                        productPay?.reduce((accum, currentValue) => {
-                          return (
-                            accum +
-                            (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
-                              currentValue.quantity
-                          );
-                        }, 0) <
-                      0 ? (
+                      {applyVoucher && applyVoucher.id === item.id ? (
                         <button
-                          onClick={() => handleApplyVoucher(item.id)}
-                          className="bg-blue-500 text-white rounded-lg me-2"
+                          onClick={() => removeApplyVoucher()}
+                          className="text-blue-500 border-2 border-blue-500 border-solid rounded hover:bg-blue-500 hover:text-white"
                         >
-                          Áp dụng
+                          Bỏ chọn
                         </button>
                       ) : (
-                        <Link
-                          to={'/'}
-                          className="bg-blue-500 text-white rounded-lg me-2 text-center leading-[30px]"
-                        >
-                          Mua thêm
-                        </Link>
+                        <>
+                          {item.condition -
+                            productPay?.reduce((accum, currentValue) => {
+                              return (
+                                accum +
+                                (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                  currentValue.quantity
+                              );
+                            }, 0) <
+                          0 ? (
+                            <button
+                              onClick={() => handleApplyVoucher(item.id)}
+                              className="bg-blue-500 text-white rounded-lg me-2"
+                            >
+                              Áp dụng
+                            </button>
+                          ) : (
+                            <Link
+                              to={'/'}
+                              className="bg-blue-500 text-white rounded-lg me-2 leading-[30px] text-center"
+                            >
+                              Mua thêm
+                            </Link>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
