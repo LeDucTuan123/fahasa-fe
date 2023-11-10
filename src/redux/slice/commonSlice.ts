@@ -51,10 +51,10 @@ export const commonSlice = createSlice({
     setTextSearchValue: (state, action: PayloadAction<string>) => {
       state.textSearchValue = action.payload;
     },
-    setCatelvId: (state, action: PayloadAction<number>) => {
+    setCatelvId: (state, action: PayloadAction<number | null>) => {
       state.catelvId = action.payload;
     },
-    setId: (state, action: PayloadAction<number>) => {
+    setId: (state, action: PayloadAction<number | null>) => {
       state.id = action.payload;
     },
     setParentCategory: (state, action: PayloadAction<string>) => {

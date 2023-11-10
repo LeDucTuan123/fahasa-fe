@@ -3,7 +3,14 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useDebounce from 'src/hooks/useDebounce';
-import { setCategory, setIsShowSearch, setTextSearchValue } from 'src/redux/slice/commonSlice';
+import {
+  setCategory,
+  setCatelvId,
+  setId,
+  setIsShowSearch,
+  setParentCategory,
+  setTextSearchValue,
+} from 'src/redux/slice/commonSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
@@ -106,6 +113,11 @@ export default function Search() {
       event.preventDefault();
       dispatch(setIsShowSearch(false));
       dispatch(setTextSearchValue(debounceValue));
+
+      dispatch(setId(null));
+      dispatch(setCatelvId(null));
+      dispatch(setParentCategory(''));
+
       navigate(`/products/searchengine?q=${debounceValue}`);
     }
   };
