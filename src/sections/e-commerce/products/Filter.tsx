@@ -113,52 +113,34 @@ export default function Filter({ handlePriceFilter, selectedPriceRange }: Filter
               </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Shounen
-              </a>
+              <label htmlFor="">
+                <input type="text" name="" /> Văn học
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Adventure
-              </a>
+              <label htmlFor="">
+                <input type="text" name="" /> Văn học
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Drama
-              </a>
+              <label htmlFor="">
+                <input type="text" name="" /> Văn học
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Action
-              </a>
+              <label htmlFor="">
+                <input type="text" name="" /> Văn học
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                School Lìe
-              </a>
+              <label htmlFor="">
+                <input type="text" name="" /> Văn học
+              </label>
             </li>
             <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Horror
-              </a>
+              <label htmlFor="">
+                <input type="text" name="" /> Văn học
+              </label>
             </li>
           </ol>
         </div>
