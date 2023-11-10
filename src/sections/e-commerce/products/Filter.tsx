@@ -2,9 +2,10 @@ import React from 'react';
 
 interface FilterProps {
   handlePriceFilter: (priceRange: string) => void;
+  selectedPriceRange: string; // Thêm prop này
 }
 
-export default function Filter({ handlePriceFilter }: FilterProps) {
+export default function Filter({ handlePriceFilter, selectedPriceRange}: FilterProps) {
   const handlePriceChange = (priceRange: string) => {
     handlePriceFilter(priceRange);
   };
@@ -35,8 +36,21 @@ export default function Filter({ handlePriceFilter }: FilterProps) {
                 <input
                   type="radio"
                   name="price"
+                  value="0-150000000" 
+                  onChange={() => handlePriceChange('0-150000000')}
+                  checked={selectedPriceRange === '0-150000000'} 
+                />{' '}
+                Tất cả
+              </label>
+            </li>
+          <li>
+              <label>
+                <input
+                  type="radio"
+                  name="price"
                   value="0-150000"
                   onChange={() => handlePriceChange('0-150000')}
+                  checked={selectedPriceRange === '0-150000'}
                 />{' '}
                 0đ - 150,000đ
               </label>
@@ -48,6 +62,7 @@ export default function Filter({ handlePriceFilter }: FilterProps) {
                   name="price"
                   value="150000-300000"
                   onChange={() => handlePriceChange('150000-300000')}
+                  checked={selectedPriceRange === '150000-300000'}
                 />{' '}
                 150,000đ - 300,000đ
               </label>
@@ -59,6 +74,7 @@ export default function Filter({ handlePriceFilter }: FilterProps) {
                   name="price"
                   value="300000-500000"
                   onChange={() => handlePriceChange('300000-500000')}
+                  checked={selectedPriceRange === '300000-500000'}
                 />{' '}
                 300,000đ - 500,000đ
               </label>
@@ -70,6 +86,7 @@ export default function Filter({ handlePriceFilter }: FilterProps) {
                   name="price"
                   value="500000-700000"
                   onChange={() => handlePriceChange('500000-700000')}
+                  checked={selectedPriceRange === '500000-700000'}
                 />{' '}
                 500,000đ - 700,000đ
               </label>
@@ -79,8 +96,9 @@ export default function Filter({ handlePriceFilter }: FilterProps) {
                 <input
                   type="radio"
                   name="price"
-                  value="700000-"
-                  onChange={() => handlePriceChange('700000-')}
+                  value="700000-150000000"
+                  onChange={() => handlePriceChange('700000-150000000')}
+                  checked={selectedPriceRange === '700000-150000000'}
                 />{' '}
                 700,000đ - Trở lên
               </label>

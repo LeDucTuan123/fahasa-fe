@@ -20,11 +20,14 @@ export default function Products() {
   const [categoryResult, setCategoryResult] = useState<BookType[]>([]); // Kết quả lọc theo category
   const [sortCriteria, setSortCriteria] = useState('new'); // Sắp xếp theo tiêu chí 'new' ban đầu
 
-  const [selectedPriceRange, setSelectedPriceRange] = useState('');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('0-150000000');
 
   const handlePriceFilter = (priceRange: string) => {
     setSelectedPriceRange(priceRange);
   };
+
+  const emptyCartImageUrl = 'http://www.muctamloc.com/assets/images/empty_cart.png';
+
 
   const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortCriteria(e.target.value);
@@ -90,7 +93,7 @@ export default function Products() {
 
   return (
     <div className='grid grid-cols-4'>
-      <div> <Filter handlePriceFilter={handlePriceFilter} /></div>
+      <div> <Filter handlePriceFilter={handlePriceFilter} selectedPriceRange={selectedPriceRange}/></div>
 
       <div className='col-span-3'>
         <div>
@@ -105,6 +108,7 @@ export default function Products() {
             />
           </div>
         </div>
+        
 
         <div className="grid grid-cols-2 m-3">
           <div>Sắp xếp theo: </div>
@@ -124,7 +128,13 @@ export default function Products() {
           </div>
         </div>
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
-          {searchResult.map((item) => (
+        {searchResult.length === 0 ? (            
+            <div>
+              <img src={emptyCartImageUrl} alt="Empty Cart" />
+              <p>Không có sản phẩm</p>
+              </div>
+          ) : (
+          searchResult.map((item) => (
             <div
               key={item.id}
               className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
@@ -151,7 +161,8 @@ export default function Products() {
                 </span>
               </div>
             </div>
-          ))}
+          ))
+        )}
         </div>
       </div>
     </div>
