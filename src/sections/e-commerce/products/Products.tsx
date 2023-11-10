@@ -9,6 +9,7 @@ import Filter from './Filter'; // Hãy đảm bảo rằng bạn đã import th�
 
 export default function Products() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
+  const [displayedProducts, setDisplayedProducts] = useState(128); // Trạng thái để lưu số lượng sản phẩm cần hiển thị
 
   const cate = useSelector((state: RootState) => state.common.category);
   const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
@@ -18,7 +19,6 @@ export default function Products() {
 
   const [categoryResult, setCategoryResult] = useState<BookType[]>([]); // Kết quả lọc theo category
   const [sortCriteria, setSortCriteria] = useState('new'); // Sắp xếp theo tiêu chí 'new' ban đầu
-
   const [selectedPriceRange, setSelectedPriceRange] = useState('0-150000000');
 
   const handlePriceFilter = (priceRange: string) => {
@@ -30,6 +30,10 @@ export default function Products() {
 
   const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSortCriteria(e.target.value);
+  };
+
+  const handleDisplayChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setDisplayedProducts(Number(e.target.value)); // Chuyển đổi giá trị đã chọn thành số
   };
 
   const fetchApiSearch = useCallback(async () => {
@@ -87,7 +91,7 @@ export default function Products() {
     } else if (sortCriteria === 'z-to-a') {
       sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
     }
-    setSearchResult(sortedCategoryResult);
+    setSearchResult(sortedCategoryResult.slice(0, displayedProducts));
   }, [sortCriteria, filteredResults]);
 
   return (
@@ -114,7 +118,7 @@ export default function Products() {
           <div className="flex justify-end">
             <select
               name="sort"
-              className="w-72"
+              className="w-64 ps-2"
               value={sortCriteria}
               onChange={handleSortChange}
             >
@@ -123,6 +127,19 @@ export default function Products() {
               <option value="low-to-high">Giá (Thấp đến cao)</option>
               <option value="a-to-z">Tên (Từ a - z)</option>
               <option value="z-to-a">Tên (Từ z - a)</option>
+            </select>
+            <select
+              name="display-quantity" // Thêm một tên cho phần tử select
+              className="w-64 ms-3 ps-2"
+              value={displayedProducts} // Đặt giá trị đã chọn
+              onChange={handleDisplayChange} // Xử lý sự kiện thay đổi
+            >
+              <option value={128}>128 sản phẩm</option>
+              <option value={64}>64 sản phẩm</option>
+              <option value={24}>24 sản phẩm</option>
+              <option value={12}>12 sản phẩm</option>
+              <option value={4}>4 sản phẩm</option>
+              
             </select>
           </div>
         </div>
