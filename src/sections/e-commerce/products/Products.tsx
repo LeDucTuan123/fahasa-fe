@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
-import search from 'src/layouts/main/header/search';
 import { RootState } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
@@ -93,7 +92,7 @@ export default function Products() {
 
   return (
     <div className='grid grid-cols-4'>
-      <div> <Filter handlePriceFilter={handlePriceFilter} selectedPriceRange={selectedPriceRange}/></div>
+      <div> <Filter handlePriceFilter={handlePriceFilter} selectedPriceRange={selectedPriceRange} /></div>
 
       <div className='col-span-3'>
         <div>
@@ -108,7 +107,7 @@ export default function Products() {
             />
           </div>
         </div>
-        
+
 
         <div className="grid grid-cols-2 m-3">
           <div>Sắp xếp theo: </div>
@@ -128,41 +127,41 @@ export default function Products() {
           </div>
         </div>
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
-        {searchResult.length === 0 ? (            
-            <div>
+          {searchResult.length === 0 ? (
+            <div className='text-center'>
               <img src={emptyCartImageUrl} alt="Empty Cart" />
-              <p>Không có sản phẩm</p>
-              </div>
-          ) : (
-          searchResult.map((item) => (
-            <div
-              key={item.id}
-              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
-            >
-              <Link to={`/detailproduct/${item.id}`}>
-                <img
-                  src={item.images}
-                  alt={'img'}
-                  className="w-full max-h-[190px] object-cover"
-                />
-              </Link>
-              <div className="pt-2 ">
-                <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
-                <p className="text-lg font-semibold text-[#C92127] mt-2">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-                    item.price - (item.price * item.discount) / 100,
-                  )}
-                </p>
-                <p className="text-sm text-[#888888] line-through">
-                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
-                </p>
-                <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
-                  {item.discount}%
-                </span>
-              </div>
+              <p className='m-1'>Không có sản phẩm</p>
             </div>
-          ))
-        )}
+          ) : (
+            searchResult.map((item) => (
+              <div
+                key={item.id}
+                className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+              >
+                <Link to={`/detailproduct/${item.id}`}>
+                  <img
+                    src={item.images}
+                    alt={'img'}
+                    className="w-full max-h-[190px] object-cover"
+                  />
+                </Link>
+                <div className="pt-2 ">
+                  <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+                  <p className="text-lg font-semibold text-[#C92127] mt-2">
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                      item.price - (item.price * item.discount) / 100,
+                    )}
+                  </p>
+                  <p className="text-sm text-[#888888] line-through">
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                  </p>
+                  <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+                    {item.discount}%
+                  </span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
