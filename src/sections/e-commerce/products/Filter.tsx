@@ -106,7 +106,7 @@ export default function Filter({ handlePriceFilter, selectedPriceRange}: FilterP
           </ol>
         </div>
         <div className="font-medium m-2">
-          GENRES
+          Danh mục
           <ol className="ml-2 mt-1 text-slate-400">
             <li>
               <a

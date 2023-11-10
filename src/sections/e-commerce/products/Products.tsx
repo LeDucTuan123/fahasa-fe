@@ -139,7 +139,7 @@ export default function Products() {
               <option value={24}>24 sản phẩm</option>
               <option value={12}>12 sản phẩm</option>
               <option value={4}>4 sản phẩm</option>
-              
+
             </select>
           </div>
         </div>
