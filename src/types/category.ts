@@ -27,6 +27,6 @@ export interface CategoryType {
   categoryname: string;
   level: number;
   cats: cats[] | null;
-  schooltools: ToolType[];
+  schooltools?: ToolType[];
   parent: parents;
 }
