@@ -8,13 +8,26 @@ export default function FormPayment() {
   const [listAddress, setListAddress] = useState<Array<any>>([]);
   const [listDistrics, setListDistrics] = useState<Array<any>>([]);
   const [listWards, setListWards] = useState<Array<any>>([]);
+  const [address, setAddress] = useState<any>({
+    city: '',
+    district: '',
+    ward: '',
+  });
   const [information, setInformation] = useState<any>({
     fullname: '',
     email: '',
     phone: '',
     address: '',
   });
-  const [informationError, setInformationError] = useState<any>();
+  const [informationError, setInformationError] = useState<any>({
+    fullname: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    district: '',
+    ward: '',
+  });
 
   useEffect(() => {
     // gọi api lấy địa chỉ
@@ -29,39 +42,112 @@ export default function FormPayment() {
   }, []);
   // hàm sẽ chạy khi chọn tỉnh thành
   function handleChangeCity(e: React.ChangeEvent<HTMLSelectElement>) {
-    const city = listAddress.find((item) => {
+    const c = listAddress.find((item) => {
       return item.Id === e.target.value;
     });
-    if (city) {
-      setListDistrics(city.Districts);
+    if (c) {
+      setListDistrics(c.Districts);
+      setAddress((a: any) => {
+        return { ...a, city: c.Name };
+      });
     } else {
       setListDistrics([]);
     }
     setListWards([]);
+
+    setInformationError(() => validation({ ...information, city: e.target.value }));
   }
   // hàm sẽ chạy khi chọn phường
   function handleChangeDistric(e: React.ChangeEvent<HTMLSelectElement>) {
-    const district = listDistrics.find((item) => {
+    const d = listDistrics.find((item) => {
       return item.Id === e.target.value;
     });
-    if (district) {
-      setListWards(district.Wards);
+    if (d) {
+      setListWards(d.Wards);
+      setAddress((a: any) => {
+        return { ...a, distrct: d.Name };
+      });
     } else {
       setListWards([]);
     }
+    setInformationError(() => validation({ ...information, district: e.target.value }));
   }
 
-  function validation() {}
+  function handleChangeWard(e: React.ChangeEvent<HTMLSelectElement>) {
+    const w = listWards.find((item) => {
+      return item.Id === e.target.value;
+    });
+    if (w) {
+      setAddress((a: any) => {
+        return { ...a, ward: w.Name };
+      });
+    }
+    setInformationError(() => validation({ ...information, ward: e.target.value }));
+  }
+
+  function validation(i: any) {
+    let error = { fullname: '', email: '', phone: '', address: '', city: '', district: '', ward: '' };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneNumberRegex = /^(0[1-9])+([0-9]{8})\b/;
+    if (i.fullname.trim().length === 0) {
+      error.fullname = 'Thông tin này không được để trống';
+    }
+
+    if (i.fullname.trim().length < 3 && i.fullname.trim().length > 0) {
+      error.fullname = 'Tên ít nhất phải có 3 ký tự';
+    }
+
+    if (!emailRegex.test(i.email)) {
+      error.email = 'Không phải định dạng email';
+    }
+
+    if (i.email.trim().length === 0) {
+      error.email = 'Thông tin này không được để trống';
+    }
+
+    if (i.phone.trim().length === 0) {
+      error.phone = 'Thông tin này không được để trống';
+    }
+
+    if (i.phone.trim().length > 0 && i.phone.trim().length < 10) {
+      error.phone = 'Số điện thoại phải có ít nhất 10 số';
+    }
+
+    if (i.phone.trim().length > 0 && !phoneNumberRegex.test(i.phone)) {
+      error.phone = 'Không đúng định dạng số điện thoại';
+    }
+
+    if (i.address.trim().length === 0) {
+      error.address = 'Thông tin này không được để trống';
+    }
+
+    if (i.city === '-1') {
+      error.city = 'Thông tin này không được để trống';
+    }
+
+    if (i.district === '-1') {
+      error.district = 'Thông tin này không được để trống';
+    }
+
+    if (i.ward === '-1') {
+      error.ward = 'Thông tin này không được để trống';
+    }
+
+    return error;
+  }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     const changed = {
       [name]: value,
     };
-
+    let updatedInfo: any;
     setInformation((i: any) => {
-      return { ...i, ...changed };
+      updatedInfo = { ...i, ...changed };
+      return updatedInfo;
     });
+
+    setInformationError(() => validation(updatedInfo));
   }
   return (
     <>
@@ -94,10 +180,20 @@ export default function FormPayment() {
                 value={information.fullname}
                 onChange={(e) => handleChange(e)}
                 placeholder="Nhập họ và tên người nhận"
-                className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
+                className={
+                  informationError.fullname.length > 0
+                    ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
+                    : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
+                }
               />
-              <p></p>
             </div>
+            {informationError.fullname.length > 0 && (
+              <div className="mt-2">
+                <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
+                <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.fullname}</p>
+              </div>
+            )}
+
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Email</label>
               <input
@@ -106,9 +202,19 @@ export default function FormPayment() {
                 value={information.email}
                 placeholder="Nhập email"
                 onChange={(e) => handleChange(e)}
-                className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
+                className={
+                  informationError.email.length > 0
+                    ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
+                    : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
+                }
               />
             </div>
+            {informationError.email.length > 0 && (
+              <div className="mt-2">
+                <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
+                <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.email}</p>
+              </div>
+            )}
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Số điện thoại</label>
               <input
@@ -118,9 +224,19 @@ export default function FormPayment() {
                 onChange={(e) => handleChange(e)}
                 placeholder="Ví dụ: 0979123xxx (10 ký tự số)"
                 maxLength={10}
-                className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
+                className={
+                  informationError.email.length > 0
+                    ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
+                    : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
+                }
               />
             </div>
+            {informationError.phone.length > 0 && (
+              <div className="mt-2">
+                <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
+                <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.phone}</p>
+              </div>
+            )}
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Tỉnh/Thành Phố</label>
               <select
@@ -141,6 +257,12 @@ export default function FormPayment() {
                   })}
               </select>
             </div>
+            {informationError.city.length > 0 && (
+              <div className="mt-2">
+                <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
+                <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.city}</p>
+              </div>
+            )}
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Quận/Huyện</label>
               <select
@@ -148,7 +270,7 @@ export default function FormPayment() {
                 onChange={(e) => handleChangeDistric(e)}
                 className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
               >
-                <option value="">-- Chọn quận huyện --</option>
+                <option value="-1">-- Chọn quận huyện --</option>
                 {listDistrics &&
                   listDistrics.map((item) => {
                     return (
@@ -162,13 +284,20 @@ export default function FormPayment() {
                   })}
               </select>
             </div>
+            {informationError.district.length > 0 && (
+              <div className="mt-2">
+                <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
+                <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.district}</p>
+              </div>
+            )}
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Phường/Xã</label>
               <select
+                onChange={(e) => handleChangeWard(e)}
                 disabled={listWards && listWards.length === 0}
                 className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
               >
-                <option value="">-- Chọn phường xã --</option>
+                <option value="-1">-- Chọn phường xã --</option>
                 {listWards &&
                   listWards.map((item) => {
                     return (
@@ -182,6 +311,12 @@ export default function FormPayment() {
                   })}
               </select>
             </div>
+            {informationError.ward.length > 0 && (
+              <div className="mt-2">
+                <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
+                <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.ward}</p>
+              </div>
+            )}
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Địa chỉ nhận hàng</label>
               <input
@@ -190,9 +325,19 @@ export default function FormPayment() {
                 value={information.address}
                 onChange={(e) => handleChange(e)}
                 placeholder="Nhập địa chỉ nhận hàng"
-                className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
+                className={
+                  informationError.email.length > 0
+                    ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
+                    : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
+                }
               />
             </div>
+            {informationError.address.length > 0 && (
+              <div className="mt-2">
+                <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
+                <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.address}</p>
+              </div>
+            )}
           </div>
         </div>
         <div className="bg-white p-5 mt-4">
