@@ -1,8 +1,68 @@
 import { Icon } from '@iconify/react';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function FormPayment() {
+  // các state để lưu địa chỉ
+  const [listAddress, setListAddress] = useState<Array<any>>([]);
+  const [listDistrics, setListDistrics] = useState<Array<any>>([]);
+  const [listWards, setListWards] = useState<Array<any>>([]);
+  const [information, setInformation] = useState<any>({
+    fullname: '',
+    email: '',
+    phone: '',
+    address: '',
+  });
+  const [informationError, setInformationError] = useState<any>();
+
+  useEffect(() => {
+    // gọi api lấy địa chỉ
+    axios
+      .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
+      .then((res) => {
+        setListAddress(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  // hàm sẽ chạy khi chọn tỉnh thành
+  function handleChangeCity(e: React.ChangeEvent<HTMLSelectElement>) {
+    const city = listAddress.find((item) => {
+      return item.Id === e.target.value;
+    });
+    if (city) {
+      setListDistrics(city.Districts);
+    } else {
+      setListDistrics([]);
+    }
+    setListWards([]);
+  }
+  // hàm sẽ chạy khi chọn phường
+  function handleChangeDistric(e: React.ChangeEvent<HTMLSelectElement>) {
+    const district = listDistrics.find((item) => {
+      return item.Id === e.target.value;
+    });
+    if (district) {
+      setListWards(district.Wards);
+    } else {
+      setListWards([]);
+    }
+  }
+
+  function validation() {}
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    const changed = {
+      [name]: value,
+    };
+
+    setInformation((i: any) => {
+      return { ...i, ...changed };
+    });
+  }
   return (
     <>
       <div className="pt-5">
@@ -30,15 +90,22 @@ export default function FormPayment() {
               <label className="text-[15px] mr-3 w-[170px] inline-block">Họ và tên người nhận</label>
               <input
                 type="text"
+                name="fullname"
+                value={information.fullname}
+                onChange={(e) => handleChange(e)}
                 placeholder="Nhập họ và tên người nhận"
                 className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
               />
+              <p></p>
             </div>
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Email</label>
               <input
                 type="email"
+                name="email"
+                value={information.email}
                 placeholder="Nhập email"
+                onChange={(e) => handleChange(e)}
                 className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
               />
             </div>
@@ -46,6 +113,9 @@ export default function FormPayment() {
               <label className="text-[15px] mr-3 w-[170px] inline-block">Số điện thoại</label>
               <input
                 type="text"
+                name="phone"
+                value={information.phone}
+                onChange={(e) => handleChange(e)}
                 placeholder="Ví dụ: 0979123xxx (10 ký tự số)"
                 maxLength={10}
                 className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
@@ -53,26 +123,72 @@ export default function FormPayment() {
             </div>
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Tỉnh/Thành Phố</label>
-              <select className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]">
-                <option value="">-- Chọn tỉnh thành --</option>
+              <select
+                onChange={(e) => handleChangeCity(e)}
+                className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
+              >
+                <option value="-1">-- Chọn tỉnh thành --</option>
+                {listAddress &&
+                  listAddress.map((item) => {
+                    return (
+                      <option
+                        key={item.Id}
+                        value={item.Id}
+                      >
+                        {item.Name}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Quận/Huyện</label>
-              <select className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]">
+              <select
+                disabled={listDistrics && listDistrics.length === 0}
+                onChange={(e) => handleChangeDistric(e)}
+                className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
+              >
                 <option value="">-- Chọn quận huyện --</option>
+                {listDistrics &&
+                  listDistrics.map((item) => {
+                    return (
+                      <option
+                        key={item.Id}
+                        value={item.Id}
+                      >
+                        {item.Name}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Phường/Xã</label>
-              <select className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]">
+              <select
+                disabled={listWards && listWards.length === 0}
+                className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
+              >
                 <option value="">-- Chọn phường xã --</option>
+                {listWards &&
+                  listWards.map((item) => {
+                    return (
+                      <option
+                        key={item.Id}
+                        value={item.Id}
+                      >
+                        {item.Name}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
             <div className="mt-4">
               <label className="text-[15px] mr-3 w-[170px] inline-block">Địa chỉ nhận hàng</label>
               <input
                 type="text"
+                name="address"
+                value={information.address}
+                onChange={(e) => handleChange(e)}
                 placeholder="Nhập địa chỉ nhận hàng"
                 className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
               />
@@ -86,6 +202,7 @@ export default function FormPayment() {
               <input
                 type="radio"
                 className=""
+                checked
               />{' '}
               Giao hàng tiêu chuẩn: 31.000đ
             </label>
