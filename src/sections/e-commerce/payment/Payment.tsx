@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form';
+import ModalVoucher from './ModalVoucher';
 
 export default function FormPayment() {
   const [address, setAddress] = useState<any>({
@@ -25,6 +26,7 @@ export default function FormPayment() {
     ward: '',
   });
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   function validation(i: any) {
     let error = { fullname: '', email: '', phone: '', address: '', city: '', district: '', ward: '' };
@@ -183,7 +185,12 @@ export default function FormPayment() {
                   className="hover:cursor-pointer ml-1"
                 />
               </span>
-              <span className="underline text-blue-600">Chọn mã khuyến mãi</span>
+              <span
+                className="underline text-blue-600 hover:cursor-pointer"
+                onClick={() => setOpenModal(true)}
+              >
+                Chọn mã khuyến mãi
+              </span>
             </div>
           </div>
         </div>
@@ -289,6 +296,10 @@ export default function FormPayment() {
           </div>
         </div>
       </div>
+      <ModalVoucher
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
     </>
   );
 }

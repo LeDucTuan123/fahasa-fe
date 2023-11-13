@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react';
 import { Modal } from 'flowbite-react';
 import ProgressBar from './ProgressBar';
 import { Link } from 'react-router-dom';
+import { formatDateToDDMMYYYY } from 'src/util/SupportFnc';
 
 interface modalVoucherProps {
   openModal: boolean | undefined;
@@ -22,20 +23,6 @@ function ModalVoucher({
   handleApplyVoucher,
   removeApplyVoucher,
 }: modalVoucherProps) {
-  function formatDateToDDMMYYYY(inputDate: string) {
-    const date = new Date(inputDate);
-
-    if (isNaN(date.getTime())) {
-      return 'Ngày không hợp lệ';
-    }
-
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}-${month}-${year}`;
-  }
-
   function ConvertToVietNamDong(money: number) {
     if (money < 0) {
       return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0);
