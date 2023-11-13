@@ -249,18 +249,16 @@ export default function Category() {
                   {categories
 
                     .filter((lv) => {
-                      for (let i = 25; i <= categories.length; i++) {
-                        if (selectedCategory2 === '1') {
-                          //   console.log(lv.parent && lv.parent.level && lv.parent.id);
+                      if (selectedCategory1 === '1') {
+                        //   console.log(lv.parent && lv.parent.level && lv.parent.id);
 
-                          return lv.level === 2 && lv.parent.id === 1;
-                        }
-                        // if (selectedCategory1 === '2') {
-                        //     return lv.level === 2 && lv.parent.id === 2;
-                        // }
-                        // if (selectedCategory1 === '3') {
-                        //     return lv.level === 2 && lv.parent.id === 3;
-                        // }
+                        return lv.level === 3;
+                      }
+                      if (selectedCategory1 === '2') {
+                        return lv.level === 3;
+                      }
+                      if (selectedCategory1 === '3') {
+                        return lv.level === 3;
                       }
                     })
                     .map((item) => (
@@ -271,7 +269,7 @@ export default function Category() {
                             type="checkbox"
                             // value=""
                             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                            // value={selectedCategory3}
+                            // value={item.id}
                             checked={selectedCategory3 === item.id}
                             onChange={() => handleCategory3Change(item.id)}
                           />
@@ -279,7 +277,7 @@ export default function Category() {
                             htmlFor={`checkbox-item-${item.id}`}
                             className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
                           >
-                            {item && item.parent && item.parent.id === selectedCategory2 && item.categoryname}
+                            {item.categoryname}
                           </label>
                         </div>
                       </li>

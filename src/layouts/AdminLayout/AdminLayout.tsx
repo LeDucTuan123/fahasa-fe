@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from './sidebar';
 import Header from './header';
+import Sidebar from './sidebar';
 
 export default function AdminLayout() {
   const [isShowSidebar, setIsShowSidebar] = useState(true);
-
   const handleShowSidebar = () => setIsShowSidebar(!isShowSidebar);
 
   return (
