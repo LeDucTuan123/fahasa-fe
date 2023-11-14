@@ -5,6 +5,9 @@ import { Provider } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import 'react-toastify/dist/ReactToastify.css';
+import ToastContainer from './components/Toastify/Toast_Container';
+
 import Route from './routers';
 import { store } from './redux/store';
 
@@ -14,6 +17,7 @@ function App() {
       <Provider store={store}>
         <HelmetProvider>
           <BrowserRouter>
+            <ToastContainer />
             <Route />
           </BrowserRouter>
         </HelmetProvider>
