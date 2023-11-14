@@ -39,6 +39,46 @@ export default function FormBook() {
       .catch((err) => console.log(err.message));
   }, []);
 
+  const addBook = () => {
+    try {
+      setTimeout(() => {
+        fetch({
+          method: 'POST',
+          url: 'http://localhost:8080/rest/book',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            title: dataBook.title,
+            author: dataBook.author,
+            price: dataBook.price,
+            discount: dataBook.discount,
+            description: dataBook.description,
+            images: String(dataBook.images),
+            product: dataBook.product,
+            // cats: dataBook.cats,
+          }),
+        }).then(() => {});
+        toast.success('Thêm sản phẩm thành công');
+        setIsLoading(false);
+        return setfetchDataBook((prev) => [
+          //khi thêm thành công thì update lại state khỏi cần load lại page
+          ...prev,
+          {
+            author: dataBook.author,
+            description: dataBook.description,
+            discount: dataBook.discount,
+            images: dataBook.images,
+            price: dataBook.price,
+            title: dataBook.title,
+          },
+        ]);
+      }, 2000);
+    } catch (error) {
+      toast.success('Thêm sản phẩm thất bại');
+    }
+  };
+
   //thêm sản phẩm
   const handleAddBook = async (e: any) => {
     e.preventDefault();
@@ -65,66 +105,27 @@ export default function FormBook() {
             break;
         }
       },
+
       (error) => {
         // Handle unsuccessful uploads
         console.log(error);
       },
-      async () => {
+      () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setDataBook({ ...dataBook, images: downloadURL });
+        // while (dataBook.images.length === 0) {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setDataBook({ ...dataBook, images: String(downloadURL) });
           console.log('File available at', dataBook.images);
         });
+        // }
       },
     );
-    // setIdImg(id);
-    try {
-      // await uploadBytes(imageRef, imageUpload);
-      // const url = await getDownloadURL(imageRef);
 
-      // setDataBook({ ...dataBook, images: url });
-      // setImageUrl(url);
-      // console.log('url:', dataBook.images);
-      // console.log('urlimage:', imageUrl);
-      setTimeout(() => {
-        fetch({
-          method: 'POST',
-          url: 'http://localhost:8080/rest/book',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          data: JSON.stringify({
-            title: dataBook.title,
-            author: dataBook.author,
-            price: dataBook.price,
-            discount: dataBook.discount,
-            description: dataBook.description,
-            images: `${dataBook.images}`,
-            product: dataBook.product,
-            cats: dataBook.cats,
-          }),
-        }).then(() => {});
-        toast.success('Thêm sản phẩm thành công');
-        setIsLoading(false);
-        return setfetchDataBook((prev) => [
-          //khi thêm thành công thì update lại state khỏi cần load lại page
-          ...prev,
-          {
-            author: dataBook.author,
-            description: dataBook.description,
-            discount: dataBook.discount,
-            images: dataBook.images,
-            price: dataBook.price,
-            title: dataBook.title,
-          },
-        ]);
-      }, 2000);
-    } catch (error) {
-      toast.success('Thêm sản phẩm thất bại');
-    }
+    // setIdImg(id);
+    addBook();
   };
-  console.log('data book : ', fetchDataBook);
+  // console.log('data book : ', fetchDataBook);
 
   const handleEditBook = (item: any) => {
     setDataBook((prev) => ({
