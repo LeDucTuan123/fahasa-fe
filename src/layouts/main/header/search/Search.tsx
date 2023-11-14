@@ -174,7 +174,7 @@ export default function Search() {
             onKeyPress={handleOnKeyUp}
           />
           <div
-            className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 lg:px-6 lg:py-1 "
+            className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 py-1 lg:px-6 lg:py-2 "
             onClick={handleOnClickSearchh}
           >
             <Icon
