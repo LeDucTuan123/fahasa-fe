@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import bookReducer from './slice/bookSlice';
 import commonReducer from './slice/commonSlice';
 import toolReducer from './slice/ToolSlice';
+import authReducer from './slice/authSlice';
+import userReducer from './slice/userSlice';
 // ...
 
 export const store = configureStore({
@@ -10,6 +12,8 @@ export const store = configureStore({
     book: bookReducer,
     common: commonReducer,
     tool: toolReducer,
+    auth: authReducer,
+    user: userReducer,
   },
 });
 

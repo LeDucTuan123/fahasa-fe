@@ -1,11 +1,13 @@
 import { Link } from 'src/components/Link';
 import imgLogin from '../../../assets/image/login-page.jpg';
+import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 export default function Register() {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -29,8 +31,22 @@ export default function Register() {
         .oneOf([Yup.ref('password')], 'Mật khẩu xác nhận phải giống mật khẩu')
         .nullable(),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        // Gửi yêu cầu POST đến API đăng ký
+        const response = await axios.post('http://localhost:8080/api/v1/auth/signup', values);
+
+        if (response.status >= 200 && response.status < 300) {
+          console.log('Đăng ký thành công:', response.data);
+
+          navigate('/login');
+        } else {
+          console.error('Lỗi khi đăng ký:', response.data);
+        }
+      } catch (error: any) {
+        // Xử lý lỗi nếu có
+        console.error('Lỗi khi đăng ký:', error.message);
+      }
     },
   });
 
