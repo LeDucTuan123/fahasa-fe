@@ -69,7 +69,7 @@ export default function Cart() {
         setProduct(JSON.parse(cartProduct));
       }
     }
-  }, [books, cartProduct, isLogin, tools, user.id]);
+  }, [books, cartProduct, isLogin, tools]);
 
   // check tất cả sản phẩm vào mảng thanh toán
   function handleCheckAll(e: React.ChangeEvent<HTMLInputElement>) {
