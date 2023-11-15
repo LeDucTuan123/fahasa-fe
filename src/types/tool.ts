@@ -6,4 +6,6 @@ export interface ToolType {
   discount: number;
   description: string;
   images: string;
+  quantity?: number;
+  orderdetails?: [];
 }

@@ -25,7 +25,7 @@ export const login = createAsyncThunk(
       // Get user - Đọc token từ localStorage
       const storedToken = localStorage.getItem('token');
 
-      axios
+      await axios
         .get('http://localhost:8080/api/v1/user', {
           headers: {
             Authorization: `Bearer ${storedToken}`,

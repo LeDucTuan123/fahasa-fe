@@ -15,7 +15,7 @@ const initialState: BookState = {
 
 //  AsyncThunk
 export const getBook = createAsyncThunk('book/getBook', async (_, thunkApi) => {
-  const res = await fetch.get<BookType[]>(`${apiPaths.book}/getAll`, {
+  const res = await fetch.get<BookType[]>(`${apiPaths.book}`, {
     signal: thunkApi.signal,
   });
   return res.data;

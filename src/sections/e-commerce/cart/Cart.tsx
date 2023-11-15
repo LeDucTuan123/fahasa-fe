@@ -4,6 +4,10 @@ import React, { useEffect, useState } from 'react';
 import ModalVoucher from './ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 import Voucher from './Voucher';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
+import { BookType } from 'src/types/book';
+import { ToolType } from 'src/types/tool';
 
 export default function Cart() {
   // const IsmUp = useResponsive('up', 'md');
@@ -13,6 +17,12 @@ export default function Cart() {
   const [openModal, setOpenModal] = useState(false);
   const [vouchers, setVouchers] = useState([]);
   const [applyVoucher, setApplyVoucher] = useState<any>();
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const u = localStorage.getItem('user');
+  const cartProduct = localStorage.getItem('cart');
+  const user = u && JSON.parse(u);
+  const books = useSelector((state: RootState) => state.book.books);
+  const tools = useSelector((state: RootState) => state.tool.tools);
 
   useEffect(() => {
     // lấy dữ liệu voucher
@@ -23,12 +33,43 @@ export default function Cart() {
       .catch((error) => {
         console.log(error);
       });
-    // nếu không đăng nhập
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      setProduct(JSON.parse(cartProduct));
-    }
   }, []);
+
+  useEffect(() => {
+    if (isLogin) {
+      // lấy dữ liệu db đổ lên cart
+      fetch
+        .get(`/rest/order/cart/${user.id}`)
+        .then((res) => {
+          let orderdetails = res.data.orderdetails;
+          let products = orderdetails.map((od: any) => {
+            let book = books.find((book: BookType) => {
+              return book.orderdetails?.some((item: any) => {
+                return item.id === od.id;
+              });
+            });
+            if (book) {
+              return { ...book, quantity: od.quantity };
+            }
+            let tool = tools.find((tool: ToolType) => {
+              return tool.orderdetails?.some((item: any) => {
+                return od.id === item.id;
+              });
+            });
+            return { ...tool, quantity: od.quantity };
+          });
+          setProduct(products);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      // nếu không đăng nhập
+      if (cartProduct) {
+        setProduct(JSON.parse(cartProduct));
+      }
+    }
+  }, [books, cartProduct, isLogin, tools, user.id]);
 
   // check tất cả sản phẩm vào mảng thanh toán
   function handleCheckAll(e: React.ChangeEvent<HTMLInputElement>) {
@@ -160,7 +201,7 @@ export default function Cart() {
                 product.map((item: any) => {
                   return (
                     <div
-                      key={item.id}
+                      key={item.title}
                       className="col-span-4 grid grid-cols-11 bg-gray-50 rounded-lg p-1 border-b-2"
                     >
                       <div className="col-span-1 flex justify-center items-center">
@@ -180,7 +221,7 @@ export default function Cart() {
                       <div className="col-span-5 grid grid-cols-6">
                         <div className="col-span-2 pe-2">
                           <img
-                            src={item.images}
+                            src={item.images && item.images}
                             alt={item.title}
                           />
                         </div>

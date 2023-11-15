@@ -44,7 +44,7 @@ export default function DetailProduct() {
 
       // Kiểm tra xem sản phẩm đó đã dc thêm vào storage chưa
       const index = cart.findIndex((item: any) => {
-        return item.id === obj.id;
+        return item.id === obj.id && item.title === obj.title;
       });
 
       // nếu rùi thì chỉ thêm vào số lượng cho sản phẩm đó
