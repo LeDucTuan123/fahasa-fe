@@ -48,7 +48,7 @@ export default function Login() {
   };
 
   const token = localStorage.getItem('token');
-
+  // đẩy dữ liệu từ local lên db khi đăng nhập thành công và xóa cart trong localstorage
   function pushCartFromLocalToDB() {
     if (cartProduct) {
       let product = cartProduct && JSON.parse(cartProduct);

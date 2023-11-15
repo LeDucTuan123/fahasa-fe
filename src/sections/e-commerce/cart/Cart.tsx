@@ -84,11 +84,11 @@ export default function Cart() {
   }
 
   // check để thêm sản phẩm vào mảng thanh toán
-  function handleCheckToPay(e: React.ChangeEvent<HTMLInputElement>, id: number) {
+  function handleCheckToPay(e: React.ChangeEvent<HTMLInputElement>, id: number, title: string) {
     let checked = e.target.checked;
     if (checked) {
       let p = product?.find((item: any) => {
-        return item.id === id;
+        return item.id === id && item.title === title;
       });
       setProductPay((prev) => {
         return [...prev, p];
@@ -96,7 +96,7 @@ export default function Cart() {
     } else {
       setProductPay((prev) => {
         return prev?.filter((item: any) => {
-          return item.id !== id;
+          return item.title !== title;
         });
       });
     }
@@ -208,12 +208,12 @@ export default function Cart() {
                         <input
                           className="h-5 w-5"
                           type="checkbox"
-                          onChange={(e) => handleCheckToPay(e, item.id)}
+                          onChange={(e) => handleCheckToPay(e, item.id, item.title)}
                           disabled={checkAll}
                           checked={
                             productPay &&
                             productPay.some((i) => {
-                              return item.id === i.id;
+                              return item.id === i.id && item.title === i.title;
                             })
                           }
                         />
