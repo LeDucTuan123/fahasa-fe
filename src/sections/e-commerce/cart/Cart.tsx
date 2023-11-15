@@ -103,13 +103,13 @@ export default function Cart() {
   }
 
   //xóa sản phẩm khỏi giỏ hàng
-  function handleDeleteProduct(id: number) {
+  function handleDeleteProduct(title: string) {
     // khi không đăng nhập
     const cartProduct = localStorage.getItem('cart');
     if (cartProduct) {
       let cart: Array<any> = JSON.parse(cartProduct);
       cart = cart.filter((item: any) => {
-        return item.id !== id;
+        return item.title !== title;
       });
       localStorage.setItem('cart', JSON.stringify(cart));
       setProduct(cart);
@@ -117,13 +117,13 @@ export default function Cart() {
   }
 
   // giảm số lượng
-  function handleDecreaseQuantity(id: number) {
+  function handleDecreaseQuantity(title: number) {
     // khi không đăng nhập
     const cartProduct = localStorage.getItem('cart');
     if (cartProduct) {
       let cart: Array<any> = JSON.parse(cartProduct);
       let index: number = cart.findIndex((item) => {
-        return item.id === id;
+        return item.title === title;
       });
       // số lượng phải lớn hơn 1 mới giảm
       if (cart[index].quantity > 1) {
@@ -134,12 +134,12 @@ export default function Cart() {
     }
   }
   // tăng số lượng
-  function handleIncreaseQuantity(id: number) {
+  function handleIncreaseQuantity(title: number) {
     const cartProduct = localStorage.getItem('cart');
     if (cartProduct) {
       let cart: Array<any> = JSON.parse(cartProduct);
       let index: number = cart.findIndex((item) => {
-        return item.id === id;
+        return item.title === title;
       });
       cart[index].quantity = cart[index].quantity + 1;
       localStorage.setItem('cart', JSON.stringify(cart));
@@ -253,10 +253,11 @@ export default function Cart() {
                           }}
                         >
                           <button
-                            onClick={() => handleDecreaseQuantity(item.id)}
-                            disabled={productPay && productPay.some((i: any) => i.id === item.id)}
+                            onClick={() => handleDecreaseQuantity(item.title)}
+                            disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                             className={
-                              (productPay && productPay.some((i: any) => i.id === item.id) && 'cursor-default') || ''
+                              (productPay && productPay.some((i: any) => i.title === item.title) && 'cursor-default') ||
+                              ''
                             }
                           >
                             <Icon
@@ -278,10 +279,11 @@ export default function Cart() {
                             readOnly
                           />
                           <button
-                            onClick={() => handleIncreaseQuantity(item.id)}
-                            disabled={productPay && productPay.some((i: any) => i.id === item.id)}
+                            onClick={() => handleIncreaseQuantity(item.title)}
+                            disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                             className={
-                              (productPay && productPay.some((i: any) => i.id === item.id) && 'cursor-default') || ''
+                              (productPay && productPay.some((i: any) => i.title === item.title) && 'cursor-default') ||
+                              ''
                             }
                           >
                             <Icon
@@ -297,11 +299,11 @@ export default function Cart() {
                       </div>
 
                       <button
-                        onClick={() => handleDeleteProduct(item.id)}
-                        disabled={productPay && productPay.some((i: any) => i.id === item.id)}
+                        onClick={() => handleDeleteProduct(item.title)}
+                        disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                         className={
                           (productPay &&
-                            productPay.some((i: any) => i.id === item.id) &&
+                            productPay.some((i: any) => i.title === item.title) &&
                             'col-span-1 flex justify-center items-center cursor-default') ||
                           'col-span-1 flex justify-center items-center'
                         }
