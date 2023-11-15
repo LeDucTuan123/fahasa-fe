@@ -3,10 +3,13 @@ import { Link } from 'src/components/Link';
 import Logo from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
 import fetch from 'src/services/axios';
-
-import { useState, useEffect } from 'react';
-import { List_nav } from './List_Item';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from 'src/redux/store';
+import { useState, useEffect, useRef } from 'react';
 import Search from './search';
+import { setIsLogin } from 'src/redux/slice/authSlice';
+import HeadlessTippy from '@tippyjs/react/headless';
+import { userData } from 'src/redux/slice/userSlice';
 
 // là mảng chứa những category level 2
 let level2: any = null;
@@ -14,6 +17,9 @@ let level2: any = null;
 let level3: any = null;
 
 export default function Header() {
+  const user = useSelector((state: RootState) => state.user.userData);
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+
   // Đây là đoạn code gọi api category -- start
   const [categoryLevel1, setCategoryLevel1] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
@@ -74,9 +80,6 @@ export default function Header() {
     setOpenMenu(!openMenu);
   };
 
-  //
-  const [openMenuMB, setopenMenuMB] = useState(false);
-
   // mobile
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -118,6 +121,36 @@ export default function Header() {
   };
 
   // mở menu con sử dụng trong mobile --> end
+
+  // show info
+
+  const [openInfo, setOpenInfo] = useState(false);
+
+  const handleInfo = () => {
+    setOpenInfo(!openInfo);
+  };
+
+  // Token
+  const dispatch = useAppDispatch();
+
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (token) {
+      dispatch(setIsLogin(true));
+    }
+    if (isLogin === true || token) {
+      dispatch(userData());
+    }
+  }, [dispatch]);
+
+  console.log(user);
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    dispatch(setIsLogin(false));
+    alert('Logout');
+  };
 
   return (
     <div className="lg:container mx-auto py-2 ">
@@ -187,35 +220,103 @@ export default function Header() {
           <Search />
           {/* msg icon */}
           <div className="flex items-center gap-2">
-            {List_nav.map((item) => (
-              <Link
-                key={item.id}
-                to={item.path}
-              >
-                <div className="header-icon text-gray-header">
-                  <Icon
-                    icon={`${item.icon}`}
-                    className="bx bx-bell text-2xl"
-                  />
-                  <span className="text-sm hidden lg:block">{item.title}</span>
-                </div>
-              </Link>
-            ))}
-
-            {/* info */}
-            <div className="z-10 hidden top-20 absolute bg-slate-200 rounded-lg border shadow items-center">
-              <div className="px-2 py-2">
-                <div className="py-2">
-                  <div className="px-6 py-3 text-center border bg-indigo-500 rounded-lg ">
-                    <span className="text-base font-semibold text-white">Đăng nhập</span>
-                  </div>
-                </div>
-                <div className="py-2">
-                  <div className="px-6 py-3 text-center border-2 border-indigo-500 bg-white rounded-lg ">
-                    <span className="text-base font-semibold text-indigo-500">Đăng ký</span>
-                  </div>
-                </div>
+            <Link to="/">
+              <div className="header-icon text-gray-header">
+                <Icon
+                  icon="solar:bell-line-duotone"
+                  className="bx bx-bell text-2xl"
+                />
+                <span className="text-sm hidden lg:block">Thông báo</span>
               </div>
+            </Link>
+            <Link to="/cart">
+              <div className="header-icon text-gray-header">
+                <Icon
+                  icon="uil:cart"
+                  className="bx bx-bell text-2xl"
+                />
+                <span className="text-sm hidden lg:block">Giỏ hàng</span>
+              </div>
+            </Link>
+            <div>
+              <HeadlessTippy
+                visible={openInfo}
+                onClickOutside={() => setOpenInfo(false)}
+              >
+                <div className="relative">
+                  <div
+                    onClick={handleInfo}
+                    className="header-icon text-gray-header"
+                  >
+                    <Icon
+                      icon="bx:user"
+                      className="bx bx-bell text-2xl"
+                    />
+                    <span className="text-sm hidden lg:block">Tài khoản</span>
+                  </div>
+                  {/* info */}
+                  {openInfo && (
+                    <div>
+                      {isLogin && (
+                        <div className="w-[250px] top-[65px] z-10 right-0 absolute bg-slate-200 rounded-lg border shadow items-center">
+                          <div className="px-2 py-2">
+                            <div className="p-1 hover:bg-gray-50">
+                              <Link to="/profile">
+                                <div className="flex items-center w-full">
+                                  <Icon icon="ri:user-settings-line" />
+                                  <span className="px-2">Thông tin Tài Khoản</span>
+                                </div>
+                              </Link>
+                            </div>
+                            <hr className="border-gray-300 py-1" />
+                            <div className="p-1 hover:bg-gray-50">
+                              <Link to="/order">
+                                <div className="flex items-center w-full">
+                                  <Icon icon="ph:note-bold" />
+                                  <span className="px-2">Đơn hàng của tôi</span>
+                                </div>
+                              </Link>
+                            </div>
+                            <hr className="border-gray-300 py-1" />
+                            <div className="p-1 hover:bg-gray-50">
+                              <div onClick={logout}>
+                                <div className="flex items-center">
+                                  <Icon icon="heroicons-outline:logout" />
+                                  <span className="px-2">Đăng xuất</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {!isLogin && (
+                        <div className="w-[200px] top-[65px] z-10 right-0 absolute bg-slate-200 rounded-lg border shadow-2xl shadow-indigo-500/40 items-center">
+                          <div className="px-2 py-2">
+                            <div className="py-2 group">
+                              <Link to="/login">
+                                <div className="px-6 py-3 cursor-pointer text-center border bg-indigo-500 rounded-lg group-hover:bg-white transition duration-500">
+                                  <span className="text-base font-semibold text-white group-hover:text-indigo-500 transition duration-500">
+                                    Đăng nhập
+                                  </span>
+                                </div>
+                              </Link>
+                            </div>
+                            <div className="py-2 group">
+                              <Link to="/register">
+                                <div className="px-6 py-3 h-[48px] cursor-pointer text-center border-2 border-indigo-500 bg-white rounded-lg group-hover:bg-indigo-500 transition duration-500">
+                                  <span className="text-base font-semibold text-indigo-500 group-hover:text-white transition duration-500">
+                                    Đăng ký
+                                  </span>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </HeadlessTippy>
             </div>
           </div>
         </div>

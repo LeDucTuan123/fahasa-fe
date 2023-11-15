@@ -3,7 +3,14 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useDebounce from 'src/hooks/useDebounce';
-import { setCategory, setIsShowSearch, setTextSearchValue } from 'src/redux/slice/commonSlice';
+import {
+  setCategory,
+  setCatelvId,
+  setId,
+  setIsShowSearch,
+  setParentCategory,
+  setTextSearchValue,
+} from 'src/redux/slice/commonSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
@@ -104,6 +111,10 @@ export default function Search() {
   const handleOnKeyUp = (event: any) => {
     if (event.key === 'Enter') {
       event.preventDefault();
+      dispatch(setId(null));
+      dispatch(setCatelvId(null));
+      dispatch(setParentCategory(''));
+
       dispatch(setIsShowSearch(false));
       dispatch(setTextSearchValue(debounceValue));
       navigate(`/products/searchengine?q=${debounceValue}`);
@@ -174,7 +185,7 @@ export default function Search() {
             onKeyPress={handleOnKeyUp}
           />
           <div
-            className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 lg:px-6 lg:py-1 "
+            className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 py-1 lg:px-6 lg:py-2 "
             onClick={handleOnClickSearchh}
           >
             <Icon

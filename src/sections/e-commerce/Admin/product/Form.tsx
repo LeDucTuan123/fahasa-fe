@@ -10,6 +10,7 @@ export default function Form() {
   const handleOnchange = (e: any) => {
     setShowForm(e.target.value);
   };
+
   return (
     <>
       <div className="w-full h-auto shadow-xl border-[1px] p-5 mb-5">
@@ -42,7 +43,6 @@ export default function Form() {
       {showForm === 'book' ? (
         <div className="space-y-5">
           <FormBook />
-          <ListBook />
         </div>
       ) : (
         <div className="space-y-5">

@@ -20,6 +20,7 @@ import {
   ProfileAddress,
   ProfileOrder,
   Register,
+  AdminCategory,
 } from './elements';
 
 import ProfileLayout from 'src/layouts/ProfileLayout';
@@ -66,6 +67,7 @@ export default function Route() {
         { path: '/admin/bill', element: <AdminBill /> },
         { path: '/admin/orther', element: <AdminOrther /> },
         { path: '/admin/voucher', element: <AdminVoucher /> },
+        { path: '/admin/category', element: <AdminCategory /> },
       ],
     },
     // profile layout

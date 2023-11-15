@@ -24,13 +24,13 @@ const List_Item_Sidebar: itemType[] = [
   },
   {
     id: 2,
-    title: 'Product',
+    title: 'Sản phẩm',
     icon: 'clarity:book-solid',
     path: '/admin/products',
   },
   {
     id: 3,
-    title: 'User',
+    title: 'Người dùng',
     icon: 'mdi:user',
     path: '/admin/user',
   },
@@ -48,7 +48,13 @@ const List_Item_Sidebar: itemType[] = [
   },
   {
     id: 6,
-    title: 'Order',
+    title: 'Thể loại',
+    icon: 'ic:round-category',
+    path: '/admin/category',
+  },
+  {
+    id: 7,
+    title: 'Khác',
     icon: 'icon-park-solid:other',
     path: '/admin/orther',
   },

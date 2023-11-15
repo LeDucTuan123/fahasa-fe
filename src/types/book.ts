@@ -8,6 +8,7 @@ export interface BookType {
   description: string;
   stock?: string;
   productId?: string;
+  cats?: [];
   //   ...
 }
 
