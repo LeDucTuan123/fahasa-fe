@@ -82,9 +82,6 @@ export default function Products() {
       fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setCategoryResult(res.data));
     } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
       fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setCategoryResult(res.data));
-
-      dispatch(setCategory('book'));
-      fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setSearchResult(res.data));
     }
   }, [dispatch, id, level, parencate]);
 
