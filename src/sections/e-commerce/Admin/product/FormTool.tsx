@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { apiPaths } from 'src/services/api/path-api';
+import fetch from 'src/services/axios/Axios';
+import { CategoryType } from 'src/types';
+import { ToolType } from 'src/types/tool';
 
 export default function FormTool() {
+  const [fetchDataTool, setfetchDataTool] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch
+      .get(apiPaths.category)
+      .then((res) => setfetchDataTool(res.data))
+      .catch((err) => console.log(err.message));
+  }, []);
+
   return (
     <>
       <div className="w-full h-auto shadow-xl p-5 border-[1px] rounded-xl">
@@ -82,11 +95,23 @@ export default function FormTool() {
                   id="underline_select"
                   className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                 >
-                  <option selected>Loại dụng cụ</option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
+                  {fetchDataTool
+                    .filter(
+                      (item: CategoryType) =>
+                        item.parent &&
+                        item.parent.parent &&
+                        item.parent.parent.id === 3 &&
+                        item.parent.parent.categoryname === 'Dụng cụ học sinh',
+                    )
+                    .map((item: CategoryType) => (
+                      <option
+                        value={item.id}
+                        key={item.id}
+                        selected
+                      >
+                        {item.categoryname}
+                      </option>
+                    ))}
                 </select>
               </div>
             </div>
