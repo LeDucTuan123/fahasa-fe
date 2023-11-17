@@ -1,12 +1,11 @@
 import { Icon } from '@iconify/react';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import React, { useCallback, useEffect, useState } from 'react';
-import { storage } from 'src/services/firebase/firebase';
+import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import { toast } from 'react-toastify';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
+import { storage } from 'src/services/firebase/firebase';
 import ListBook from './ListBook';
 // import { apiPaths } from 'src/services/api/path-api';
 // import { CategoryType } from 'src/types';
