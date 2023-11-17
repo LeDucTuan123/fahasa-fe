@@ -9,6 +9,8 @@ import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import Filter from './Filter'; // Hãy đảm bảo rằng bạn đã import thành phần Filter đúng cách
+import Pagination from 'src/Pagination';
+
 
 export default function Products() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
@@ -80,9 +82,6 @@ export default function Products() {
       fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setCategoryResult(res.data));
     } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
       fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setCategoryResult(res.data));
-
-      dispatch(setCategory('book'));
-      fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setSearchResult(res.data));
     }
   }, [dispatch, id, level, parencate]);
 
@@ -99,6 +98,13 @@ export default function Products() {
     }
     setSearchResult(sortedCategoryResult.slice(0, displayedProducts));
   }, [sortCriteria, filteredResults]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(4);
+
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = searchResult.slice(firstPostIndex, lastPostIndex);
 
   return (
     <div className="grid grid-cols-4">
@@ -154,7 +160,7 @@ export default function Products() {
           </div>
         </div>
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
-          {searchResult.length === 0 ? (
+          {currentPosts.length === 0 ? (
             <div className="text-center">
               <img
                 src={emptyCartImageUrl}
@@ -163,7 +169,7 @@ export default function Products() {
               <p className="m-1">Không có sản phẩm</p>
             </div>
           ) : (
-            searchResult.map((item) => (
+            currentPosts.map((item) => (
               <div
                 key={item.id}
                 className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
@@ -192,6 +198,14 @@ export default function Products() {
               </div>
             ))
           )}
+        </div>
+        <div className='mt-3 flex flex-wrap justify-center'>
+          <Pagination 
+            totalPosts={searchResult.length} 
+            postsPerPage={postsPerPage}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}       
+          />
         </div>
       </div>
     </div>

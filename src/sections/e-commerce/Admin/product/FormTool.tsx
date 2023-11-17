@@ -269,7 +269,7 @@ export default function FormTool() {
                     .map((item: CategoryType) => (
                       <option
                         value={item.id}
-                        key={item.id}
+                        key={item.id
                         selected={dataTool.category.id === item.id}
                       >
                         {item.categoryname}

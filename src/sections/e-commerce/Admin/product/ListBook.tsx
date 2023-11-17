@@ -126,16 +126,17 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
                   <td className="px-6 py-4 max-w-[170px] text-left ">
                     <div className="w-full flex gap-3">
                       <button
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        className="bg-orange-300 text-white hover:bg-orange-400 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                         onClick={() => onHandleEditBook(item)}
                       >
                         Edit
                       </button>
+
                       <button
-                        className="font-medium text-blue-600 dark:text-blue-500 bg-red-400 hover:underline"
+                        className="text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
                         onClick={() => handleDeleteBook(item)}
                       >
-                        Delete
+                        Xóa
                       </button>
                     </div>
                   </td>
