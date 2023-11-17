@@ -8,4 +8,5 @@ export interface ToolType {
   images: string;
   quantity?: number;
   orderdetails?: [];
+  category?: string;
 }

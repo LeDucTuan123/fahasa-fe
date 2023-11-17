@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { RootState, useAppDispatch } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 
 import { storage } from 'src/services/firebase/firebase';
 
-import { ref, deleteObject } from 'firebase/storage';
+import { deleteObject, ref } from 'firebase/storage';
 
 interface Props {
   onHandleEditBook: (item: BookType) => void;
@@ -18,17 +15,6 @@ interface Props {
 
 export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchDataBook }: Props) {
   const handleDeleteBook = async (item: BookType) => {
-    // const desertRef = ref(storage.app.options.databaseURL, 'images/desert.jpg');
-    // Delete the file
-    // deleteObject(desertRef)
-    //   .then(() => {
-    //     // File deleted successfully
-    //     console.log('delete image success');
-    //   })
-    //   .catch((error) => {
-    //     // Uh-oh, an error occurred!
-    //     console.log(error.message);
-    //   });
     try {
       if (item.images) {
         const urlImage = ref(storage, item.images);
@@ -140,16 +126,17 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
                   <td className="px-6 py-4 max-w-[170px] text-left ">
                     <div className="w-full flex gap-3">
                       <button
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        className="bg-orange-300 text-white hover:bg-orange-400 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                         onClick={() => onHandleEditBook(item)}
                       >
                         Edit
                       </button>
+
                       <button
-                        className="font-medium text-blue-600 dark:text-blue-500 bg-red-400 hover:underline"
+                        className="text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
                         onClick={() => handleDeleteBook(item)}
                       >
-                        Delete
+                        Xóa
                       </button>
                     </div>
                   </td>
