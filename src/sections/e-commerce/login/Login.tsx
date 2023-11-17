@@ -52,14 +52,11 @@ export default function Login() {
   function pushCartFromLocalToDB() {
     if (cartProduct) {
       let product = cartProduct && JSON.parse(cartProduct);
-      let totalamount = product.reduce((accum: any, item: any) => {
-        return accum + (item.price - (item.price * item.discount) / 100) * item.quantity;
-      }, 0);
       // khi trong localstorage có sản phẩm thì nó sẽ được đẩy vào db khi có đăng nhập
       fetch
         .post('/rest/order/create', {
           orderdate: new Date(),
-          totalamount,
+          totalamount: null,
           user: { id: user.id },
           statuss: { id: 1 },
           voucher: null,

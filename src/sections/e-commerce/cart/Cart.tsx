@@ -33,9 +33,6 @@ export default function Cart() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
-
-  useEffect(() => {
     if (isLogin) {
       // lấy dữ liệu db đổ lên cart
       fetch
@@ -49,14 +46,14 @@ export default function Cart() {
               });
             });
             if (book) {
-              return { ...book, quantity: od.quantity };
+              return { ...book, quantity: od.quantity, odid: od.id };
             }
             let tool = tools.find((tool: ToolType) => {
               return tool.orderdetails?.some((item: any) => {
                 return od.id === item.id;
               });
             });
-            return { ...tool, quantity: od.quantity };
+            return { ...tool, quantity: od.quantity, odid: od.id };
           });
           setProduct(products);
         })
@@ -69,7 +66,7 @@ export default function Cart() {
         setProduct(JSON.parse(cartProduct));
       }
     }
-  }, [books, cartProduct, isLogin, tools]);
+  }, []);
 
   // check tất cả sản phẩm vào mảng thanh toán
   function handleCheckAll(e: React.ChangeEvent<HTMLInputElement>) {
@@ -103,47 +100,101 @@ export default function Cart() {
   }
 
   //xóa sản phẩm khỏi giỏ hàng
-  function handleDeleteProduct(title: string) {
-    // khi không đăng nhập
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      let cart: Array<any> = JSON.parse(cartProduct);
-      cart = cart.filter((item: any) => {
-        return item.title !== title;
-      });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      setProduct(cart);
-    }
-  }
-
-  // giảm số lượng
-  function handleDecreaseQuantity(title: number) {
-    // khi không đăng nhập
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      let cart: Array<any> = JSON.parse(cartProduct);
-      let index: number = cart.findIndex((item) => {
-        return item.title === title;
-      });
-      // số lượng phải lớn hơn 1 mới giảm
-      if (cart[index].quantity > 1) {
-        cart[index].quantity = cart[index].quantity - 1;
+  function handleDeleteProduct(title: string, id: number) {
+    if (isLogin) {
+      fetch
+        .delete(`/rest/orderdetail/delete/${id}`)
+        .then((res) => {
+          setProduct((prev: any[]) => {
+            return prev.filter((item: any) => {
+              return item.odid !== id;
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      // khi không đăng nhập
+      const cartProduct = localStorage.getItem('cart');
+      if (cartProduct) {
+        let cart: Array<any> = JSON.parse(cartProduct);
+        cart = cart.filter((item: any) => {
+          return item.title !== title;
+        });
         localStorage.setItem('cart', JSON.stringify(cart));
         setProduct(cart);
       }
     }
   }
+
+  // giảm số lượng
+  function handleDecreaseQuantity(title: string, odid: number) {
+    if (isLogin) {
+      // khi đăng nhập
+      fetch
+        .patch('/rest/orderdetail/updateQuantity', { id: odid, type: 'desc' })
+        .then((res) => {
+          setProduct((prev: any[]) => {
+            return prev.map((item: any) => {
+              if (item.odid === res.data.id) {
+                return { ...item, quantity: res.data.quantity };
+              }
+              return item;
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      // khi không đăng nhập
+      const cartProduct = localStorage.getItem('cart');
+      if (cartProduct) {
+        let cart: Array<any> = JSON.parse(cartProduct);
+        let index: number = cart.findIndex((item) => {
+          return item.title === title;
+        });
+        // số lượng phải lớn hơn 1 mới giảm
+        if (cart[index].quantity > 1) {
+          cart[index].quantity = cart[index].quantity - 1;
+          localStorage.setItem('cart', JSON.stringify(cart));
+          setProduct(cart);
+        }
+      }
+    }
+  }
   // tăng số lượng
-  function handleIncreaseQuantity(title: number) {
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      let cart: Array<any> = JSON.parse(cartProduct);
-      let index: number = cart.findIndex((item) => {
-        return item.title === title;
-      });
-      cart[index].quantity = cart[index].quantity + 1;
-      localStorage.setItem('cart', JSON.stringify(cart));
-      setProduct(cart);
+  function handleIncreaseQuantity(title: string, odid: number) {
+    if (isLogin) {
+      // khi đăng nhập
+      fetch
+        .patch('/rest/orderdetail/updateQuantity', { id: odid, type: 'asc' })
+        .then((res) => {
+          setProduct((prev: any[]) => {
+            return prev.map((item: any) => {
+              if (item.odid === res.data.id) {
+                return { ...item, quantity: res.data.quantity };
+              }
+              return item;
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      // khi không đăng nhập
+      const cartProduct = localStorage.getItem('cart');
+      if (cartProduct) {
+        let cart: Array<any> = JSON.parse(cartProduct);
+        let index: number = cart.findIndex((item) => {
+          return item.title === title;
+        });
+        cart[index].quantity = cart[index].quantity + 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        setProduct(cart);
+      }
     }
   }
 
@@ -253,7 +304,7 @@ export default function Cart() {
                           }}
                         >
                           <button
-                            onClick={() => handleDecreaseQuantity(item.title)}
+                            onClick={() => handleDecreaseQuantity(item.title, item.odid)}
                             disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                             className={
                               (productPay && productPay.some((i: any) => i.title === item.title) && 'cursor-default') ||
@@ -270,7 +321,7 @@ export default function Cart() {
                             type="text"
                             value={item.quantity}
                             style={{
-                              width: '40px',
+                              width: '45px',
                               height: '90%',
                               outline: 'none',
                               border: 'none',
@@ -279,7 +330,7 @@ export default function Cart() {
                             readOnly
                           />
                           <button
-                            onClick={() => handleIncreaseQuantity(item.title)}
+                            onClick={() => handleIncreaseQuantity(item.title, item.odid)}
                             disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                             className={
                               (productPay && productPay.some((i: any) => i.title === item.title) && 'cursor-default') ||
@@ -299,7 +350,7 @@ export default function Cart() {
                       </div>
 
                       <button
-                        onClick={() => handleDeleteProduct(item.title)}
+                        onClick={() => handleDeleteProduct(item.title, item.odid)}
                         disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                         className={
                           (productPay &&
@@ -321,7 +372,7 @@ export default function Cart() {
                 })}
             </div>
           </div>
-          <div className="col-span-4 grid grid-rows-2 ms-1">
+          <div className="col-span-4 grid grid-rows-2 ms-1 max-h-[700px]">
             <Voucher
               vouchers={vouchers}
               handleOpenModal={handleOpenModal}

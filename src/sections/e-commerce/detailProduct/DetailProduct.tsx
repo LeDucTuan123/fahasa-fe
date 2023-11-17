@@ -11,8 +11,12 @@ export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
   const [data, setData] = useState<BookType>();
   const navigate = useNavigate();
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const u = localStorage.getItem('user');
+  const user = u && JSON.parse(u);
   // Lấy danh sách book trong redux bookSlice
   const books: BookType[] = useSelector((state: any) => state.book.books);
+  const tools = useSelector((state: RootState) => state.tool.tools);
   const cate = useSelector((state: RootState) => state.common.category);
 
   const { id } = useParams();
@@ -21,7 +25,7 @@ export default function DetailProduct() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, isLogin]);
   // const book = useSelector((state: any) => state.productDetail);
 
   // // const dispatch = useAppDispatch();
@@ -62,6 +66,35 @@ export default function DetailProduct() {
       cart.push(obj);
       localStorage.setItem('cart', JSON.stringify(cart));
     }
+  }
+
+  async function addProductToDB() {
+    fetch
+      .post('/rest/order/create', {
+        orderdate: new Date(),
+        totalamount: null,
+        user: { id: user.id },
+        statuss: { id: 1 },
+        voucher: null,
+        orderdetails: [
+          {
+            quantity: counter,
+            price: data!.price - (data!.price * data!.discount) / 100,
+            book: books.find((book) => {
+              return book.title === data!.title;
+            }),
+            schooltool: tools.find((tool) => {
+              return tool.title === data!.title;
+            }),
+          },
+        ],
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function handleBuyNow() {
@@ -146,7 +179,13 @@ export default function DetailProduct() {
           </div>
           <div className="pt-3 flex flex-col sm:flex-row justify-between">
             <button
-              onClick={() => handleAddProduct()}
+              onClick={() => {
+                if (isLogin) {
+                  addProductToDB();
+                } else {
+                  handleAddProduct();
+                }
+              }}
               className="text-[#d32f2f] text-xl border-[2px] border-[#d32f2f] px-5 rounded-md py-2 flex sm:w-[55%] active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white"
             >
               <Icon
@@ -156,7 +195,9 @@ export default function DetailProduct() {
               <span>Thêm vào giỏ hàng</span>
             </button>
             <button
-              onClick={() => handleBuyNow()}
+              onClick={() => {
+                handleBuyNow();
+              }}
               className="bg-[#d32f2f] py-2 px-5 text-xl border-none rounded-md text-white sm:w-[40%] button-buy"
             >
               <span>Mua ngay</span>
