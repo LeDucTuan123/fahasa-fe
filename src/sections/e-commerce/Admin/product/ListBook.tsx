@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { RootState, useAppDispatch } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 
 import { storage } from 'src/services/firebase/firebase';
 
-import { ref, deleteObject } from 'firebase/storage';
+import { deleteObject, ref } from 'firebase/storage';
 
 interface Props {
   onHandleEditBook: (item: BookType) => void;
@@ -18,17 +15,6 @@ interface Props {
 
 export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchDataBook }: Props) {
   const handleDeleteBook = async (item: BookType) => {
-    // const desertRef = ref(storage.app.options.databaseURL, 'images/desert.jpg');
-    // Delete the file
-    // deleteObject(desertRef)
-    //   .then(() => {
-    //     // File deleted successfully
-    //     console.log('delete image success');
-    //   })
-    //   .catch((error) => {
-    //     // Uh-oh, an error occurred!
-    //     console.log(error.message);
-    //   });
     try {
       if (item.images) {
         const urlImage = ref(storage, item.images);

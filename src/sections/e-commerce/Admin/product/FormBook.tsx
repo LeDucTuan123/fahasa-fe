@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { storage } from 'src/services/firebase/firebase';
 
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { Icon } from '@iconify/react';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { toast } from 'react-toastify';
+import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import ListBook from './ListBook';
-import { BookType } from 'src/types/book';
-import { apiPaths } from 'src/services/api/path-api';
-import { Icon } from '@iconify/react';
 // import { apiPaths } from 'src/services/api/path-api';
 // import { CategoryType } from 'src/types';
 // import { BookType } from 'src/types/book';
