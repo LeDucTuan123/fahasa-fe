@@ -13,6 +13,7 @@ export const DetailProductPage = Loadable(lazy(() => import('../pages/DetailProd
 export const Login = Loadable(lazy(() => import('../pages/LoginPage')));
 export const Register = Loadable(lazy(() => import('../sections/e-commerce/login/Register')));
 export const Error = Loadable(lazy(() => import('../pages/Error404')));
+export const ForgotPassword = Loadable(lazy(() => import('../sections/e-commerce/login/ForgotPassword')));
 
 export const Cart = Loadable(lazy(() => import('../pages/CartPage')));
 export const Payment = Loadable(lazy(() => import('../pages/PaymentPage')));
