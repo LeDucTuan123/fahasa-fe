@@ -148,6 +148,7 @@ export default function Header() {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     dispatch(setIsLogin(false));
     alert('Logout');
   };

@@ -4,6 +4,10 @@ import React, { useEffect, useState } from 'react';
 import ModalVoucher from './ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 import Voucher from './Voucher';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
+import { BookType } from 'src/types/book';
+import { ToolType } from 'src/types/tool';
 
 export default function Cart() {
   // const IsmUp = useResponsive('up', 'md');
@@ -13,22 +17,50 @@ export default function Cart() {
   const [openModal, setOpenModal] = useState(false);
   const [vouchers, setVouchers] = useState([]);
   const [applyVoucher, setApplyVoucher] = useState<any>();
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const u = localStorage.getItem('user');
+  const cartProduct = localStorage.getItem('cart');
+  const user = u && JSON.parse(u);
+  const books = useSelector((state: RootState) => state.book.books);
+  const tools = useSelector((state: RootState) => state.tool.tools);
 
   useEffect(() => {
-    // lấy dữ liệu voucher
-    fetch('/rest/voucher')
-      .then((res) => {
-        setVouchers(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // nếu không đăng nhập
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      setProduct(JSON.parse(cartProduct));
+    async function test() {
+      const voucher = await fetch.get('/rest/voucher');
+      setVouchers(voucher.data);
+      if (isLogin) {
+        // lấy dữ liệu db đổ lên cart
+        const res = await fetch.get(`/rest/order/cart/${user.id}`);
+        if (res.data) {
+          let orderdetails = res.data.orderdetails;
+          let products = orderdetails.map((od: any) => {
+            let book = books.find((book: BookType) => {
+              return book.orderdetails?.some((item: any) => {
+                return item.id === od.id;
+              });
+            });
+            if (book) {
+              return { ...book, quantity: od.quantity, odid: od.id };
+            }
+            let tool = tools.find((tool: ToolType) => {
+              return tool.orderdetails?.some((item: any) => {
+                return od.id === item.id;
+              });
+            });
+            return { ...tool, quantity: od.quantity, odid: od.id };
+          });
+          setProduct(products);
+        }
+      } else {
+        // nếu không đăng nhập
+        if (cartProduct) {
+          setProduct(JSON.parse(cartProduct));
+        }
+      }
     }
-  }, []);
+    test();
+    // lấy dữ liệu voucher
+  }, [books, cartProduct, isLogin, tools]);
 
   // check tất cả sản phẩm vào mảng thanh toán
   function handleCheckAll(e: React.ChangeEvent<HTMLInputElement>) {
@@ -43,11 +75,11 @@ export default function Cart() {
   }
 
   // check để thêm sản phẩm vào mảng thanh toán
-  function handleCheckToPay(e: React.ChangeEvent<HTMLInputElement>, id: number) {
+  function handleCheckToPay(e: React.ChangeEvent<HTMLInputElement>, id: number, title: string) {
     let checked = e.target.checked;
     if (checked) {
       let p = product?.find((item: any) => {
-        return item.id === id;
+        return item.id === id && item.title === title;
       });
       setProductPay((prev) => {
         return [...prev, p];
@@ -55,54 +87,108 @@ export default function Cart() {
     } else {
       setProductPay((prev) => {
         return prev?.filter((item: any) => {
-          return item.id !== id;
+          return item.title !== title;
         });
       });
     }
   }
 
   //xóa sản phẩm khỏi giỏ hàng
-  function handleDeleteProduct(id: number) {
-    // khi không đăng nhập
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      let cart: Array<any> = JSON.parse(cartProduct);
-      cart = cart.filter((item: any) => {
-        return item.id !== id;
-      });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      setProduct(cart);
-    }
-  }
-
-  // giảm số lượng
-  function handleDecreaseQuantity(id: number) {
-    // khi không đăng nhập
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      let cart: Array<any> = JSON.parse(cartProduct);
-      let index: number = cart.findIndex((item) => {
-        return item.id === id;
-      });
-      // số lượng phải lớn hơn 1 mới giảm
-      if (cart[index].quantity > 1) {
-        cart[index].quantity = cart[index].quantity - 1;
+  function handleDeleteProduct(title: string, id: number) {
+    if (isLogin) {
+      fetch
+        .delete(`/rest/orderdetail/delete/${id}`)
+        .then((res) => {
+          setProduct((prev: any[]) => {
+            return prev.filter((item: any) => {
+              return item.odid !== id;
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      // khi không đăng nhập
+      const cartProduct = localStorage.getItem('cart');
+      if (cartProduct) {
+        let cart: Array<any> = JSON.parse(cartProduct);
+        cart = cart.filter((item: any) => {
+          return item.title !== title;
+        });
         localStorage.setItem('cart', JSON.stringify(cart));
         setProduct(cart);
       }
     }
   }
+
+  // giảm số lượng
+  function handleDecreaseQuantity(title: string, odid: number) {
+    if (isLogin) {
+      // khi đăng nhập
+      fetch
+        .patch('/rest/orderdetail/updateQuantity', { id: odid, type: 'desc' })
+        .then((res) => {
+          setProduct((prev: any[]) => {
+            return prev.map((item: any) => {
+              if (item.odid === res.data.id) {
+                return { ...item, quantity: res.data.quantity };
+              }
+              return item;
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      // khi không đăng nhập
+      const cartProduct = localStorage.getItem('cart');
+      if (cartProduct) {
+        let cart: Array<any> = JSON.parse(cartProduct);
+        let index: number = cart.findIndex((item) => {
+          return item.title === title;
+        });
+        // số lượng phải lớn hơn 1 mới giảm
+        if (cart[index].quantity > 1) {
+          cart[index].quantity = cart[index].quantity - 1;
+          localStorage.setItem('cart', JSON.stringify(cart));
+          setProduct(cart);
+        }
+      }
+    }
+  }
   // tăng số lượng
-  function handleIncreaseQuantity(id: number) {
-    const cartProduct = localStorage.getItem('cart');
-    if (cartProduct) {
-      let cart: Array<any> = JSON.parse(cartProduct);
-      let index: number = cart.findIndex((item) => {
-        return item.id === id;
-      });
-      cart[index].quantity = cart[index].quantity + 1;
-      localStorage.setItem('cart', JSON.stringify(cart));
-      setProduct(cart);
+  function handleIncreaseQuantity(title: string, odid: number) {
+    if (isLogin) {
+      // khi đăng nhập
+      fetch
+        .patch('/rest/orderdetail/updateQuantity', { id: odid, type: 'asc' })
+        .then((res) => {
+          setProduct((prev: any[]) => {
+            return prev.map((item: any) => {
+              if (item.odid === res.data.id) {
+                return { ...item, quantity: res.data.quantity };
+              }
+              return item;
+            });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      // khi không đăng nhập
+      const cartProduct = localStorage.getItem('cart');
+      if (cartProduct) {
+        let cart: Array<any> = JSON.parse(cartProduct);
+        let index: number = cart.findIndex((item) => {
+          return item.title === title;
+        });
+        cart[index].quantity = cart[index].quantity + 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        setProduct(cart);
+      }
     }
   }
 
@@ -160,19 +246,19 @@ export default function Cart() {
                 product.map((item: any) => {
                   return (
                     <div
-                      key={item.id}
+                      key={item.title}
                       className="col-span-4 grid grid-cols-11 bg-gray-50 rounded-lg p-1 border-b-2"
                     >
                       <div className="col-span-1 flex justify-center items-center">
                         <input
                           className="h-5 w-5"
                           type="checkbox"
-                          onChange={(e) => handleCheckToPay(e, item.id)}
+                          onChange={(e) => handleCheckToPay(e, item.id, item.title)}
                           disabled={checkAll}
                           checked={
                             productPay &&
                             productPay.some((i) => {
-                              return item.id === i.id;
+                              return item.id === i.id && item.title === i.title;
                             })
                           }
                         />
@@ -180,7 +266,7 @@ export default function Cart() {
                       <div className="col-span-5 grid grid-cols-6">
                         <div className="col-span-2 pe-2">
                           <img
-                            src={item.images}
+                            src={item.images && item.images}
                             alt={item.title}
                           />
                         </div>
@@ -212,10 +298,11 @@ export default function Cart() {
                           }}
                         >
                           <button
-                            onClick={() => handleDecreaseQuantity(item.id)}
-                            disabled={productPay && productPay.some((i: any) => i.id === item.id)}
+                            onClick={() => handleDecreaseQuantity(item.title, item.odid)}
+                            disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                             className={
-                              (productPay && productPay.some((i: any) => i.id === item.id) && 'cursor-default') || ''
+                              (productPay && productPay.some((i: any) => i.title === item.title) && 'cursor-default') ||
+                              ''
                             }
                           >
                             <Icon
@@ -228,7 +315,7 @@ export default function Cart() {
                             type="text"
                             value={item.quantity}
                             style={{
-                              width: '40px',
+                              width: '45px',
                               height: '90%',
                               outline: 'none',
                               border: 'none',
@@ -237,10 +324,11 @@ export default function Cart() {
                             readOnly
                           />
                           <button
-                            onClick={() => handleIncreaseQuantity(item.id)}
-                            disabled={productPay && productPay.some((i: any) => i.id === item.id)}
+                            onClick={() => handleIncreaseQuantity(item.title, item.odid)}
+                            disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                             className={
-                              (productPay && productPay.some((i: any) => i.id === item.id) && 'cursor-default') || ''
+                              (productPay && productPay.some((i: any) => i.title === item.title) && 'cursor-default') ||
+                              ''
                             }
                           >
                             <Icon
@@ -256,11 +344,11 @@ export default function Cart() {
                       </div>
 
                       <button
-                        onClick={() => handleDeleteProduct(item.id)}
-                        disabled={productPay && productPay.some((i: any) => i.id === item.id)}
+                        onClick={() => handleDeleteProduct(item.title, item.odid)}
+                        disabled={productPay && productPay.some((i: any) => i.title === item.title)}
                         className={
                           (productPay &&
-                            productPay.some((i: any) => i.id === item.id) &&
+                            productPay.some((i: any) => i.title === item.title) &&
                             'col-span-1 flex justify-center items-center cursor-default') ||
                           'col-span-1 flex justify-center items-center'
                         }
@@ -278,7 +366,7 @@ export default function Cart() {
                 })}
             </div>
           </div>
-          <div className="col-span-4 grid grid-rows-2 ms-1">
+          <div className="col-span-4 grid grid-rows-2 ms-1 max-h-[700px]">
             <Voucher
               vouchers={vouchers}
               handleOpenModal={handleOpenModal}

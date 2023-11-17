@@ -5,9 +5,16 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { login, setIsLogin } from 'src/redux/slice/authSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
+import fetch from 'src/services/axios/Axios';
 
 export default function Login() {
   const dispatch = useAppDispatch();
+  const cartProduct = localStorage.getItem('cart');
+
+  const tools = useSelector((state: RootState) => state.tool.tools);
+  const books = useSelector((state: RootState) => state.book.books);
+  const u = localStorage.getItem('user');
+  const user = u && JSON.parse(u);
 
   const loading = useSelector((state: RootState) => state.auth.loading);
   const error = useSelector((state: RootState) => state.auth.error);
@@ -37,16 +44,54 @@ export default function Login() {
       errorElement?.classList.add('hidden');
     }
 
-    dispatch(login({ email, password }));
+    await dispatch(login({ email, password }));
   };
 
   const token = localStorage.getItem('token');
+  // đẩy dữ liệu từ local lên db khi đăng nhập thành công và xóa cart trong localstorage
+  function pushCartFromLocalToDB() {
+    if (cartProduct) {
+      let product = cartProduct && JSON.parse(cartProduct);
+      // khi trong localstorage có sản phẩm thì nó sẽ được đẩy vào db khi có đăng nhập
+      fetch
+        .post('/rest/order/create', {
+          orderdate: new Date(),
+          totalamount: null,
+          user: { id: user.id },
+          statuss: { id: 1 },
+          voucher: null,
+          orderdetails: [
+            ...product.map((item: any) => {
+              return {
+                quantity: item.quantity,
+                price: item.price - (item.price * item.discount) / 100,
+                book: books.find((book) => {
+                  return book.title === item.title;
+                }),
+                schooltool: tools.find((tool) => {
+                  return tool.title === item.title;
+                }),
+              };
+            }),
+          ],
+        })
+        .then((res) => {
+          localStorage.removeItem('cart');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
 
   useEffect(() => {
     if (token) {
       dispatch(setIsLogin(true));
     }
-  }, [dispatch]);
+    if (user) {
+      pushCartFromLocalToDB();
+    }
+  }, [dispatch, user]);
 
   return (
     <>
