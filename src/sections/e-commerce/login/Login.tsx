@@ -1,13 +1,15 @@
-import { Link } from 'src/components/Link';
-import imgLogin from '../../../assets/image/login-page.jpg';
 import { Icon } from '@iconify/react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'src/components/Link';
 import { login, setIsLogin } from 'src/redux/slice/authSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
+import imgLogin from '../../../assets/image/login-page.jpg';
+
 
 export default function Login() {
   const dispatch = useAppDispatch();
+
 
   const loading = useSelector((state: RootState) => state.auth.loading);
   const error = useSelector((state: RootState) => state.auth.error);
@@ -126,10 +128,11 @@ export default function Login() {
               />
               Đăng nhập với Google
             </button>
-
-            <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
-              Quên mật khẩu?
-            </p>
+            <Link to='/ForgotPassword'>
+              <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
+                Quên mật khẩu?
+              </p>
+            </Link>
 
             <div className="mt-3 text-xs flex justify-between items-center">
               <p>Bạn chưa có tài khoản?</p>

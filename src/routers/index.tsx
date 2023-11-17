@@ -1,30 +1,30 @@
-import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import MainLayout from '../layouts/main';
 
 import {
   AdminBill,
+  AdminCategory,
   AdminDashboard,
   AdminOrther,
   AdminProduct,
   AdminUser,
   AdminVoucher,
   Cart,
-  Payment,
   DetailProductPage,
   Error,
+  ForgotPassword,
   HomePage,
   Login,
+  Payment,
   Products,
   Profile,
   ProfileAddress,
   ProfileOrder,
-  Register,
-  AdminCategory,
+  Register
 } from './elements';
 
-import ProfileLayout from 'src/layouts/ProfileLayout';
 import AdminLayout from 'src/layouts/AdminLayout';
+import ProfileLayout from 'src/layouts/ProfileLayout';
 
 export default function Route() {
   return useRoutes([
@@ -54,6 +54,10 @@ export default function Route() {
         {
           path: '/register',
           element: <Register />,
+        },
+        {
+          path: '/ForgotPassword',
+          element: <ForgotPassword />,
         },
       ],
     },
