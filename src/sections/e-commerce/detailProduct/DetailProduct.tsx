@@ -5,7 +5,9 @@ import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import { LatestBooks } from '../home';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { RootState, useAppDispatch } from 'src/redux/store';
+import { getBook } from 'src/redux/slice/bookSlice';
+import { getTools } from 'src/redux/slice/ToolSlice';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
@@ -14,9 +16,11 @@ export default function DetailProduct() {
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const u = localStorage.getItem('user');
   const user = u && JSON.parse(u);
+  const dispatch = useAppDispatch();
   // Lấy danh sách book trong redux bookSlice
   const books: BookType[] = useSelector((state: any) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
+
   const cate = useSelector((state: RootState) => state.common.category);
 
   const { id } = useParams();
@@ -90,7 +94,8 @@ export default function DetailProduct() {
         ],
       })
       .then((res) => {
-        console.log(res.data);
+        dispatch(getBook());
+        dispatch(getTools());
       })
       .catch((error) => {
         console.log(error);
@@ -98,7 +103,11 @@ export default function DetailProduct() {
   }
 
   function handleBuyNow() {
-    handleAddProduct();
+    if (isLogin) {
+      addProductToDB();
+    } else {
+      handleAddProduct();
+    }
     navigate('/cart');
   }
 

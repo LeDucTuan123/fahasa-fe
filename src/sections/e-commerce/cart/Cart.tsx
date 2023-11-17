@@ -25,19 +25,13 @@ export default function Cart() {
   const tools = useSelector((state: RootState) => state.tool.tools);
 
   useEffect(() => {
-    // lấy dữ liệu voucher
-    fetch('/rest/voucher')
-      .then((res) => {
-        setVouchers(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    if (isLogin) {
-      // lấy dữ liệu db đổ lên cart
-      fetch
-        .get(`/rest/order/cart/${user.id}`)
-        .then((res) => {
+    async function test() {
+      const voucher = await fetch.get('/rest/voucher');
+      setVouchers(voucher.data);
+      if (isLogin) {
+        // lấy dữ liệu db đổ lên cart
+        const res = await fetch.get(`/rest/order/cart/${user.id}`);
+        if (res.data) {
           let orderdetails = res.data.orderdetails;
           let products = orderdetails.map((od: any) => {
             let book = books.find((book: BookType) => {
@@ -56,17 +50,17 @@ export default function Cart() {
             return { ...tool, quantity: od.quantity, odid: od.id };
           });
           setProduct(products);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      // nếu không đăng nhập
-      if (cartProduct) {
-        setProduct(JSON.parse(cartProduct));
+        }
+      } else {
+        // nếu không đăng nhập
+        if (cartProduct) {
+          setProduct(JSON.parse(cartProduct));
+        }
       }
     }
-  }, []);
+    test();
+    // lấy dữ liệu voucher
+  }, [books, cartProduct, isLogin, tools]);
 
   // check tất cả sản phẩm vào mảng thanh toán
   function handleCheckAll(e: React.ChangeEvent<HTMLInputElement>) {
