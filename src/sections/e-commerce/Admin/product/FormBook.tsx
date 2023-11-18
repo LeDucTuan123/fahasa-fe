@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { UploadTask, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
@@ -67,6 +67,7 @@ export default function FormBook() {
         }).then(() => {});
         toast.success('Thêm sản phẩm thành công');
         setIsLoading(false);
+
         return setfetchDataBook((prev) => [
           //khi thêm thành công thì update lại state khỏi cần load lại page
           ...prev,
@@ -80,10 +81,18 @@ export default function FormBook() {
           },
         ]);
       }, 2000);
+      setDataBook(formBook); //reset form
     } catch (error) {
       toast.success('Thêm sản phẩm thất bại');
     }
   };
+
+  // vì lí do state image set chậm 1 nhịp nên phải bỏ vào useEffect để khi image thay đổi giá trị thì addBook đc gọi
+  useEffect(() => {
+    if (dataBook.images && isShowEdit === false) {
+      addBook();
+    }
+  }, [dataBook.images]);
 
   //thêm sản phẩm
   const handleAddBook = async (e: any) => {
@@ -91,7 +100,7 @@ export default function FormBook() {
     if (imageUpload === null) return toast.error('Vui lòng thêm ảnh');
     setIsLoading(true);
     const id = Math.random() * 1000;
-    const imageRef = ref(storage, `imagesFahasa/book/${imageUpload.name + id} `);
+    const imageRef = ref(storage, `imagesFahasa/book/add-book/${imageUpload.name + id} `);
     const uploadTask = uploadBytesResumable(imageRef, imageUpload);
 
     //Tải ảnh lên firebase
@@ -111,22 +120,26 @@ export default function FormBook() {
             break;
         }
       },
-
       (error) => {
         // Handle unsuccessful uploads
         console.log(error);
       },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setDataBook({ ...dataBook, images: String(downloadURL) });
-          console.log('File available at', dataBook.images);
-        });
+      async () => {
+        await getDowloadUrlImage(uploadTask);
       },
     );
 
-    addBook();
+    // addBook();
+  };
+
+  const getDowloadUrlImage = async (uploadTask: UploadTask) => {
+    try {
+      const img = await getDownloadURL(uploadTask.snapshot.ref);
+      setDataBook({ ...dataBook, images: String(img) });
+      console.log('File available at', dataBook.images);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleEditBook = (item: any) => {
