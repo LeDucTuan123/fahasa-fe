@@ -1,24 +1,35 @@
 import { Icon } from '@iconify/react';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { CategoryType } from 'src/types';
+
+const dataCate = {
+  categoryname: '',
+  parent: { id: 0 },
+  level: 3,
+};
 
 export default function AddCategory() {
   const [isLoading, setIsLoading] = useState(false);
   const [isShowEdit, setIsShowEdit] = useState(false);
 
+  const [formCate, setFormCate] = useState(dataCate);
   const [categories, setCategories] = useState<CategoryType[]>([]); // Dữ liệu thể loại từ API
   const [selectedCategory1, setSelectedCategory1] = useState<number | string>('1'); // Thể loại cấp 1 được chọn
   const [selectedCategory2, setSelectedCategory2] = useState<number | string>(''); // Thể loại cấp 2 được chọn
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      // Gọi API để lấy dữ liệu thể loại
+  const fetchCategories = async () => {
+    try {
       const res = await fetch.get(apiPaths.category);
       setCategories(res.data);
-    };
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+  const [editingCategory, setEditingCategory] = useState<CategoryType | null>(null);
 
+  useEffect(() => {
     fetchCategories();
   }, []);
 
@@ -32,7 +43,120 @@ export default function AddCategory() {
   const handleCategory2Change = (e: any) => {
     const category2 = e.target.value;
     setSelectedCategory2(category2);
+    console.log('Selected Category 2:', category2);
     // setSelectedCategory3(''); // Đặt thể loại cấp 3 về giá trị mặc định khi thể loại cấp 2 thay đổi
+  };
+
+  const handleAddCategoryProduct = async () => {
+    try {
+      // Gửi yêu cầu thêm mới
+      await fetch({
+        method: 'POST',
+        url: 'http://localhost:8080/rest/category',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          categoryname: formCate.categoryname,
+          parent: { id: selectedCategory2 },
+          level: formCate.level,
+        }),
+      });
+
+      // Load lại dữ liệu sau khi thêm mới thành công
+      await fetchCategories();
+
+      toast.success('Thêm thể loại thành công');
+      setIsShowEdit(false);
+    } catch (error) {
+      console.error('Error adding category/product:', error);
+      toast.error('Thêm sản phẩm thất bại');
+    }
+  };
+
+  const handleEditCategory = (category: CategoryType) => {
+    setEditingCategory(category);
+    setFormCate({
+      categoryname: category.categoryname,
+      parent: { id: category.parent.id },
+      level: category.level,
+    });
+    setIsShowEdit(true); // Đặt trạng thái chỉnh sửa thành true
+  };
+
+  const handleEditCategoryProduct = async () => {
+    try {
+      // Kiểm tra xem editingCategory có khác null không
+      if (editingCategory) {
+        // Gửi yêu cầu chỉnh sửa
+        await fetch({
+          method: 'PUT',
+          url: `http://localhost:8080/rest/category/${editingCategory.id}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            categoryname: formCate.categoryname,
+            parent: { id: selectedCategory2 },
+            level: formCate.level,
+          }),
+        });
+
+        // Load lại dữ liệu sau khi chỉnh sửa thành công
+        await fetchCategories();
+
+        toast.success('Chỉnh sửa thể loại thành công');
+      } else {
+        console.error('Editing category is null');
+        toast.error('Không thể chỉnh sửa vì thể loại đang chỉnh sửa không tồn tại');
+      }
+    } catch (error) {
+      console.error('Error editing category/product:', error);
+      toast.error('Chỉnh sửa sản phẩm thất bại');
+    } finally {
+      // Đặt trạng thái chỉnh sửa về false và reset form
+      setEditingCategory(null);
+      setFormCate(dataCate);
+      setIsShowEdit(false);
+    }
+  };
+
+  const handleResetForm = () => {
+    setFormCate(dataCate);
+    setSelectedCategory1('1'); // Đặt giá trị mặc định cho thể loại cấp 1
+    setSelectedCategory2(''); // Đặt giá trị mặc định cho thể loại cấp 2
+    // setSelectedCategory3(''); // Nếu cần thiết, đặt giá trị mặc định cho thể loại cấp 3
+    setIsShowEdit(false);
+    setEditingCategory(null);
+  };
+
+  const handleDeleteCategory = async () => {
+    try {
+      // Kiểm tra xem editingCategory có khác null không
+      if (editingCategory) {
+        // Gửi yêu cầu xóa thể loại
+        await fetch({
+          method: 'DELETE',
+          url: `http://localhost:8080/rest/category/${editingCategory.id}`,
+        });
+
+        // Load lại dữ liệu sau khi xóa thành công
+        await fetchCategories();
+
+        toast.success('Xóa thể loại thành công');
+      } else {
+        console.error('Editing category is null');
+        toast.error('Không thể xóa vì thể loại đang chỉnh sửa không tồn tại');
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      toast.error('Xóa thể loại thất bại');
+    } finally {
+      // Đặt trạng thái chỉnh sửa về false và reset form
+      setEditingCategory(null);
+      setFormCate(dataCate);
+      setIsShowEdit(false);
+    }
   };
 
   return (
@@ -204,6 +328,7 @@ export default function AddCategory() {
                             <li
                               key={item.id}
                               className="flex justify-between"
+                              onDoubleClick={() => handleEditCategory(item)}
                             >
                               <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
                                 <label
@@ -218,22 +343,6 @@ export default function AddCategory() {
                           );
                         })}
                     </ul>
-
-                    {/* <a
-                  href="#"
-                  className="flex items-center p-3 text-sm font-medium text-red-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-red-500 hover:underline"
-                >
-                  <svg
-                    className="w-4 h-4 me-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 18"
-                  >
-                    <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-6a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2Z" />
-                  </svg>
-                  Delete user
-                </a> */}
                   </div>
                 </div>
                 <div className="relative flex flex-col justify-between ml-10 col-span-2 z-0 w-full mb-6 group">
@@ -244,6 +353,8 @@ export default function AddCategory() {
                       id="floating_discount"
                       className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                       placeholder=" "
+                      value={formCate.categoryname}
+                      onChange={(event) => setFormCate((prev) => ({ ...prev, categoryname: event.target.value }))}
                     />
                     <label
                       htmlFor="floating_discount"
@@ -255,7 +366,7 @@ export default function AddCategory() {
 
                   <div className="flex gap-2">
                     <button
-                      // type="submit"
+                      onClick={editingCategory ? handleEditCategoryProduct : handleAddCategoryProduct}
                       className={
                         isShowEdit
                           ? 'bg-orange-300 text-white  hover:bg-orange-400 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center'
@@ -275,23 +386,27 @@ export default function AddCategory() {
                       )}
                     </button>
                     {isShowEdit ? (
-                      <button
-                        type="submit"
-                        className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-1 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center   "
-                        // onClick={() => setIsShowEdit(false)}
-                      >
-                        Cancel
-                      </button>
-                    ) : (
                       <>
                         <button
-                          type="submit"
-                          className="text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                          type="button"
+                          onClick={handleDeleteCategory}
+                          className="text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
                         >
                           Xóa
                         </button>
                         <button
                           type="submit"
+                          className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-1 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center   "
+                          onClick={() => setIsShowEdit(false)}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          type="submit"
+                          onClick={handleResetForm}
                           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
                         >
                           Reset
