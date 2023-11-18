@@ -5,15 +5,18 @@ import { useEffect, useState } from 'react';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 import ModalVoucher from '../cart/ModalVoucher';
 import fetch from 'src/services/axios/Axios';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
+
+const u = localStorage.getItem('user');
+const user = JSON.parse(u ? u : '');
 
 export default function Payment() {
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
   const [openModal, setOpenModal] = useState<boolean>(false);
   const paymentLocal = localStorage.getItem('payment');
-  const u = localStorage.getItem('user');
-  const user = JSON.parse(u ? u : '');
   const payment = JSON.parse(paymentLocal ? paymentLocal : '');
-  const [cart, setCart] = useState<any[]>(payment.cart);
+  const cart = payment.cart;
   const sum = cart.reduce((accum: number, item: any) => {
     return accum + item.quantity * (item.price - (item.price * item.discount) / 100);
   }, 0);
@@ -37,6 +40,9 @@ export default function Payment() {
     district: '',
     ward: '',
   });
+  const books = useSelector((state: RootState) => state.book.books);
+  const tools = useSelector((state: RootState) => state.tool.tools);
+  console.log(cart);
   useEffect(() => {
     fetch
       .get('/rest/voucher')
@@ -46,7 +52,6 @@ export default function Payment() {
       .catch((error) => {
         console.log(error);
       });
-    console.log('hello');
     setInformation({
       fullname: user && user.lastname && user.firstname ? user.lastname + user.firstname : '',
       email: user && user.email ? user.email : '',
@@ -63,7 +68,6 @@ export default function Payment() {
   }, [information]);
 
   function validation(i: any) {
-    console.log(i);
     let error = { fullname: '', email: '', phone: '', address: '', city: '', district: '', ward: '' };
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneNumberRegex = /^(0[1-9])+([0-9]{8})\b/;
@@ -156,7 +160,40 @@ export default function Payment() {
 
   function handlePayment() {
     if (valid()) {
-      console.log('không lỗi');
+      fetch
+        .post('/rest/order/payment', {
+          orderdate: new Date(),
+          totalamount:
+            sum -
+            (voucher ? voucher.valuev : 0) +
+            (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+          user: {
+            id: user.id,
+          },
+          statuss: {
+            id: 3,
+          },
+          voucher: voucher ? { id: voucher.id } : null,
+          orderdetails: cart.map((item: any) => {
+            return {
+              id: item.odid,
+              quantity: item.quantity,
+              price: item.price - (item.price * item.discount) / 100,
+              book: books.find((book) => {
+                return book.title === item.title;
+              }),
+              schooltool: tools.find((tool) => {
+                return tool.title === item.title;
+              }),
+            };
+          }),
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       console.log('có lỗi');
     }
