@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 interface FormProps {
-  setAddress: React.Dispatch<any>;
   informationError: any;
   setInformationError: React.Dispatch<any>;
   information: any;
@@ -10,14 +9,7 @@ interface FormProps {
   validation: (i: any) => any;
 }
 
-function Form({
-  setAddress,
-  informationError,
-  information,
-  setInformationError,
-  setInformation,
-  validation,
-}: FormProps) {
+function Form({ informationError, information, setInformationError, setInformation, validation }: FormProps) {
   // các state để lưu địa chỉ
   const [listAddress, setListAddress] = useState<Array<any>>([]);
   const [listDistrics, setListDistrics] = useState<Array<any>>([]);
@@ -42,15 +34,16 @@ function Form({
     });
     if (c) {
       setListDistrics(c.Districts);
-      setAddress((a: any) => {
-        return { ...a, city: c.Name };
+      setInformation((i: any) => {
+        return { ...i, city: c.Name };
       });
     } else {
       setListDistrics([]);
+      setInformation((i: any) => {
+        return { ...i, city: '', district: '', ward: '' };
+      });
     }
     setListWards([]);
-
-    setInformationError(() => validation({ ...information, city: e.target.value }));
   }
 
   // hàm sẽ chạy khi chọn phường
@@ -60,25 +53,30 @@ function Form({
     });
     if (d) {
       setListWards(d.Wards);
-      setAddress((a: any) => {
-        return { ...a, distrct: d.Name };
+      setInformation((i: any) => {
+        return { ...i, district: d.Name };
       });
     } else {
       setListWards([]);
+      setInformation((i: any) => {
+        return { ...i, district: '', ward: '' };
+      });
     }
-    setInformationError(() => validation({ ...information, district: e.target.value }));
   }
-
+  // hàm sẽ chạy khi chọn xã
   function handleChangeWard(e: React.ChangeEvent<HTMLSelectElement>) {
     const w = listWards.find((item) => {
       return item.Id === e.target.value;
     });
     if (w) {
-      setAddress((a: any) => {
-        return { ...a, ward: w.Name };
+      setInformation((i: any) => {
+        return { ...i, ward: w.Name };
+      });
+    } else {
+      setInformation((i: any) => {
+        return { ...i, ward: '' };
       });
     }
-    setInformationError(() => validation({ ...information, ward: e.target.value }));
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -170,7 +168,7 @@ function Form({
             onChange={(e) => handleChangeCity(e)}
             className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
           >
-            <option value="-1">-- Chọn tỉnh thành --</option>
+            <option value="">-- Chọn tỉnh thành --</option>
             {listAddress &&
               listAddress.map((item) => {
                 return (
@@ -197,7 +195,7 @@ function Form({
             onChange={(e) => handleChangeDistric(e)}
             className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
           >
-            <option value="-1">-- Chọn quận huyện --</option>
+            <option value="">-- Chọn quận huyện --</option>
             {listDistrics &&
               listDistrics.map((item) => {
                 return (
@@ -224,7 +222,7 @@ function Form({
             disabled={listWards && listWards.length === 0}
             className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
           >
-            <option value="-1">-- Chọn phường xã --</option>
+            <option value="">-- Chọn phường xã --</option>
             {listWards &&
               listWards.map((item) => {
                 return (

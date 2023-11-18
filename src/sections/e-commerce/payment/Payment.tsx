@@ -7,16 +7,26 @@ import ModalVoucher from '../cart/ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 
 export default function Payment() {
-  const [address, setAddress] = useState<any>({
-    city: '',
-    district: '',
-    ward: '',
-  });
+  const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const paymentLocal = localStorage.getItem('payment');
+  const u = localStorage.getItem('user');
+  const user = JSON.parse(u ? u : '');
+  const payment = JSON.parse(paymentLocal ? paymentLocal : '');
+  const [cart, setCart] = useState<any[]>(payment.cart);
+  const sum = cart.reduce((accum: number, item: any) => {
+    return accum + item.quantity * (item.price - (item.price * item.discount) / 100);
+  }, 0);
+  const [voucher, setVoucher] = useState<any>(payment.voucher);
+  const [vouchers, setVouchers] = useState<any[]>([]);
   const [information, setInformation] = useState<any>({
     fullname: '',
     email: '',
     phone: '',
     address: '',
+    city: '',
+    district: '',
+    ward: '',
   });
   const [informationError, setInformationError] = useState<any>({
     fullname: '',
@@ -27,17 +37,6 @@ export default function Payment() {
     district: '',
     ward: '',
   });
-  const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const paymentLocal = localStorage.getItem('payment');
-  const payment = JSON.parse(paymentLocal ? paymentLocal : '');
-  const [cart, setCart] = useState<any[]>(payment.cart);
-  const sum = cart.reduce((accum: number, item: any) => {
-    return accum + item.quantity * (item.price - (item.price * item.discount) / 100);
-  }, 0);
-  const [voucher, setVoucher] = useState<any>(payment.voucher);
-  const [vouchers, setVouchers] = useState<any[]>([]);
-  console.log(address);
   useEffect(() => {
     fetch
       .get('/rest/voucher')
@@ -47,9 +46,24 @@ export default function Payment() {
       .catch((error) => {
         console.log(error);
       });
+    console.log('hello');
+    setInformation({
+      fullname: user && user.lastname && user.firstname ? user.lastname + user.firstname : '',
+      email: user && user.email ? user.email : '',
+      phone: user && user.phone ? user.phone : '',
+      address: user && user.address ? user.address : '',
+      city: '',
+      district: '',
+      ward: '',
+    });
   }, []);
 
+  useEffect(() => {
+    setInformationError(() => validation(information));
+  }, [information]);
+
   function validation(i: any) {
+    console.log(i);
     let error = { fullname: '', email: '', phone: '', address: '', city: '', district: '', ward: '' };
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneNumberRegex = /^(0[1-9])+([0-9]{8})\b/;
@@ -85,15 +99,15 @@ export default function Payment() {
       error.address = 'Thông tin này không được để trống';
     }
 
-    if (i.city === '-1') {
+    if (i.city.trim().length === 0) {
       error.city = 'Thông tin này không được để trống';
     }
 
-    if (i.district === '-1') {
+    if (i.district.trim().length === 0) {
       error.district = 'Thông tin này không được để trống';
     }
 
-    if (i.ward === '-1') {
+    if (i.ward.trim().length === 0) {
       error.ward = 'Thông tin này không được để trống';
     }
 
@@ -124,6 +138,30 @@ export default function Payment() {
 
   // -----------------
 
+  function valid() {
+    if (
+      informationError.fullname === '' &&
+      informationError.email === '' &&
+      informationError.phone === '' &&
+      informationError.address === '' &&
+      informationError.city === '' &&
+      informationError.district === '' &&
+      informationError.ward === ''
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function handlePayment() {
+    if (valid()) {
+      console.log('không lỗi');
+    } else {
+      console.log('có lỗi');
+    }
+  }
+
   return (
     <>
       <div className="pt-5">
@@ -147,7 +185,6 @@ export default function Payment() {
         <Form
           information={information}
           setInformationError={setInformationError}
-          setAddress={setAddress}
           informationError={informationError}
           setInformation={setInformation}
           validation={validation}
@@ -161,7 +198,8 @@ export default function Payment() {
                 className=""
                 checked
               />{' '}
-              Giao hàng tiêu chuẩn: {address.city && address.city === 'Thành phố Hồ Chí Minh' ? 'Miễn phí' : '31.000đ'}
+              Giao hàng tiêu chuẩn:{' '}
+              {information.city && information.city === 'Thành phố Hồ Chí Minh' ? 'Miễn phí' : '31.000đ'}
             </label>
           </div>
         </div>
@@ -293,7 +331,7 @@ export default function Payment() {
                 <div className="flex justify-end mt-1">
                   <p className="text-[15px]">Phí vận chuyển (Giao hàng tiêu chuẩn)</p>
                   <p className="w-[150px] text-end">
-                    {address.city && address.city === 'Thành phố Hồ Chí Minh' ? '0đ' : '31.000đ'}
+                    {information.city && information.city === 'Thành phố Hồ Chí Minh' ? '0đ' : '31.000đ'}
                   </p>
                 </div>
                 <div className="flex justify-end mt-1">
@@ -302,7 +340,7 @@ export default function Payment() {
                     {ConvertToVietNamDong(
                       sum -
                         (voucher ? voucher.valuev : 0) +
-                        (address.city && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                        (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
                     )}
                   </p>
                 </div>
@@ -320,7 +358,12 @@ export default function Payment() {
                 />
                 Quay về giỏ hàng
               </Link>
-              <button className="bg-[#C92127] text-white text-[19px] py-2 px-10 rounded-lg">Xác nhận thanh toán</button>
+              <button
+                onClick={() => handlePayment()}
+                className="bg-[#C92127] text-white text-[19px] py-2 px-10 rounded-lg"
+              >
+                Xác nhận thanh toán
+              </button>
             </div>
           </div>
         </div>
