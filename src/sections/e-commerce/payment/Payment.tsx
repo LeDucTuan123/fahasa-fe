@@ -1,10 +1,12 @@
 import { Icon } from '@iconify/react';
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Form from './Form';
-import ModalVoucher from './ModalVoucher';
+import { useEffect, useState } from 'react';
+import { ConvertToVietNamDong } from 'src/util/SupportFnc';
+import ModalVoucher from '../cart/ModalVoucher';
+import fetch from 'src/services/axios/Axios';
 
-export default function FormPayment() {
+export default function Payment() {
   const [address, setAddress] = useState<any>({
     city: '',
     district: '',
@@ -27,6 +29,25 @@ export default function FormPayment() {
   });
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const paymentLocal = localStorage.getItem('payment');
+  const payment = JSON.parse(paymentLocal ? paymentLocal : '');
+  const [cart, setCart] = useState<any[]>(payment.cart);
+  const sum = cart.reduce((accum: number, item: any) => {
+    return accum + item.quantity * (item.price - (item.price * item.discount) / 100);
+  }, 0);
+  const [voucher, setVoucher] = useState<any>(payment.voucher);
+  const [vouchers, setVouchers] = useState<any[]>([]);
+  console.log(address);
+  useEffect(() => {
+    fetch
+      .get('/rest/voucher')
+      .then((res) => {
+        setVouchers(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   function validation(i: any) {
     let error = { fullname: '', email: '', phone: '', address: '', city: '', district: '', ward: '' };
@@ -82,10 +103,31 @@ export default function FormPayment() {
   function ChangePaymentMedthod(e: React.ChangeEvent<HTMLInputElement>) {
     setPaymentMedthod(e.target.value);
   }
+
+  // phần này truyền cho voucher modal
+
+  function handleCloseModal() {
+    setOpenModal(false);
+  }
+
+  function handleApplyVoucher(id: number) {
+    setVoucher(
+      vouchers.find((item: any) => {
+        return item.id === id;
+      }),
+    );
+  }
+
+  function removeApplyVoucher() {
+    setVoucher(undefined);
+  }
+
+  // -----------------
+
   return (
     <>
       <div className="pt-5">
-        <div className="bg-white h-[46px] flex items-center">
+        {/* <div className="bg-white h-[46px] flex items-center">
           <div className="bg-[#F39801] h-full flex w-[40px]">
             <img
               src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_warning_white.svg?q=10298"
@@ -101,7 +143,7 @@ export default function FormPayment() {
           >
             Đăng nhập ngay
           </Link>
-        </div>
+        </div> */}
         <Form
           information={information}
           setInformationError={setInformationError}
@@ -119,7 +161,7 @@ export default function FormPayment() {
                 className=""
                 checked
               />{' '}
-              Giao hàng tiêu chuẩn: 31.000đ
+              Giao hàng tiêu chuẩn: {address.city && address.city === 'Thành phố Hồ Chí Minh' ? 'Miễn phí' : '31.000đ'}
             </label>
           </div>
         </div>
@@ -178,13 +220,17 @@ export default function FormPayment() {
           <div className="mt-3">
             <div className="flex items-center">
               <label className="text-[15px] inline-block">Mã KM/Quà tặng</label>
-              <span className="mx-3 bg-[#FFB3234D] text-[#FFB323] py-1 px-2 rounded-lg font-bold flex items-center">
-                Chọn mã thành công - Mã giảm giá 10k toàn sàn - đơn hàng 150k
-                <Icon
-                  icon="system-uicons:cross"
-                  className="hover:cursor-pointer ml-1"
-                />
-              </span>
+              {voucher && (
+                <span className="mx-3 bg-[#FFB3234D] text-[#FFB323] py-1 px-2 rounded-lg font-bold flex items-center">
+                  Chọn mã thành công - Mã giảm giá {voucher.valuev / 1000}k toàn sàn - đơn hàng{' '}
+                  {voucher.condition / 1000}k
+                  <Icon
+                    icon="system-uicons:cross"
+                    className="hover:cursor-pointer ml-1"
+                  />
+                </span>
+              )}
+
               <span
                 className="underline text-blue-600 hover:cursor-pointer"
                 onClick={() => setOpenModal(true)}
@@ -198,60 +244,31 @@ export default function FormPayment() {
           <h3 className="uppercase font-bold text-[14px] border-b-2 pb-2">Kiểm tra lại đơn hàng</h3>
           <div className="mt-3">
             <div className="divide-y">
-              <div className="grid grid-cols-5 gap-2 py-2">
-                <div className="max-w-[150px] max-h-[150px]">
-                  <img
-                    src="https://cdn0.fahasa.com/media/catalog/product//8/9/8936066697088.jpg"
-                    className="h-full w-full"
-                    alt="img"
-                  />
-                </div>
-                <div>Lý thuyết trò chơi</div>
-                <div className="text-center">
-                  <p>161.100đ</p>
-                  <p className="text-[13px] line-through text-[#bfbfbf]">179.000đ</p>
-                </div>
-                <div className="text-center">4</div>
-                <div className="text-center">
-                  <p className="text-[#F39801] font-semibold">87.500đ</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-5 gap-2 py-2">
-                <div className="max-w-[150px] max-h-[150px]">
-                  <img
-                    src="https://cdn0.fahasa.com/media/catalog/product//8/9/8936066697088.jpg"
-                    className="h-full w-full"
-                    alt="img"
-                  />
-                </div>
-                <div>Lý thuyết trò chơi</div>
-                <div className="text-center">
-                  <p>161.100đ</p>
-                  <p className="text-[13px] line-through text-[#bfbfbf]">179.000đ</p>
-                </div>
-                <div className="text-center">4</div>
-                <div className="text-center">
-                  <p className="text-[#F39801] font-semibold">87.500đ</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-5 gap-2 py-2">
-                <div className="max-w-[150px] max-h-[150px]">
-                  <img
-                    src="https://cdn0.fahasa.com/media/catalog/product//8/9/8936066697088.jpg"
-                    className="h-full w-full"
-                    alt="img"
-                  />
-                </div>
-                <div>Lý thuyết trò chơi</div>
-                <div className="text-center">
-                  <p>161.100đ</p>
-                  <p className="text-[13px] line-through text-[#bfbfbf]">179.000đ</p>
-                </div>
-                <div className="text-center">4</div>
-                <div className="text-center">
-                  <p className="text-[#F39801] font-semibold">87.500đ</p>
-                </div>
-              </div>
+              {cart &&
+                cart.map((item: any) => {
+                  return (
+                    <div className="grid grid-cols-5 gap-2 py-2">
+                      <div className="max-w-[150px] max-h-[150px]">
+                        <img
+                          src={item.images}
+                          className="h-full w-full"
+                          alt={item.title}
+                        />
+                      </div>
+                      <div>{item.title}</div>
+                      <div className="text-center">
+                        <p>{ConvertToVietNamDong(item.price - (item.price * item.discount) / 100)}</p>
+                        <p className="text-[13px] line-through text-[#bfbfbf]">{item.price}</p>
+                      </div>
+                      <div className="text-center">{item.quantity}</div>
+                      <div className="text-center">
+                        <p className="text-[#F39801] font-semibold">
+                          {ConvertToVietNamDong(item.quantity * (item.price - (item.price * item.discount) / 100))}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -261,21 +278,33 @@ export default function FormPayment() {
               <div className="self-end">
                 <div className="flex justify-end mt-1">
                   <p className="text-[15px]">Thành tiền</p>
-                  <p className="w-[150px] text-end text-[15px]">694.500đ</p>
+                  <p className="w-[150px] text-end text-[15px]">{ConvertToVietNamDong(sum)}</p>
                 </div>
-                <div className="flex justify-end mt-1">
-                  <p className="text-[15px]">
-                    Giảm giá (Nhập mã thành công - Mã giảm giá 10K TOÀN SÀN - Đơn hàng từ 150K)
-                  </p>
-                  <p className="w-[150px] text-end text-[15px]">-10.000 đ</p>
-                </div>
+                {voucher && (
+                  <div className="flex justify-end mt-1">
+                    <p className="text-[15px]">
+                      Giảm giá (Nhập mã thành công - Mã giảm giá {voucher.valuev / 1000}K TOÀN SÀN - Đơn hàng từ{' '}
+                      {voucher.condition / 1000}K)
+                    </p>
+                    <p className="w-[150px] text-end text-[15px]">-{ConvertToVietNamDong(voucher.valuev)}</p>
+                  </div>
+                )}
+
                 <div className="flex justify-end mt-1">
                   <p className="text-[15px]">Phí vận chuyển (Giao hàng tiêu chuẩn)</p>
-                  <p className="w-[150px] text-end">31.000 đ</p>
+                  <p className="w-[150px] text-end">
+                    {address.city && address.city === 'Thành phố Hồ Chí Minh' ? '0đ' : '31.000đ'}
+                  </p>
                 </div>
                 <div className="flex justify-end mt-1">
                   <p className="text-[15px] font-bold">Tổng Số Tiền (gồm VAT)</p>
-                  <p className="w-[150px] text-end text-[#F39801] font-semibold">694.500đ</p>
+                  <p className="w-[150px] text-end text-[#F39801] font-semibold">
+                    {ConvertToVietNamDong(
+                      sum -
+                        (voucher ? voucher.valuev : 0) +
+                        (address.city && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                    )}
+                  </p>
                 </div>
               </div>
             </div>
@@ -298,7 +327,12 @@ export default function FormPayment() {
       </div>
       <ModalVoucher
         openModal={openModal}
-        setOpenModal={setOpenModal}
+        setCloseModal={handleCloseModal}
+        vouchers={vouchers}
+        productPay={cart}
+        applyVoucher={voucher}
+        handleApplyVoucher={handleApplyVoucher}
+        removeApplyVoucher={removeApplyVoucher}
       />
     </>
   );
