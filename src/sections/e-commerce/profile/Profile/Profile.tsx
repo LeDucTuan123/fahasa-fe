@@ -1,11 +1,25 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 
 function Profile() {
   const [isShow, setIsShow] = useState(false);
 
+  const userData: any = useSelector((state: RootState) => state.user.userData);
+
+  const [changeUser, setChangeUser] = useState(false);
+
+  const [profile, setProfile] = useState({
+    firstname: userData.firstname,
+    lastname: '',
+    phone: '',
+    email: '',
+  });
+
   function showChangePassword(e: any) {
     setIsShow(e.target.checked);
   }
+  console.log(profile.firstname);
   return (
     <>
       <div className="p-5 shadow-lg w-full">
@@ -17,6 +31,8 @@ function Profile() {
               className="w-3/4 border p-1 pl-3 font-bold text-sm text-[#495057] outline-blue-500"
               type="text"
               placeholder="Nhập họ"
+              value={changeUser ? profile.firstname : userData.firstname}
+              onChange={(e: any) => setProfile((prev) => ({ ...prev, firstname: e.target.value }))}
             />
           </div>
           <div className="mt-3">
@@ -108,11 +124,15 @@ function Profile() {
           ) : (
             <></>
           )}
-
-          <div className="text-center mt-8">
-            <button className="border py-2 px-14 bg-[#c92127] text-white font-bold rounded-lg">Lưu thay đổi</button>
-          </div>
         </form>
+        <div className="text-center mt-8">
+          <button
+            onClick={() => setChangeUser(true)}
+            className="border py-2 px-14 bg-[#c92127] text-white font-bold rounded-lg"
+          >
+            {changeUser ? 'Lưu Thay đổi' : 'Thay đổi'}
+          </button>
+        </div>
       </div>
     </>
   );

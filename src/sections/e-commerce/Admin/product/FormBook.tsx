@@ -89,8 +89,11 @@ export default function FormBook() {
 
   // vì lí do state image set chậm 1 nhịp nên phải bỏ vào useEffect để khi image thay đổi giá trị thì addBook đc gọi
   useEffect(() => {
-    if (dataBook.images && isShowEdit === false) {
+    if (!isShowEdit && isLoading && dataBook.images) {
       addBook();
+    }
+    if (isShowEdit && isLoading) {
+      uploadImage();
     }
   }, [dataBook.images]);
 
@@ -156,9 +159,7 @@ export default function FormBook() {
     setIsShowEdit(true);
   };
 
-  const handleUpdateBook = (e: any) => {
-    setIsLoading(true);
-    e.preventDefault();
+  const uploadImage = () => {
     setTimeout(async () => {
       await fetch({
         method: 'PUT',
@@ -196,6 +197,40 @@ export default function FormBook() {
         ),
       );
     }, 2000);
+  };
+
+  const handleUpdateBook = (e: any) => {
+    setIsLoading(true);
+    e.preventDefault();
+
+    const urlImage = ref(storage, dataBook.images);
+    const pathImage = ref(storage, urlImage.fullPath);
+    const uploadTask = uploadBytesResumable(pathImage, imageUpload);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // Quan sát các sự kiện thay đổi trạng thái như tiến trình, tạm dừng và tiếp tục
+        // Lấy tiến độ nhiệm vụ, bao gồm số byte đã tải lên và tổng số byte cần tải lên
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        console.log(error);
+      },
+      async () => {
+        await getDowloadUrlImage(uploadTask);
+      },
+    );
   };
 
   const handleResetForm = () => {

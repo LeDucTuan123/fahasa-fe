@@ -10,7 +10,7 @@ export const userData = createAsyncThunk('user/userData', async () => {
       },
     });
 
-    return response.data.find((user: any) => user.token === storedToken);
+    return response.data;
   } catch (error) {
     throw error;
   }
