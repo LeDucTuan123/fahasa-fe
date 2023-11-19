@@ -112,8 +112,8 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
                   <td className="px-6 py-4 max-w-[170px]">
                     <img
                       src={item.images}
-                      alt={item.title}
-                      className="w-50 h-50 object-cover"
+                      alt=""
+                      className="w-20 h-20 object-cover"
                     />
                   </td>
                   <td className="px-6 py-4 max-w-[170px] overflow-hidden text-ellipsis line-clamp-5">{item.title}</td>
