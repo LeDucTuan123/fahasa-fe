@@ -4,5 +4,6 @@ export const apiPaths = {
   school2: '/rest/schooltool/test',
   category: '/rest/category',
   cat: '/rest/cat',
+  voucher: '/rest/voucher',
   //   ...
 };
