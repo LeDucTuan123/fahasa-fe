@@ -1,7 +1,145 @@
-import React from 'react';
+import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { apiPaths } from 'src/services/api/path-api';
+import fetch from 'src/services/axios/Axios';
+import ListVoucher from './ListVoucher';
 
-export default function Voucher() {
+
+const formVoucher = {
+  id: '',
+  code: '',
+  expdate: '',
+  valuev: 0,
+  condition: 0,
+  active: false,
+  quantity: 0
+}
+export default function FormVoucher() {
+  const [voucherLoading, setVoucherLoading] = useState(false);
+  const [voucherEdit, setVoucherEdit] = useState(false);
+  const [dataVoucher, setDataVoucher] = useState(formVoucher);
+  const [fetchDataVoucher, setFetchDataVoucher] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch
+      .get(apiPaths.voucher)
+      .then((res) => setFetchDataVoucher(res.data))
+      .catch((err) => console.log(err.message));
+  }, []);
+
+  const addVoucher = () => {
+    try {
+      fetch({
+        method: 'POST',
+        url: 'http://localhost:8080/rest/voucher',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          code: dataVoucher.code,
+          expdate: dataVoucher.expdate,
+          valuev: dataVoucher.valuev,
+          condition: dataVoucher.condition,
+          active: dataVoucher.active,
+          quantity: dataVoucher.quantity,
+        }),
+      }).then(() => {});
+      toast.success('Thêm sản phẩm thành công');
+        setVoucherLoading(false);
+        return setFetchDataVoucher((prev) => [
+          //khi thêm thành công thì upexpdate lại state khỏi cần load lại page
+          ...prev,
+          {
+            code: dataVoucher.code,
+            expdate: dataVoucher.expdate,
+            valuev: dataVoucher.valuev,
+            condition: dataVoucher.condition,
+            active: dataVoucher.active,
+            quantity: dataVoucher.quantity,
+          },
+        ]);
+    } catch (error) {
+      toast.success('Thêm voucher thất bại');
+    }
+  };
+
+  const handleAddVoucher = async (e: any) => {
+    e.preventDefault();
+    setVoucherLoading(true);
+    addVoucher();
+  };
+
+  const handleEditVoucher = (item: any) => {
+    setDataVoucher((prev) => ({
+      ...prev,
+      id: item.id,
+      code: item.code,
+      expdate: item.expdate,
+      valuev: item.valuev,
+      condition: item.condition,
+      active: item.active,
+      quantity: item.quantity,
+    }));
+    setVoucherEdit(true);
+  };
+
+  const handleUpdateVoucher = (e: any) => {
+    setVoucherLoading(true);
+    e.preventDefault();
+    setTimeout(async () => {
+      await fetch({
+        method: 'PUT',
+        url: `http://localhost:8080/rest/voucher/${dataVoucher.id}`,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          code: dataVoucher.code,
+          expdate: dataVoucher.expdate,
+          valuev: dataVoucher.valuev,
+          condition: dataVoucher.condition,
+          active: dataVoucher.active,
+          quantity: dataVoucher.quantity,
+        }),
+      });
+
+      setVoucherLoading(false);
+      setVoucherEdit(false);
+      toast.success('Update thành công');
+      // return setfetchDataBook(fetdataUpexpdate);
+      setFetchDataVoucher((prev) =>
+        prev.map((item) =>
+          item.id === dataVoucher.id
+            ? {
+                ...item,
+                code: dataVoucher.code,
+                expdate: dataVoucher.expdate,
+                valuev: dataVoucher.valuev,
+                condition: dataVoucher.condition,
+                active: dataVoucher.active,
+                quantity: dataVoucher.quantity,
+              }
+            : item,
+        ),
+      );
+    }, 2000);
+  };
+
+  const handleResetForm = () => {
+    setDataVoucher((prev) => ({
+      ...prev,
+      id: '',
+      code: '',
+      expdate: '',
+      valuev: 0,
+      condition: 0,
+      quantity: 0,
+    }));
+  };
+
   return (
+    <>
     <div className="w-full h-auto shadow-xl p-5 border-[1px] rounded-xl">
       <div className="flex relative pb-5">
         <form className="w-full">
@@ -16,6 +154,8 @@ export default function Voucher() {
                 placeholder=" "
                 required
                 maxLength={5}
+                value={dataVoucher.code}
+                onChange={(e: any) => setDataVoucher((prev) => ({...prev, code: e.target.value}))}
               />
               <label
                 htmlFor="floating_name"
@@ -26,12 +166,14 @@ export default function Voucher() {
             </div>
             <div className="relative z-0 w-full mb-6 group">
               <input
-                type="date"
+                type="expdate"
                 name="floating_author"
                 id="floating_author"
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
+                value={dataVoucher.expdate}
+                onChange={(e: any) => setDataVoucher((prev) => ({...prev, expdate: e.target.value}))}
               />
               <label
                 htmlFor="floating_author"
@@ -51,6 +193,8 @@ export default function Voucher() {
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
+                value={dataVoucher.valuev}
+                onChange={(e: any) => setDataVoucher((prev) => ({...prev, valuev: e.target.value}))}
               />
               <label
                 htmlFor="floating_discount"
@@ -67,6 +211,8 @@ export default function Voucher() {
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
+                value={dataVoucher.quantity}
+                onChange={(e: any) => setDataVoucher((prev) => ({...prev, quantity: e.target.value}))}
               />
               <label
                 htmlFor="floating_discount"
@@ -88,6 +234,8 @@ export default function Voucher() {
                 name="floating_discount"
                 id="floating_discount"
                 required
+                checked={dataVoucher.active}
+                onChange={(e: any) => setDataVoucher((prev) => ({...prev, quantity: e.target.checked}))}
               />
             </div>
           </div>
@@ -104,10 +252,11 @@ export default function Voucher() {
               rows={4}
               className="block outline-none p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Leave a comment..."
+              value={dataVoucher.condition}
+              onChange={(e: any) => setDataVoucher((prev) => ({...prev, condition: e.target.value}))}
             ></textarea>
           </div>
-
-          <div className="relative z-0 w-full mb-6 group">
+          {/* <div className="relative z-0 w-full mb-6 group">
             <label
               htmlFor="file-upload"
               className="block mb-2 text-sm font-medium text-gray-900 "
@@ -120,8 +269,8 @@ export default function Voucher() {
               alt=""
               className="cursor-pointer"
             />
-          </div>
-          <div className="flex gap-2">
+          </div> */}
+          {/* <div className="flex gap-2">
             <button
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -146,9 +295,64 @@ export default function Voucher() {
             >
               Reset
             </button>
-          </div>
+          </div> */}
+          <div className="flex gap-2">
+              <button
+                // type="submit"
+                disabled={voucherLoading ? true : false}
+                className={
+                  voucherEdit
+                    ? 'bg-orange-300 text-white  hover:bg-orange-400 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center'
+                    : ' bg-green-400 text-white  hover:bg-green-500 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-[96px] sm:w-auto px-5 py-2.5 text-center'
+                }
+                onClick={voucherEdit ? handleUpdateVoucher : handleAddVoucher}
+              >
+                {voucherLoading ? (
+                  <Icon
+                    icon={'mingcute:loading-fill'}
+                    fontSize={24}
+                    className="animate-spin"
+                  />
+                ) : voucherEdit ? (
+                  'Sửa'
+                ) : (
+                  'Tạo mới'
+                )}
+              </button>
+              {voucherEdit ? (
+                <button
+                  type="submit"
+                  className="text-white bg-gray-400 hover:bg-gray-500 focus:ring-1 focus:outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center   "
+                  onClick={() => setVoucherEdit(false)}
+                >
+                  Cancel
+                </button>
+              ) : (
+                <>
+                  {/* <button
+                    type="submit"
+                    className="text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                  >
+                    Xóa
+                  </button> */}
+                  <button
+                    type="submit"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                    onClick={handleResetForm}
+                  >
+                    Reset
+                  </button>
+                </>
+              )}
+            </div>
         </form>
-      </div>
+      </div>      
     </div>
+    <ListVoucher
+    fetchDataVoucher={fetchDataVoucher}
+    setFetchDataVoucher={setFetchDataVoucher}
+    onHandleEditVoucher={handleEditVoucher}
+    />
+    </>
   );
 }
