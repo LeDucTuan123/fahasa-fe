@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Form from './Form';
 import { useEffect, useState } from 'react';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
@@ -12,6 +12,7 @@ const u = localStorage.getItem('user');
 const user = JSON.parse(u ? u : '');
 
 export default function Payment() {
+  const navigate = useNavigate();
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
   const [openModal, setOpenModal] = useState<boolean>(false);
   const paymentLocal = localStorage.getItem('payment');
@@ -189,7 +190,7 @@ export default function Payment() {
           }),
         })
         .then((res) => {
-          console.log(res.data);
+          navigate(`/success/${res.data.id}`);
         })
         .catch((error) => {
           console.log(error);
