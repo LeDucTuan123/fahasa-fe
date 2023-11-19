@@ -108,10 +108,10 @@ function Profile() {
           ) : (
             <></>
           )}
+          <div className="text-center mt-8">
+            <button className="border py-2 px-14 bg-[#c92127] text-white font-bold rounded-lg">Lưu thay đổi</button>
+          </div>
         </form>
-        <div className="text-center mt-8">
-          <button className="border py-2 px-14 bg-[#c92127] text-white font-bold rounded-lg">Lưu thay đổi</button>
-        </div>
       </div>
     </>
   );
