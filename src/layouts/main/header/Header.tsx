@@ -1,15 +1,15 @@
 import { Icon } from '@iconify/react';
+import HeadlessTippy from '@tippyjs/react/headless';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
+import { setIsLogin } from 'src/redux/slice/authSlice';
+import { userData } from 'src/redux/slice/userSlice';
+import { RootState, useAppDispatch } from 'src/redux/store';
+import fetch from 'src/services/axios';
 import Logo from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
-import fetch from 'src/services/axios';
-import { useSelector } from 'react-redux';
-import { RootState, useAppDispatch } from 'src/redux/store';
-import { useState, useEffect, useRef } from 'react';
 import Search from './search';
-import { setIsLogin } from 'src/redux/slice/authSlice';
-import HeadlessTippy from '@tippyjs/react/headless';
-import { userData } from 'src/redux/slice/userSlice';
 
 // là mảng chứa những category level 2
 let level2: any = null;
@@ -333,9 +333,8 @@ export default function Header() {
 
         {/* Mobile menu */}
         <div
-          className={`lg:hidden fixed bg-[#f8f6f0] top-0 right-0 transition-all w-screen h-full duration-500 z-50 ${
-            openMenu ? 'left-0' : 'left-[-100%]'
-          }`}
+          className={`lg:hidden fixed bg-[#f8f6f0] top-0 right-0 transition-all w-screen h-full duration-500 z-50 ${openMenu ? 'left-0' : 'left-[-100%]'
+            }`}
         >
           {/* Header mobile */}
           <div className="flex justify-between bg-indigo-300 grid-cols-2 px-2">
