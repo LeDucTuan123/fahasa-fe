@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
 import { BookType } from 'src/types/book';
 import { ToolType } from 'src/types/tool';
+import { useNavigate } from 'react-router-dom';
+import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 
 export default function Cart() {
   // const IsmUp = useResponsive('up', 'md');
@@ -23,6 +25,7 @@ export default function Cart() {
   const user = u && JSON.parse(u);
   const books = useSelector((state: RootState) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function test() {
@@ -199,10 +202,6 @@ export default function Cart() {
   function handleOpenModal() {
     setOpenModal(true);
   }
-  // chuyển đổi thành tiền việt
-  function ConvertToVietNamDong(money: number) {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(money);
-  }
 
   function handleApplyVoucher(id: number) {
     setApplyVoucher(
@@ -214,6 +213,11 @@ export default function Cart() {
 
   function removeApplyVoucher() {
     setApplyVoucher(undefined);
+  }
+
+  function handleNavigateToPayment() {
+    localStorage.setItem('payment', JSON.stringify({ cart: productPay, voucher: applyVoucher }));
+    navigate('/payment');
   }
 
   return (
@@ -435,7 +439,12 @@ export default function Cart() {
               </div>
               <div className="grid grid-rows-2 m-2 h-28">
                 {productPay && productPay?.length > 0 ? (
-                  <button className="bg-red-500 justify-center items-center w-full h-12 text-white font-bold text-2xl opacity-50 hover:bg-red-500 hover:opacity-100 hover:cursor-pointer">
+                  <button
+                    onClick={() => {
+                      handleNavigateToPayment();
+                    }}
+                    className="bg-red-500 justify-center items-center w-full h-12 text-white font-bold text-2xl opacity-50 hover:bg-red-500 hover:opacity-100 hover:cursor-pointer"
+                  >
                     Thanh toán
                   </button>
                 ) : (
@@ -452,7 +461,7 @@ export default function Cart() {
       </div>
       <ModalVoucher
         openModal={openModal}
-        setOpenModal={handleCloseModal}
+        setCloseModal={handleCloseModal}
         vouchers={vouchers}
         productPay={productPay}
         applyVoucher={applyVoucher}

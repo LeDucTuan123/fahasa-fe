@@ -6,7 +6,7 @@ import { formatDateToDDMMYYYY } from 'src/util/SupportFnc';
 
 interface modalVoucherProps {
   openModal: boolean | undefined;
-  setOpenModal: () => void;
+  setCloseModal: () => void;
   vouchers: any;
   productPay: Array<any>;
   applyVoucher: any;
@@ -16,7 +16,7 @@ interface modalVoucherProps {
 
 function ModalVoucher({
   openModal,
-  setOpenModal,
+  setCloseModal,
   vouchers,
   productPay,
   applyVoucher,
@@ -34,7 +34,7 @@ function ModalVoucher({
       <Modal
         dismissible
         show={openModal}
-        onClose={() => setOpenModal()}
+        onClose={() => setCloseModal()}
       >
         <Modal.Header>
           <div className="flex items-center">
