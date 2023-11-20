@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const login = createAsyncThunk(
   'user/login',
@@ -12,7 +13,7 @@ export const login = createAsyncThunk(
       });
 
       if (response.status === 200) {
-        alert('success');
+        toast.success('Đăng nhập thành công');
       }
 
       const data = await response.data;
@@ -22,36 +23,11 @@ export const login = createAsyncThunk(
 
       localStorage.setItem('token', token);
 
-      // Get user - Đọc token từ localStorage
-      const storedToken = localStorage.getItem('token');
-
-      axios
-        .get('http://localhost:8080/api/v1/user', {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
-        })
-        .then((response) => {
-          // Handle successful response
-          const userData = response.data;
-          console.log('User data:', response.data);
-          localStorage.setItem('user', JSON.stringify(response.data));
-          // Do something with the data here
-        })
-        .catch((error) => {
-          // Handle error
-          console.error('Error fetching user data:', error);
-          // Optionally, you can check the status code and handle different errors
-          if (error.response && error.response.status === 401) {
-            console.log('Unauthorized. Redirect to login page, for example.');
-          }
-        });
-
       return data;
     } catch (error: any) {
       console.error('Login error:', error.message);
       if (error.message === 'Network Error') {
-        alert('Network Error');
+        toast.error('Network Error');
       }
 
       throw error;

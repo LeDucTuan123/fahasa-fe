@@ -5,6 +5,7 @@ import { Icon } from '@iconify/react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -37,20 +38,18 @@ export default function Register() {
         const response = await axios.post('http://localhost:8080/api/v1/auth/signup', values);
 
         if (response.status >= 200 && response.status < 300) {
-          console.log('Đăng ký thành công:', response.data);
-
+          toast.success('Đăng ký thành công');
           navigate('/login');
         } else {
-          console.error('Lỗi khi đăng ký:', response.data);
+          toast.error(response.data.message);
         }
       } catch (error: any) {
         // Xử lý lỗi nếu có
+        toast.error(error.message);
         console.error('Lỗi khi đăng ký:', error.message);
       }
     },
   });
-
-  console.log(formik.errors);
 
   return (
     <>

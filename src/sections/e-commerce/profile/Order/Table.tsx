@@ -5,7 +5,7 @@ interface TableProps {
 function Table(props: TableProps) {
   return (
     <>
-      <div className="p-5 shadow-lg w-full">
+      <div className="p-5 shadow-lg w-full rounded-lg">
         <h1 className="uppercase font-bold text-[#C92127]">Đơn hàng của tôi</h1>
         <table className="table-auto border-collapse border-spacing-3 w-full mt-5">
           <thead>

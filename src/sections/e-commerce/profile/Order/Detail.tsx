@@ -8,7 +8,7 @@ function Detail(props: DetailProps) {
   return (
     <>
       <div
-        className="inline-flex items-center hover:cursor-pointer hover:font-bold"
+        className="inline-flex items-center hover:cursor-pointer hover:font-bold rounded-lg"
         onClick={() => props.changeToTable()}
       >
         <Icon
@@ -17,7 +17,7 @@ function Detail(props: DetailProps) {
         />
         <span className="text-[#2489F4]  inline-block">Quay lại</span>
       </div>
-      <div className="p-5 shadow-lg w-full">
+      <div className="p-5 shadow-lg w-full rounded-lg">
         <h1 className="font-bold text-[#C92127]">Chi tiết đơn hàng</h1>
         <table className="table-auto border-collapse border-spacing-3 w-full mt-5">
           <thead>

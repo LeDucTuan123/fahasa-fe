@@ -5,10 +5,13 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { login, setIsLogin } from 'src/redux/slice/authSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
+import { getUser } from 'src/redux/slice/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const dispatch = useAppDispatch();
 
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const loading = useSelector((state: RootState) => state.auth.loading);
   const error = useSelector((state: RootState) => state.auth.error);
 
@@ -38,7 +41,9 @@ export default function Login() {
     }
 
     dispatch(login({ email, password }));
+    dispatch(getUser());
   };
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
 
@@ -46,7 +51,10 @@ export default function Login() {
     if (token) {
       dispatch(setIsLogin(true));
     }
-  }, [dispatch]);
+    if (isLogin) {
+      navigate('/');
+    }
+  }, [dispatch, isLogin]);
 
   return (
     <>

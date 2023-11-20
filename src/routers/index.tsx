@@ -72,11 +72,12 @@ export default function Route() {
     },
     // profile layout
     {
+      path: '/member',
       element: <ProfileLayout />,
       children: [
-        { path: '/profile', element: <Profile /> },
-        { path: '/address', element: <ProfileAddress /> },
-        { path: '/order', element: <ProfileOrder /> },
+        { path: 'profile', element: <Profile /> },
+        { path: 'address', element: <ProfileAddress /> },
+        { path: 'order', element: <ProfileOrder /> },
       ],
     },
   ]);
