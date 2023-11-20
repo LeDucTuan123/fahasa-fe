@@ -168,6 +168,8 @@ export default function Payment() {
             sum -
             (voucher ? voucher.valuev : 0) +
             (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+          receiver: information.fullname,
+          ship: information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
           user: {
             id: user.id,
           },
