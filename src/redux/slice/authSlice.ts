@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const login = createAsyncThunk(
   'user/login',
@@ -12,7 +13,7 @@ export const login = createAsyncThunk(
       });
 
       if (response.status === 200) {
-        alert('success');
+        toast.success('Đăng nhập thành công');
       }
 
       const data = await response.data;
@@ -21,6 +22,8 @@ export const login = createAsyncThunk(
       const token = data.token;
 
       localStorage.setItem('token', token);
+
+
 
       // Get user - Đọc token từ localStorage
       const storedToken = localStorage.getItem('token');
@@ -47,11 +50,12 @@ export const login = createAsyncThunk(
           }
         });
 
+
       return data;
     } catch (error: any) {
       console.error('Login error:', error.message);
       if (error.message === 'Network Error') {
-        alert('Network Error');
+        toast.error('Network Error');
       }
 
       throw error;

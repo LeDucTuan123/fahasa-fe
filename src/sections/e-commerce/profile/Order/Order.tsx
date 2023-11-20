@@ -48,7 +48,7 @@ function Order() {
 
   return (
     <>
-      <div className="p-3 mb-3 shadow-md w-full">
+      <div className="p-3 mb-3 shadow-md w-full rounded-lg">
         Bạn vui lòng cập nhật thông tin tài khoản{' '}
         <Link
           to="/profile"

@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { login, setIsLogin } from 'src/redux/slice/authSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
+import { getUser } from 'src/redux/slice/userSlice';
+import { useNavigate } from 'react-router-dom';
 import fetch from 'src/services/axios/Axios';
 
 export default function Login() {
@@ -16,6 +18,7 @@ export default function Login() {
   const u = localStorage.getItem('user');
   const user = u && JSON.parse(u);
 
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const loading = useSelector((state: RootState) => state.auth.loading);
   const error = useSelector((state: RootState) => state.auth.error);
 
@@ -44,8 +47,11 @@ export default function Login() {
       errorElement?.classList.add('hidden');
     }
 
-    await dispatch(login({ email, password }));
+    dispatch(login({ email, password }));
+    dispatch(getUser());
+
   };
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
   // đẩy dữ liệu từ local lên db khi đăng nhập thành công và xóa cart trong localstorage
@@ -91,7 +97,11 @@ export default function Login() {
     if (user) {
       pushCartFromLocalToDB();
     }
-  }, [dispatch, user]);
+    if (isLogin) {
+      navigate('/');
+    }
+  }, [dispatch, isLogin, user]);
+
 
   return (
     <>
