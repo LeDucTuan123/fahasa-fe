@@ -22,7 +22,7 @@ function Order() {
       .catch((error) => {
         console.log(error);
       });
-  });
+  }, []);
 
   // thay đổi giữa table và detail
   function changeToDetail(id: number) {
