@@ -147,6 +147,7 @@ export default function Header() {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     dispatch(setIsLogin(false));
     toast.success('Đăng xuất thành công');
   };

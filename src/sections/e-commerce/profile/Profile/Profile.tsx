@@ -14,6 +14,7 @@ function Profile() {
     setIsChange(false);
   }
   return <>{isChange ? <ChangePass changeToForm={changeToForm} /> : <Form changeToPass={changeToPass} />}</>;
+
 }
 
 export default Profile;

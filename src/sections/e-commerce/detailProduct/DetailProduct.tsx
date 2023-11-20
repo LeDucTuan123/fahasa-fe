@@ -5,14 +5,22 @@ import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import { LatestBooks } from '../home';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { RootState, useAppDispatch } from 'src/redux/store';
+import { getBook } from 'src/redux/slice/bookSlice';
+import { getTools } from 'src/redux/slice/ToolSlice';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
   const [data, setData] = useState<BookType>();
   const navigate = useNavigate();
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const u = localStorage.getItem('user');
+  const user = u && JSON.parse(u);
+  const dispatch = useAppDispatch();
   // Lấy danh sách book trong redux bookSlice
   const books: BookType[] = useSelector((state: any) => state.book.books);
+  const tools = useSelector((state: RootState) => state.tool.tools);
+
   const cate = useSelector((state: RootState) => state.common.category);
 
   const { id } = useParams();
@@ -21,7 +29,7 @@ export default function DetailProduct() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [fetchData, isLogin]);
   // const book = useSelector((state: any) => state.productDetail);
 
   // // const dispatch = useAppDispatch();
@@ -44,7 +52,7 @@ export default function DetailProduct() {
 
       // Kiểm tra xem sản phẩm đó đã dc thêm vào storage chưa
       const index = cart.findIndex((item: any) => {
-        return item.id === obj.id;
+        return item.id === obj.id && item.title === obj.title;
       });
 
       // nếu rùi thì chỉ thêm vào số lượng cho sản phẩm đó
@@ -64,8 +72,42 @@ export default function DetailProduct() {
     }
   }
 
+  async function addProductToDB() {
+    fetch
+      .post('/rest/order/create', {
+        orderdate: new Date(),
+        totalamount: null,
+        user: { id: user.id },
+        statuss: { id: 1 },
+        voucher: null,
+        orderdetails: [
+          {
+            quantity: counter,
+            price: data!.price - (data!.price * data!.discount) / 100,
+            book: books.find((book) => {
+              return book.title === data!.title;
+            }),
+            schooltool: tools.find((tool) => {
+              return tool.title === data!.title;
+            }),
+          },
+        ],
+      })
+      .then((res) => {
+        dispatch(getBook());
+        dispatch(getTools());
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   function handleBuyNow() {
-    handleAddProduct();
+    if (isLogin) {
+      addProductToDB();
+    } else {
+      handleAddProduct();
+    }
     navigate('/cart');
   }
 
@@ -146,7 +188,13 @@ export default function DetailProduct() {
           </div>
           <div className="pt-3 flex flex-col sm:flex-row justify-between">
             <button
-              onClick={() => handleAddProduct()}
+              onClick={() => {
+                if (isLogin) {
+                  addProductToDB();
+                } else {
+                  handleAddProduct();
+                }
+              }}
               className="text-[#d32f2f] text-xl border-[2px] border-[#d32f2f] px-5 rounded-md py-2 flex sm:w-[55%] active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white"
             >
               <Icon
@@ -156,7 +204,9 @@ export default function DetailProduct() {
               <span>Thêm vào giỏ hàng</span>
             </button>
             <button
-              onClick={() => handleBuyNow()}
+              onClick={() => {
+                handleBuyNow();
+              }}
               className="bg-[#d32f2f] py-2 px-5 text-xl border-none rounded-md text-white sm:w-[40%] button-buy"
             >
               <span>Mua ngay</span>

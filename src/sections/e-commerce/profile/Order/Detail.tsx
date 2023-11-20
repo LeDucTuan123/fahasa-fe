@@ -1,7 +1,11 @@
 import { Icon } from '@iconify/react';
+import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 
 interface DetailProps {
   changeToTable: () => void;
+  order: any;
+  products: any[];
+  user: any;
 }
 
 function Detail(props: DetailProps) {
@@ -28,19 +32,24 @@ function Detail(props: DetailProps) {
             <th>Thành tiền</th>
           </thead>
           <tbody className="divide-y">
-            <tr className="text-center">
-              <td className="flex">
-                <img
-                  src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                  className="h-[100px] m-auto"
-                  alt="img"
-                />
-              </td>
-              <td>Thẻ bài mèo cảm tử mở rộng</td>
-              <td>124.700đ</td>
-              <td>1</td>
-              <td>124.700đ</td>
-            </tr>
+            {props.products &&
+              props.products.map((item: any) => {
+                return (
+                  <tr className="text-center">
+                    <td className="flex">
+                      <img
+                        src={item[0].images}
+                        className="h-[100px] m-auto"
+                        alt={item[0].title}
+                      />
+                    </td>
+                    <td>{item[0].title}</td>
+                    <td>{ConvertToVietNamDong(item[0].price - (item[0].price * item[0].discount) / 100)}</td>
+                    <td>{item[1]}</td>
+                    <td>{ConvertToVietNamDong(item[2])}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
         <div className="flex justify-between mt-5">
@@ -48,29 +57,53 @@ function Detail(props: DetailProps) {
             <h1 className="font-bold text-[#C92127]">Thông tin người nhận</h1>
             <ul>
               <li className="mt-3">
-                Người nhận: <span className="font-bold">Phạm Duy Phương</span>
+                Người nhận: <span className="font-bold">{props.order.receiver}</span>
               </li>
               <li className="mt-3">
                 Địa chỉ: <span className="font-bold">Địa chỉ</span>
               </li>
               <li className="mt-3">
-                Số điện thoại: <span className="font-bold">09868798797</span>
+                Số điện thoại: <span className="font-bold">{props.user.phone}</span>
               </li>
             </ul>
           </div>
 
           <ul className="text-end">
             <li>
-              Thành tiền: <span className="font-bold">124.700đ</span>
+              Thành tiền:{' '}
+              <span className="font-bold">
+                {ConvertToVietNamDong(
+                  props.products.reduce((accum: number, item: any) => {
+                    return accum + item[1] * (item[0].price - (item[0].price * item[0].discount) / 100);
+                  }, 0),
+                )}
+              </span>
             </li>
             <li className="mt-3">
-              Phí vận chuyển: <span className="font-bold">25.000đ</span>
+              Phí vận chuyển: <span className="font-bold">{ConvertToVietNamDong(props.order.ship)}</span>
             </li>
+            {props.order.totalamount -
+              props.order.ship -
+              props.products.reduce((accum: number, item: any) => {
+                return accum + item[1] * (item[0].price - (item[0].price * item[0].discount) / 100);
+              }, 0) <
+              0 && (
+              <li className="mt-3">
+                Voucher:{' '}
+                <span className="font-bold">
+                  {ConvertToVietNamDong(
+                    props.order.totalamount -
+                      props.order.ship -
+                      props.products.reduce((accum: number, item: any) => {
+                        return accum + item[1] * (item[0].price - (item[0].price * item[0].discount) / 100);
+                      }, 0),
+                  )}
+                </span>
+              </li>
+            )}
+
             <li className="mt-3">
-              Chiết khấu: <span className="font-bold">-20.000đ</span>
-            </li>
-            <li className="mt-3">
-              Tổng tiền (gồm VAT): <span className="font-bold">129.700đ</span>
+              Tổng tiền (gồm VAT): <span className="font-bold">{ConvertToVietNamDong(props.order.totalamount)}</span>
             </li>
           </ul>
         </div>

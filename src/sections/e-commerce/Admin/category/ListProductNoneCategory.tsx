@@ -63,38 +63,39 @@ export default function ListProductNoneCategory({ dataBook, onHandleEditing }: P
           </tr>
         </thead>
         <tbody>
-          {dataBook
-            .filter((item) => item.cats?.length === 0)
-            .map((item) => (
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
-                  {item.id}
-                </th>
-                <td className="px-6 py-4 max-w-[170px]">
-                  <img
-                    src={item.images}
-                    alt=""
-                    className="w-20 h-20 object-cover"
-                  />
-                </td>
-                <td className="px-6 py-4 max-w-[170px]">{item.title}</td>
-                <td className="px-6 py-4 max-w-[170px]">{item.author}</td>
-                <td className="px-6 py-4 max-w-[170px]">{item.price}</td>
-                <td className="px-6 py-4 max-w-[170px]">{item.discount}</td>
-                <td className="px-6 py-4 max-w-[170px]">{item.description}</td>
-                <td className="px-6 py-4 max-w-[170px] text-left">
-                  <button
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    onClick={() => onHandleEditing(item)}
+          {dataBook &&
+            dataBook
+              .filter((item) => item.cats?.length === 0)
+              .map((item) => (
+                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <th
+                    scope="row"
+                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
+                    {item.id}
+                  </th>
+                  <td className="px-6 py-4 max-w-[170px]">
+                    <img
+                      src={item.images}
+                      alt=""
+                      className="w-20 h-20 object-cover"
+                    />
+                  </td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.title}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.author}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.price}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.discount}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.description}</td>
+                  <td className="px-6 py-4 max-w-[170px] text-left">
+                    <button
+                      className="bg-orange-300 text-white hover:bg-orange-400 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+                      onClick={() => onHandleEditing(item)}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </table>
     </div>

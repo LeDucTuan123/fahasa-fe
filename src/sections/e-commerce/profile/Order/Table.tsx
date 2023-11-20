@@ -1,5 +1,8 @@
+import { ConvertToVietNamDong, formatDateToDDMMYYYY } from 'src/util/SupportFnc';
+
 interface TableProps {
-  changeToDetail: () => void;
+  orders: any[];
+  changeToDetail: (id: number) => void;
 }
 
 function Table(props: TableProps) {
@@ -19,35 +22,24 @@ function Table(props: TableProps) {
             </tr>
           </thead>
           <tbody className="divide-y">
-            <tr className="text-center py-3">
-              <td>1</td>
-              <td>26-10-2019</td>
-              <td>Phạm Duy Phương</td>
-              <td>129.000đ</td>
-              <td>Hoàn tất</td>
-              <td
-                className="text-[#C92127] hover:cursor-pointer hover:font-semibold"
-                onClick={() => props.changeToDetail()}
-              >
-                Xem chi tiết
-              </td>
-            </tr>
-            <tr className="text-center">
-              <td>1</td>
-              <td>26-10-2019</td>
-              <td>Phạm Duy Phương</td>
-              <td>129.000đ</td>
-              <td>Hoàn tất</td>
-              <td className="text-[#C92127] hover:cursor-pointer">Xem chi tiết</td>
-            </tr>
-            <tr className="text-center">
-              <td>1</td>
-              <td>26-10-2019</td>
-              <td>Phạm Duy Phương</td>
-              <td>129.000đ</td>
-              <td>Hoàn tất</td>
-              <td className="text-[#C92127] hover:cursor-pointer">Xem chi tiết</td>
-            </tr>
+            {props.orders &&
+              props.orders.map((item: any) => {
+                return (
+                  <tr className="text-center py-3">
+                    <td>{item.id}</td>
+                    <td>{formatDateToDDMMYYYY(item.orderdate)}</td>
+                    <td>{item.receiver}</td>
+                    <td>{ConvertToVietNamDong(item.totalamount)}</td>
+                    <td>{item.statuss.statuss}</td>
+                    <td
+                      className="text-[#C92127] hover:cursor-pointer hover:font-semibold"
+                      onClick={() => props.changeToDetail(item.id)}
+                    >
+                      Xem chi tiết
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>

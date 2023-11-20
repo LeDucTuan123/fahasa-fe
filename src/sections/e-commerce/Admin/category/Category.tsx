@@ -44,20 +44,24 @@ export default function Category() {
       setCheckedItems([...checkedItems, { id: selectedItem.id }]);
     }
   };
-  console.log(checkedItems);
+  // console.log(checkedItems.map((item: any) => item));
 
   const handleAddCategoryProduct = () => {
     try {
-      fetch({
-        method: 'PUT',
-        url: `http://localhost:8080/rest/book/${formCate.id}`,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: JSON.stringify({
-          cats: checkedItems,
-        }),
-      }).then((res) => {});
+      if (!formCate.id) return toast.error('Vui lòng thêm ID sản phẩm');
+      for (let i = 0; i < checkedItems.length; i++) {
+        fetch({
+          method: 'POST',
+          url: 'http://localhost:8080/rest/cat',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            category: { id: checkedItems[i].id },
+            book: { id: formCate.id },
+          }),
+        }).then(() => {});
+      }
       toast.success('Thêm thể loại thành công');
     } catch (error) {
       toast.error('Thêm sản phẩm thất bại');
@@ -79,11 +83,13 @@ export default function Category() {
     setSelectedCategory1(category1);
     setSelectedCategory2(''); // Đặt thể loại cấp 2 về giá trị mặc định khi thể loại cấp 1 thay đổi
     // setSelectedCategory3(''); // Đặt thể loại cấp 3 về giá trị mặc định khi thể loại cấp 1 thay đổi
+    setCheckedItems([]);
   };
 
   const handleCategory2Change = (e: any) => {
     const category2 = e.target.value;
     setSelectedCategory2(category2);
+    setCheckedItems([]);
     // setSelectedCategory3(''); // Đặt thể loại cấp 3 về giá trị mặc định khi thể loại cấp 2 thay đổi
   };
 
@@ -166,7 +172,7 @@ export default function Category() {
                     //   onChange={(event: any) => setValueCateLv1(event.target.value)}
                   >
                     {categories
-                      .filter((lv) => lv.level === 1)
+                      .filter((lv) => lv.level === 1 && lv.id !== 3)
                       .map((item) => (
                         <>
                           <option
@@ -204,18 +210,12 @@ export default function Category() {
                       // eslint-disable-next-line array-callback-return
                       .filter((lv) => {
                         if (selectedCategory1 === '1') {
-                          // console.log(lv.parent && lv.parent.level && lv.parent.id);
-
                           return lv.level === 2 && lv.parent.id === 1;
                         }
                         if (selectedCategory1 === '2') {
                           return lv.level === 2 && lv.parent.id === 2;
                         }
-                        if (selectedCategory1 === '3') {
-                          return lv.level === 2 && lv.parent.id === 3;
-                        }
                       })
-                      // .filter((lv) => lv.parent.id === selectedCategory2 && lv.level === 3)
                       .map((item: any) => (
                         <option
                           key={item.id}
@@ -231,7 +231,7 @@ export default function Category() {
                 <button
                   id="dropdownSearchButton"
                   data-dropdown-toggle="dropdownSearch"
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="w-[241px] justify-between inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-100 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   type="button"
                 >
                   Thể loại 3{' '}

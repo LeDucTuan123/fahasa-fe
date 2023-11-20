@@ -1,40 +1,24 @@
+import React from 'react'
 import { toast } from 'react-toastify';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
-import { BookType } from 'src/types/book';
-
-import { storage } from 'src/services/firebase/firebase';
-
-import { deleteObject, ref } from 'firebase/storage';
+import { VoucherType } from 'src/types/voucher';
 
 interface Props {
-  onHandleEditBook: (item: BookType) => void;
-  fetchDataBook: BookType[];
-  setFetchDataBook: React.Dispatch<React.SetStateAction<BookType[]>>;
+  onHandleEditVoucher: (item: VoucherType) => void;
+  fetchDataVoucher: VoucherType[];
+  setFetchDataVoucher: React.Dispatch<React.SetStateAction<VoucherType[]>>;
 }
 
-export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchDataBook }: Props) {
-  const handleDeleteBook = async (item: BookType) => {
+export default function ListVoucher({onHandleEditVoucher, fetchDataVoucher, setFetchDataVoucher}: Props) {
+  const handleDeleteVoucher = async (item: VoucherType) => {
     try {
-      if (item.images) {
-        const urlImage = ref(storage, item.images);
-        const desertRef = ref(storage, urlImage.fullPath);
+      await fetch.delete(`${apiPaths.voucher}/${item.id}`);
 
-        // Delete the file
-        await deleteObject(desertRef)
-          .then(() => {
-            // File deleted successfully
-          })
-          .catch((error) => {
-            return toast.error('Xóa ảnh thất bại, vui lòng thử lại');
-          });
-      }
-      await fetch.delete(`${apiPaths.book}/${item.id}`);
-
-      const filteredPosts = fetchDataBook.filter((b: BookType) => b.id !== item.id);
+      const filteredPosts = fetchDataVoucher.filter((b: VoucherType) => b.id !== item.id);
 
       toast.success('Xóa thành công');
-      return setFetchDataBook(filteredPosts);
+      return setFetchDataVoucher(filteredPosts);
     } catch (error) {
       toast.error('Xóa thất bại');
     }
@@ -56,37 +40,37 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
                 scope="col"
                 className="px-6 py-3"
               >
-                Hình ảnh
+                Mã Voucher
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Tên sách
+                Ngày hết hạn
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Tác giả
+                Giá trị
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Giá
+                Số lượng
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Giảm giá
+                Kích hoạt
               </th>
               <th
                 scope="col"
                 className="px-6 py-3"
               >
-                Miêu tả
+                Tình trạng
               </th>
               <th
                 scope="col"
@@ -97,8 +81,8 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
             </tr>
           </thead>
           <tbody>
-            {fetchDataBook.length > 0 &&
-              fetchDataBook.slice(240, fetchDataBook.length).map((item: BookType) => (
+            {fetchDataVoucher.length > 0 &&
+              fetchDataVoucher.map((item: VoucherType) => (
                 <tr
                   key={item.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -109,32 +93,26 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
                   >
                     {item.id}
                   </th>
-                  <td className="px-6 py-4 max-w-[170px]">
-                    <img
-                      src={item.images}
-                      alt=""
-                      className="w-20 h-20 object-cover"
-                    />
-                  </td>
-                  <td className="px-6 py-4 max-w-[170px] overflow-hidden text-ellipsis line-clamp-5">{item.title}</td>
-                  <td className="px-6 py-4 max-w-[170px]">{item.author}</td>
-                  <td className="px-6 py-4 max-w-[170px]">{item.price}</td>
-                  <td className="px-6 py-4 max-w-[170px]">{item.discount}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.code}</td>
+                  <td className="px-6 py-4 max-w-[170px] overflow-hidden text-ellipsis line-clamp-5">{item.expdate}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.valuev}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.quantity}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.active === true ? 'true':'false'}</td>
                   <td className="px-6 py-4 max-w-[170px] overflow-hidden text-ellipsis line-clamp-5">
-                    {item.description}
+                    {item.condition}
                   </td>
                   <td className="px-6 py-4 max-w-[170px] text-left ">
                     <div className="w-full flex gap-3">
                       <button
                         className="bg-orange-300 text-white hover:bg-orange-400 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-                        onClick={() => onHandleEditBook(item)}
+                        onClick={() => onHandleEditVoucher(item)}
                       >
                         Edit
                       </button>
 
                       <button
                         className="text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
-                        onClick={() => handleDeleteBook(item)}
+                        onClick={() => handleDeleteVoucher(item)}
                       >
                         Xóa
                       </button>
@@ -146,5 +124,5 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
         </table>
       </div>
     </>
-  );
+  );  
 }
