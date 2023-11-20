@@ -1,5 +1,5 @@
 import { Box, Grid, Paper, Typography, styled } from '@mui/material';
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookType } from 'src/types/book';
 
@@ -87,6 +87,18 @@ interface props {
 }
 
 export default function BestSellingBooks({ books }: props) {
+  const itemsPerPage = 10;
+  const [displayedItems, setDisplayedItems] = useState(itemsPerPage);
+  const totalItems = books.length;
+
+  const loadMore = () => {
+    setDisplayedItems((prev) => prev + (totalItems - 150));
+  }
+
+  const showLess = () => {
+    setDisplayedItems(itemsPerPage);
+  }
+
   return (
     <div className="w-full pt-5">
       <p className="text-xl py-5">Sách bán chạy</p>
@@ -110,7 +122,7 @@ export default function BestSellingBooks({ books }: props) {
           </div>
         ))} */}
 
-        {books.slice(0, 10).map((item: BookType) => {
+        {books.slice(0, displayedItems).map((item: BookType) => {
           return (
             <div
               key={item.id}
@@ -141,6 +153,21 @@ export default function BestSellingBooks({ books }: props) {
           );
         })}
       </div>
+      {displayedItems < (totalItems - 150) ? (
+        <div className="text-center mt-4">
+          <button className="text-[#d32f2f] font-semibold border-[2px] border-[#d32f2f] px-4 rounded-md py-2 active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white" onClick={loadMore}>
+            Xem Thêm
+          </button>
+        </div>
+      ) : (
+        displayedItems > itemsPerPage && (
+          <div className="text-center mt-4">
+            <button className="text-[#d32f2f] font-semibold border-[2px] border-[#d32f2f] px-4 rounded-md py-2 active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white" onClick={showLess}>
+              Thu gọn
+            </button>
+          </div>
+        )
+      )}
     </div>
   );
 }
