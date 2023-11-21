@@ -192,7 +192,20 @@ export default function Payment() {
           }),
         })
         .then((res) => {
-          navigate(`/success/${res.data.id}`);
+          if (paymentMedthod === 'momo') {
+            fetch
+              .get(`/orders/momo-pay/${res.data.id}`)
+              .then((res) => {
+                window.location.href = res.data;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else if (paymentMedthod === 'zalo') {
+            console.log('thanh toán bằng zalo pay');
+          } else {
+            navigate(`/success/${res.data.id}`);
+          }
         })
         .catch((error) => {
           console.log(error);
