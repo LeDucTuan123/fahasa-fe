@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 
-import { setCategory } from 'src/redux/slice/commonSlice';
+import { addToFavoriteBook, addToFavoriteTool, setCategory } from 'src/redux/slice/commonSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
 
 import { apiPaths } from 'src/services/api/path-api';
@@ -10,7 +10,8 @@ import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import Filter from './Filter'; // Hãy đảm bảo rằng bạn đã import thành phần Filter đúng cách
 import Pagination from 'src/Pagination';
-
+import { Icon } from '@iconify/react';
+import { toast } from 'react-toastify';
 
 export default function Products() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
@@ -105,6 +106,56 @@ export default function Products() {
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = searchResult.slice(firstPostIndex, lastPostIndex);
+  const user: any = useSelector((state: RootState) => state.user.userData);
+  const favo: any = useSelector((state: RootState) => state.common.favorite);
+
+  const handleAddFavoriteBook = (item: any) => {
+    const storedData: any = localStorage.getItem('favoriteItems');
+    const favoriteItemsFromLocalStorage: any | string[] = storedData ? JSON.parse(storedData) : [];
+    const isProductInFavorites = favoriteItemsFromLocalStorage.some((favoriteItem: any) => favoriteItem.id === item.id);
+
+    if (isProductInFavorites) {
+      // Nếu sản phẩm đã tồn tại, bạn có thể xử lý theo ý muốn, ví dụ: thông báo cho người dùng.
+      toast.warning('Sản phẩm này đã có trong danh sách yêu thích của bạn');
+      return;
+    }
+
+    const updatedFavoriteItems: any = [...favoriteItemsFromLocalStorage, item];
+
+    localStorage.setItem('favoriteItems', JSON.stringify(updatedFavoriteItems));
+
+    const userId = user.id;
+    dispatch(
+      addToFavoriteBook({
+        userId,
+        bookId: item.id,
+      }),
+    );
+  };
+
+  const handleAddFavoriteTool = (item: any) => {
+    const storedData: any = localStorage.getItem('favoriteItems');
+    const favoriteItemsFromLocalStorage: any | string[] = storedData ? JSON.parse(storedData) : [];
+    const isProductInFavorites = favoriteItemsFromLocalStorage.some((favoriteItem: any) => favoriteItem.id === item.id);
+
+    if (isProductInFavorites) {
+      // Nếu sản phẩm đã tồn tại, bạn có thể xử lý theo ý muốn, ví dụ: thông báo cho người dùng.
+      toast.warning('Sản phẩm này đã có trong danh sách yêu thích của bạn');
+      return;
+    }
+
+    const updatedFavoriteItems: any = [...favoriteItemsFromLocalStorage, item];
+
+    localStorage.setItem('favoriteItems', JSON.stringify(updatedFavoriteItems));
+
+    const userId = user.id;
+    dispatch(
+      addToFavoriteTool({
+        userId,
+        schooltoolId: item.id,
+      }),
+    );
+  };
 
   return (
     <div className="grid grid-cols-4">
@@ -169,42 +220,67 @@ export default function Products() {
               <p className="m-1">Không có sản phẩm</p>
             </div>
           ) : (
-            currentPosts.map((item) => (
-              <div
-                key={item.id}
-                className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
-              >
-                <Link to={`/detailproduct/${item.id}`}>
-                  <img
-                    src={item.images}
-                    alt={'img'}
-                    className="w-full max-h-[190px] object-cover"
-                  />
-                </Link>
-                <div className="pt-2 ">
-                  <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
-                  <p className="text-lg font-semibold text-[#C92127] mt-2">
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-                      item.price - (item.price * item.discount) / 100,
-                    )}
-                  </p>
-                  <p className="text-sm text-[#888888] line-through">
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
-                  </p>
-                  <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
-                    {item.discount}%
-                  </span>
+            currentPosts.map((item) => {
+              let isFavorite = false;
+              const favoritepr = localStorage.getItem('favoriteItems');
+              if (favoritepr) {
+                let fv: any = JSON.parse(favoritepr);
+                fv.filter((i: any) => {
+                  if (i.title === item.title) {
+                    isFavorite = true;
+                  }
+                });
+              }
+              return (
+                <div
+                  key={item.id}
+                  className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+                >
+                  <Link to={`/detailproduct/${item.id}`}>
+                    <img
+                      src={item.images}
+                      alt={'img'}
+                      className="w-full max-h-[190px] object-cover"
+                    />
+                  </Link>
+                  <div className="pt-2 ">
+                    <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+                    <div className="flex flex-row justify-between items-center">
+                      <div>
+                        <p className="text-lg font-semibold text-[#C92127] mt-2">
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                            item.price - (item.price * item.discount) / 100,
+                          )}
+                        </p>
+                        <p className="text-sm text-[#888888] line-through">
+                          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                        </p>
+                        <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+                          {item.discount}%
+                        </span>
+                      </div>
+                      <Icon
+                        onClick={() => {
+                          cate === 'book' ? handleAddFavoriteBook(item) : handleAddFavoriteTool(item);
+                        }}
+                        icon={'ic:round-favorite'}
+                        className={`hover:text-red-500 text-3xl  cursor-pointer ${
+                          isFavorite ? 'text-red-500' : 'text-slate-300'
+                        }`}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
-        <div className='mt-3 flex flex-wrap justify-center'>
-          <Pagination 
-            totalPosts={searchResult.length} 
+        <div className="mt-3 flex flex-wrap justify-center">
+          <Pagination
+            totalPosts={searchResult.length}
             postsPerPage={postsPerPage}
             setCurrentPage={setCurrentPage}
-            currentPage={currentPage}       
+            currentPage={currentPage}
           />
         </div>
       </div>

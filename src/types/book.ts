@@ -11,6 +11,7 @@ export interface BookType {
   productId?: string;
   cats?: [];
   orderdetails?: [];
+  favorite?: [];
   //   ...
 }
 
