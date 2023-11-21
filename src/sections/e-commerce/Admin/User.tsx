@@ -18,6 +18,7 @@ interface User {
 
 export default function User() {
   const [users, setUsers] = useState<User[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     loadUsers();
@@ -69,6 +70,20 @@ export default function User() {
     });
   };
 
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredUsers = users.filter((user) => {
+    const fullName = `${user.firstname} ${user.lastname}`;
+    return (
+      fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.phone.includes(searchTerm)
+    );
+  });
+
+
   return (
     <>
       <p className="text-xl pb-5 flex items-center gap-3">
@@ -80,7 +95,16 @@ export default function User() {
           />
         </span>{' '}
       </p>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+      <input
+        type="text"
+        placeholder="Tìm kiếm theo tên, email, số điện thoại..."
+        value={searchTerm}
+        onChange={handleSearch}
+        className="rounded-lg p-2 border border-gray-500 w-96"
+      />
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
         <table className="w-full text-sm text-gray-500 dark:text-gray-400 text-center">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -141,7 +165,7 @@ export default function User() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {filteredUsers.map((user, index) => (
 
               <tr key={user.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700
                hover:bg-gray-50 dark:hover:bg-gray-600">

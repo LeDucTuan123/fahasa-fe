@@ -2,33 +2,36 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 
+
 import { addToFavoriteBook, addToFavoriteTool, setCategory } from 'src/redux/slice/commonSlice';
+
 import { RootState, useAppDispatch } from 'src/redux/store';
 
+import Pagination, { resetPagination } from 'src/Pagination';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import Filter from './Filter'; // Hãy đảm bảo rằng bạn đã import thành phần Filter đúng cách
+
 import Pagination from 'src/Pagination';
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
 
 export default function Products() {
   const [searchResult, setSearchResult] = useState<BookType[]>([]);
-
-  const [displayedProducts, setDisplayedProducts] = useState(128); // Trạng thái để lưu số lượng sản phẩm cần hiển thị
+  const [sortCriteria, setSortCriteria] = useState('default');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('0-150000000');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(9999); // Tổng số sản phẩm cần hiển thị
 
   const dispatch = useAppDispatch();
-
   const cate = useSelector((state: RootState) => state.common.category);
   const searchInputText = useSelector((state: RootState) => state.common.textSearchValue);
   const level = useSelector((state: RootState) => state.common.catelvId);
   const id = useSelector((state: RootState) => state.common.id);
   const parencate = useSelector((state: RootState) => state.common.parenCategory);
 
-  const [categoryResult, setCategoryResult] = useState<BookType[]>([]); // Kết quả lọc theo category
-  const [sortCriteria, setSortCriteria] = useState('new'); // Sắp xếp theo tiêu chí 'new' ban đầu
-  const [selectedPriceRange, setSelectedPriceRange] = useState('0-150000000');
+  const [categoryResult, setCategoryResult] = useState<BookType[]>([]);
 
   const handlePriceFilter = (priceRange: string) => {
     setSelectedPriceRange(priceRange);
@@ -41,17 +44,26 @@ export default function Products() {
   };
 
   const handleDisplayChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setDisplayedProducts(Number(e.target.value)); // Chuyển đổi giá trị đã chọn thành số
+    const newPostsPerPage = e.target.value === 'all' ? 999999 : Number(e.target.value);
+    setPostsPerPage(newPostsPerPage);
+
+    if (e.target.value === 'all') {
+      setCurrentPage(1);
+    } else {
+      const newTotalPages = Math.ceil(categoryResult.length / newPostsPerPage);
+      setCurrentPage(currentPage > newTotalPages ? newTotalPages : currentPage);
+    }
   };
+
 
   const fetchApiSearch = useCallback(async () => {
     if (searchInputText) {
-      if (cate === 'book') {
-        const res = await fetch.get(`${apiPaths.book}/search?q=${searchInputText}`);
-        return setCategoryResult(res.data);
-      } else {
-        const res = await fetch.get(`${apiPaths.school}/search?q=${searchInputText}`);
-        return setCategoryResult(res.data);
+      try {
+        const apiUrl = cate === 'book' ? `${apiPaths.book}/search?q=${searchInputText}` : `${apiPaths.school}/search?q=${searchInputText}`;
+        const res = await fetch.get(apiUrl);
+        setCategoryResult(res.data);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
       }
     }
   }, [cate, searchInputText]);
@@ -63,28 +75,47 @@ export default function Products() {
   // Lọc kết quả tìm kiếm dựa trên phạm vi giá được chọn
   const filteredResults = selectedPriceRange
     ? categoryResult.filter((item) => {
-        const [minPrice, maxPrice] = selectedPriceRange.split('-');
-        const itemPrice = item.price - (item.price * item.discount) / 100;
-        return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
-      })
+      const [minPrice, maxPrice] = selectedPriceRange.split('-');
+      const itemPrice = item.price - (item.price * item.discount) / 100;
+      return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
+    })
     : categoryResult;
 
   useEffect(() => {
-    if (id === 1 || id === 2) {
-      fetch.get(`http://localhost:8080/rest/book/cate/${id}`).then((res) => setCategoryResult(res.data));
-    } else if (id === 3) {
-      fetch.get(`http://localhost:8080/rest/schooltool`).then((res) => setCategoryResult(res.data));
-    }
-    if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-      fetch.get(`http://localhost:8080/rest/book/cate2/${id}`).then((res) => setCategoryResult(res.data));
-    } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
-      fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`).then((res) => setCategoryResult(res.data));
-    } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
-      fetch.get(`http://localhost:8080/rest/book/cate3/${id}`).then((res) => setCategoryResult(res.data));
-    } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
-      fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`).then((res) => setCategoryResult(res.data));
-    }
-  }, [dispatch, id, level, parencate]);
+    // Move the fetching logic inside the useEffect with proper dependencies
+    const fetchData = async () => {
+      try {
+        if (id === 1 || id === 2) {
+          const res = await fetch.get(`http://localhost:8080/rest/book/cate/${id}`);
+          setCategoryResult(res.data);
+        } else if (id === 3) {
+          const res = await fetch.get(`http://localhost:8080/rest/schooltool`);
+          setCategoryResult(res.data);
+        } else if (level === 2 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+          const res = await fetch.get(`http://localhost:8080/rest/book/cate2/${id}`);
+          setCategoryResult(res.data);
+        } else if (level === 2 && parencate === 'Dụng cụ học sinh') {
+          const res = await fetch.get(`http://localhost:8080/rest/schooltool/cate2/${id}`);
+          setCategoryResult(res.data);
+        } else if (level === 3 && (parencate === 'Sách trong nước' || parencate === 'Sách nước ngoài')) {
+          const res = await fetch.get(`http://localhost:8080/rest/book/cate3/${id}`);
+          setCategoryResult(res.data);
+        } else if (level === 3 && parencate === 'Dụng cụ học sinh') {
+          const res = await fetch.get(`http://localhost:8080/rest/schooltool/cate3/${id}`);
+          setCategoryResult(res.data);
+        }
+      } catch (error) {
+        console.error('Error fetching category results:', error);
+        // Handle errors if needed
+      }
+    };
+
+    fetchData();
+  }, [id, level, parencate]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   useEffect(() => {
     const sortedCategoryResult = [...filteredResults];
@@ -97,11 +128,26 @@ export default function Products() {
     } else if (sortCriteria === 'z-to-a') {
       sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
     }
-    setSearchResult(sortedCategoryResult.slice(0, displayedProducts));
-  }, [sortCriteria, filteredResults]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(4);
+    const newLastPostIndex = currentPage * postsPerPage;
+    const newFirstPostIndex = newLastPostIndex - postsPerPage;
+    setSearchResult(sortedCategoryResult.slice(newFirstPostIndex, newLastPostIndex));
+  }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
+
+  const pages = Math.ceil(filteredResults.length / postsPerPage);
+
+  useEffect(() => {
+    // Gọi hàm reset khi totalPosts thay đổi và currentPage nằm ngoài khoảng trang có sẵn
+    if (currentPage > pages && currentPage <= filteredResults.length) {
+      resetPagination(); // Chuyển resetPagination vào đây nếu muốn gọi reset chỉ khi điều kiện đúng
+      setCurrentPage(pages);
+    }
+
+    // Nếu muốn reset trang mỗi khi totalPosts thay đổi
+    // resetPagination(); // Chuyển resetPagination vào đây nếu muốn gọi reset mỗi khi totalPosts thay đổi
+  }, [filteredResults.length, currentPage, pages, setCurrentPage, resetPagination]);
+
+
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
@@ -157,6 +203,7 @@ export default function Products() {
     );
   };
 
+
   return (
     <div className="grid grid-cols-4">
       <div>
@@ -199,9 +246,10 @@ export default function Products() {
             <select
               name="display-quantity" // Thêm một tên cho phần tử select
               className="w-64 ms-3 ps-2"
-              value={displayedProducts} // Đặt giá trị đã chọn
+              value={postsPerPage} // Đặt giá trị đã chọn
               onChange={handleDisplayChange} // Xử lý sự kiện thay đổi
             >
+              <option value="all">Tất cả</option>
               <option value={128}>128 sản phẩm</option>
               <option value={64}>64 sản phẩm</option>
               <option value={24}>24 sản phẩm</option>
@@ -211,7 +259,7 @@ export default function Products() {
           </div>
         </div>
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-4">
-          {currentPosts.length === 0 ? (
+          {searchResult.length === 0 ? (
             <div className="text-center">
               <img
                 src={emptyCartImageUrl}
@@ -220,6 +268,7 @@ export default function Products() {
               <p className="m-1">Không có sản phẩm</p>
             </div>
           ) : (
+
             currentPosts.map((item) => {
               let isFavorite = false;
               const favoritepr = localStorage.getItem('favoriteItems');
@@ -270,17 +319,54 @@ export default function Products() {
                       />
                     </div>
                   </div>
+
+            searchResult.map((item: BookType) => (
+              <div
+                key={item.id}
+                className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+              >
+                <Link to={`/detailproduct/${item.id}`}>
+                  <img
+                    src={item.images}
+                    alt={'img'}
+                    className="w-full max-h-[190px] object-cover"
+                  />
+                </Link>
+                <div className="pt-2 ">
+                  <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+                  <p className="text-lg font-semibold text-[#C92127] mt-2">
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+                      item.price - (item.price * item.discount) / 100,
+                    )}
+                  </p>
+                  <p className="text-sm text-[#888888] line-through">
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+                  </p>
+                  <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+                    {item.discount}%
+                  </span>
+
                 </div>
               );
             })
           )}
         </div>
+
         <div className="mt-3 flex flex-wrap justify-center">
           <Pagination
             totalPosts={searchResult.length}
             postsPerPage={postsPerPage}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
+
+        <div className='mt-3 flex flex-wrap justify-center'>
+          <Pagination
+            totalPosts={filteredResults.length}
+            postsPerPage={postsPerPage}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            resetPagination={() => setCurrentPage(1)}
+
           />
         </div>
       </div>

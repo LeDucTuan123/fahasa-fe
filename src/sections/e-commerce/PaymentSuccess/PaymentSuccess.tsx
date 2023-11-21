@@ -9,6 +9,22 @@ function PaymentSuccess() {
   const { id } = useParams();
   const [products, setProducts] = useState<any[]>([]);
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get('resultCode');
+    // Xử lý trạng thái thanh toán và hiển thị thông báo
+    console.log(paymentStatus);
+    if (paymentStatus === '0') {
+      alert('Thanh toán thành công!');
+      fetch
+        .patch(`/rest/order/payment/success/${id}`)
+        .then((res) => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (paymentStatus === '1006') {
+      alert('Thanh toán không thành công.');
+    }
+
     fetch
       .get(`/rest/orderdetail/success/${id}`)
       .then((res) => {
@@ -18,8 +34,6 @@ function PaymentSuccess() {
         console.log(error);
       });
   }, [id]);
-
-  console.log(id);
   return (
     <>
       <div className="w-full flex-col pt-10">

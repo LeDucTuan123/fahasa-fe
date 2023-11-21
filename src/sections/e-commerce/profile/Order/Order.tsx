@@ -3,15 +3,15 @@ import Detail from './Detail';
 import { useEffect, useState } from 'react';
 import Table from './Table';
 import fetch from 'src/services/axios/Axios';
-
-const u = localStorage.getItem('user');
-const user = JSON.parse(u ? u : '');
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 
 function Order() {
   const [isChange, setIsChange] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [order, setOrder] = useState<any>();
+  const user: any = useSelector((state: RootState) => state.user.userData);
 
   useEffect(() => {
     fetch
@@ -48,7 +48,7 @@ function Order() {
 
   return (
     <>
-      <div className="p-3 mb-3 shadow-md w-full">
+      <div className="p-3 mb-3 shadow-md w-full rounded-lg">
         Bạn vui lòng cập nhật thông tin tài khoản{' '}
         <Link
           to="/profile"

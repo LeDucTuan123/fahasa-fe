@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const userData = createAsyncThunk('user/userData', async () => {
+export const getUser = createAsyncThunk('user/userData', async () => {
   try {
     const storedToken = localStorage.getItem('token');
     const response = await axios.get('http://localhost:8080/api/v1/user', {
@@ -9,6 +9,10 @@ export const userData = createAsyncThunk('user/userData', async () => {
         Authorization: `Bearer ${storedToken}`,
       },
     });
+    const userData = response.data;
+
+
+    console.log('User data:', userData);
 
     return response.data;
   } catch (error) {
@@ -20,29 +24,21 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     loading: false,
-    userData: null,
+    userData: {},
     error: null as string | null,
   },
-  reducers: {
-    // login: (state, action) => {
-    //   state.user = action.payload;
-    //   state.isLogin = true;
-    // },
-    // setIsLogin: (state, action) => {
-    //   state.isLogin = action.payload;
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(userData.pending, (state) => {
+      .addCase(getUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(userData.fulfilled, (state, action) => {
+      .addCase(getUser.fulfilled, (state, action) => {
         state.loading = false;
         state.userData = action.payload;
         state.error = null;
       })
-      .addCase(userData.rejected, (state, action) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
         state.error =
           action.error.message === 'Request failed with status code 401'
