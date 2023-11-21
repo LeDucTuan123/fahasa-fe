@@ -34,6 +34,7 @@ export default function Filter({ handlePriceFilter, selectedPriceRange }: Filter
               <label>
                 <input
                   type="radio"
+                  id="price-all"
                   name="price"
                   value="0-150000000"
                   onChange={() => handlePriceChange('0-150000000')}
@@ -109,37 +110,37 @@ export default function Filter({ handlePriceFilter, selectedPriceRange }: Filter
           <ol className="ml-2 mt-1 text-slate-400">
             <li>
               <label htmlFor="">
-                <input type="radio" name="filtercate" /> Văn học
+                <input type="radio" name="filtercate " /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="radio" name="filtercate" /> Văn học
+                <input type="radio" name="filtercate " /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="radio" name="filtercate" /> Văn học
+                <input type="radio" name="filtercate " /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="radio" name="filtercate" /> Văn học
+                <input type="radio" name="filtercate " /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="radio" name="filtercate" /> Văn học
+                <input type="radio" name="filtercate " /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="radio" name="filtercate" /> Văn học
+                <input type="radio" name="filtercate " /> Văn học
               </label>
             </li>
             <li>
               <label htmlFor="">
-                <input type="radio" name="filtercate" /> Văn học
+                <input type="radio" name="filtercate " /> Văn học
               </label>
             </li>
           </ol>
