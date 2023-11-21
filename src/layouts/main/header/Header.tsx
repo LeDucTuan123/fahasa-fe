@@ -4,21 +4,20 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 import { setIsLogin } from 'src/redux/slice/authSlice';
-import { userData } from 'src/redux/slice/userSlice';
+
 import { RootState, useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios';
 import Logo from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
 
-import fetch from 'src/services/axios';
 
-import { RootState, useAppDispatch } from 'src/redux/store';
+
 
 import Search from './search';
 
 
-import { getUser } from 'src/redux/slice/userSlice';
 import { toast } from 'react-toastify';
+import { getUser } from 'src/redux/slice/userSlice';
 
 
 // là mảng chứa những category level 2
