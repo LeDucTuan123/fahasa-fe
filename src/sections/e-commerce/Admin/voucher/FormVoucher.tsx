@@ -30,35 +30,39 @@ export default function FormVoucher() {
 
   const addVoucher = () => {
     try {
-      fetch({
-        method: 'POST',
-        url: 'http://localhost:8080/rest/voucher',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: JSON.stringify({
-          code: dataVoucher.code,
-          expdate: dataVoucher.expdate,
-          valuev: dataVoucher.valuev,
-          condition: dataVoucher.condition,
-          active: dataVoucher.active,
-          quantity: dataVoucher.quantity,
-        }),
-      }).then(() => {});
-      toast.success('Thêm sản phẩm thành công');
-        setVoucherLoading(false);
-        return setFetchDataVoucher((prev) => [
-          //khi thêm thành công thì upexpdate lại state khỏi cần load lại page
-          ...prev,
-          {
+      setTimeout(() => {
+        fetch({
+          method: 'POST',
+          url: 'http://localhost:8080/rest/voucher',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
             code: dataVoucher.code,
             expdate: dataVoucher.expdate,
             valuev: dataVoucher.valuev,
             condition: dataVoucher.condition,
             active: dataVoucher.active,
             quantity: dataVoucher.quantity,
-          },
-        ]);
+          }),
+        }).then(() => {});
+        toast.success('Thêm sản phẩm thành công');
+          setVoucherLoading(false);
+          return setFetchDataVoucher((prev) => [
+            //khi thêm thành công thì upexpdate lại state khỏi cần load lại page
+            ...prev,
+            {
+              id: dataVoucher.id,
+              code: dataVoucher.code,
+              expdate: dataVoucher.expdate,
+              valuev: dataVoucher.valuev,
+              condition: dataVoucher.condition,
+              active: dataVoucher.active,
+              quantity: dataVoucher.quantity,
+            },
+          ]);
+      }, 2000)
+      setDataVoucher(formVoucher);
     } catch (error) {
       toast.success('Thêm voucher thất bại');
     }
@@ -147,6 +151,11 @@ export default function FormVoucher() {
             <div className="relative z-0 w-full mb-6 group">
               <input
                 type="text"
+                value={dataVoucher.id}
+                className="hidden"
+              />
+              <input
+                type="text"
                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                 name="floating_name"
                 id="floating_name"
@@ -166,7 +175,7 @@ export default function FormVoucher() {
             </div>
             <div className="relative z-0 w-full mb-6 group">
               <input
-                type="expdate"
+                type="date"
                 name="floating_author"
                 id="floating_author"
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -235,7 +244,7 @@ export default function FormVoucher() {
                 id="floating_discount"
                 required
                 checked={dataVoucher.active}
-                onChange={(e: any) => setDataVoucher((prev) => ({...prev, quantity: e.target.checked}))}
+                onChange={(e: any) => setDataVoucher((prev) => ({...prev, active: e.target.checked}))}
               />
             </div>
           </div>
