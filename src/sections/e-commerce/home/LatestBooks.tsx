@@ -1,5 +1,5 @@
 import { Box, Grid, Paper, Typography, styled } from '@mui/material';
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BookType } from 'src/types/book';
 const category = [
@@ -67,12 +67,23 @@ interface LastestProps {
 }
 
 export default function LatestBooks({ books }: LastestProps) {
+  const itemsPerPage = 210;
+  const [displayedItems, setDisplayedItems] = useState(itemsPerPage);
+  const totalItems = books.length;
+
+  const loadMore = () => {
+    setDisplayedItems((prev) => prev + itemsPerPage);
+  }
+
+  const showLess = () => {
+    setDisplayedItems(itemsPerPage);
+  }
   return (
     <div className="w-full pt-5">
       <p className="text-xl py-5">Sản phẩm mới nhất</p>
 
       <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4">
-        {books.slice(200, 210).map((item: BookType) => (
+        {books.slice(200, displayedItems).map((item: BookType) => (
           <div
             key={item.id}
             className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
@@ -101,6 +112,21 @@ export default function LatestBooks({ books }: LastestProps) {
           </div>
         ))}
       </div>
+      {displayedItems < totalItems ? (
+        <div className="text-center mt-4">
+          <button className="text-[#d32f2f] font-semibold border-[2px] border-[#d32f2f] px-4 rounded-md py-2 active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white" onClick={loadMore}>
+            Xem thêm
+          </button>
+        </div>
+      ) : (
+        displayedItems > itemsPerPage && (
+          <div className="text-center mt-4">
+            <button className="text-[#d32f2f] font-semibold border-[2px] border-[#d32f2f] px-4 rounded-md py-2 active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white" onClick={showLess}>
+              Thu gọn
+            </button>
+          </div>
+        )
+      )}
     </div>
   );
 }

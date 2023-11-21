@@ -9,7 +9,17 @@ import { RootState, useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios';
 import Logo from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
+
+import fetch from 'src/services/axios';
+
+import { RootState, useAppDispatch } from 'src/redux/store';
+
 import Search from './search';
+
+
+import { getUser } from 'src/redux/slice/userSlice';
+import { toast } from 'react-toastify';
+
 
 // là mảng chứa những category level 2
 let level2: any = null;
@@ -17,7 +27,7 @@ let level2: any = null;
 let level3: any = null;
 
 export default function Header() {
-  const user = useSelector((state: RootState) => state.user.userData);
+  // const user = useSelector((state: RootState) => state.user.userData);
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
 
   // Đây là đoạn code gọi api category -- start
@@ -140,16 +150,15 @@ export default function Header() {
       dispatch(setIsLogin(true));
     }
     if (isLogin === true || token) {
-      dispatch(userData());
+      dispatch(getUser());
     }
   }, [dispatch]);
 
-  console.log(user);
-
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     dispatch(setIsLogin(false));
-    alert('Logout');
+    toast.success('Đăng xuất thành công');
   };
 
   return (
@@ -261,7 +270,7 @@ export default function Header() {
                         <div className="w-[250px] top-[65px] z-10 right-0 absolute bg-slate-200 rounded-lg border shadow items-center">
                           <div className="px-2 py-2">
                             <div className="p-1 hover:bg-gray-50">
-                              <Link to="/profile">
+                              <Link to="/member/profile">
                                 <div className="flex items-center w-full">
                                   <Icon icon="ri:user-settings-line" />
                                   <span className="px-2">Thông tin Tài Khoản</span>
@@ -270,9 +279,9 @@ export default function Header() {
                             </div>
                             <hr className="border-gray-300 py-1" />
                             <div className="p-1 hover:bg-gray-50">
-                              <Link to="/order">
+                              <Link to="/member/order">
                                 <div className="flex items-center w-full">
-                                  <Icon icon="ph:note-bold" />
+                                  <Icon icon="icon-park-outline:transaction-order" />
                                   <span className="px-2">Đơn hàng của tôi</span>
                                 </div>
                               </Link>

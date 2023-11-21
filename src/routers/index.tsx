@@ -25,6 +25,7 @@ import {
 
 import ProfileLayout from 'src/layouts/ProfileLayout';
 import AdminLayout from 'src/layouts/AdminLayout';
+import PaymentSuccess from 'src/sections/e-commerce/PaymentSuccess/PaymentSuccess';
 
 export default function Route() {
   return useRoutes([
@@ -42,6 +43,7 @@ export default function Route() {
         { path: '/*', element: <Error /> },
         { path: '/cart', element: <Cart /> },
         { path: '/payment', element: <Payment /> },
+        { path: '/success/:id', element: <PaymentSuccess /> },
       ],
     },
     // login
@@ -72,11 +74,12 @@ export default function Route() {
     },
     // profile layout
     {
+      path: '/member',
       element: <ProfileLayout />,
       children: [
-        { path: '/profile', element: <Profile /> },
-        { path: '/address', element: <ProfileAddress /> },
-        { path: '/order', element: <ProfileOrder /> },
+        { path: 'profile', element: <Profile /> },
+        { path: 'address', element: <ProfileAddress /> },
+        { path: 'order', element: <ProfileOrder /> },
       ],
     },
   ]);

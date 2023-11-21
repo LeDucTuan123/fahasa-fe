@@ -16,6 +16,7 @@ export const Error = Loadable(lazy(() => import('../pages/Error404')));
 
 export const Cart = Loadable(lazy(() => import('../pages/CartPage')));
 export const Payment = Loadable(lazy(() => import('../pages/PaymentPage')));
+export const PaymentSuccess = Loadable(lazy(() => import('../pages/PaymentSuccessPage')));
 
 export const Products = Loadable(lazy(() => import('../pages/ProductsPage')));
 export const Profile = Loadable(lazy(() => import('../pages/ProfilePage')));

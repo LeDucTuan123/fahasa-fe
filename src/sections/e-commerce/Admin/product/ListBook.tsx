@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { RootState, useAppDispatch } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
-
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { storage } from 'src/services/firebase/firebase';
 
-import { ref, deleteObject } from 'firebase/storage';
+import { deleteObject, ref } from 'firebase/storage';
 
 interface Props {
   onHandleEditBook: (item: BookType) => void;
@@ -18,17 +15,6 @@ interface Props {
 
 export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchDataBook }: Props) {
   const handleDeleteBook = async (item: BookType) => {
-    // const desertRef = ref(storage.app.options.databaseURL, 'images/desert.jpg');
-    // Delete the file
-    // deleteObject(desertRef)
-    //   .then(() => {
-    //     // File deleted successfully
-    //     console.log('delete image success');
-    //   })
-    //   .catch((error) => {
-    //     // Uh-oh, an error occurred!
-    //     console.log(error.message);
-    //   });
     try {
       if (item.images) {
         const urlImage = ref(storage, item.images);
@@ -53,9 +39,47 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
       toast.error('Xóa thất bại');
     }
   };
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+      setCurrentPage(1);
+    },[]
+  );
+
+  const filteredBooks = fetchDataBook.filter((book) =>
+    book.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const itemsPerPage = 3;
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const totalItems = filteredBooks.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const visibleItem = filteredBooks.slice(startIndex, endIndex);
+  
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
   return (
     <>
-      <p className="text-2xl">Danh sách sách</p>
+      <div className='flex justify-between'>
+        <p className="text-2xl">Danh sách sách</p>
+        <div className="flex items-center justify-end">
+        <input
+          type="text"
+          placeholder="Search by book name"
+          className="border p-2"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+        </div>
+      </div>      
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg border-[1px] rounded-xl">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -111,8 +135,8 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
             </tr>
           </thead>
           <tbody>
-            {fetchDataBook.length > 0 &&
-              fetchDataBook.slice(240, fetchDataBook.length).map((item: BookType) => (
+            {visibleItem.length > 0 &&
+              visibleItem.map((item: BookType) => (
                 <tr
                   key={item.id}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -126,8 +150,8 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
                   <td className="px-6 py-4 max-w-[170px]">
                     <img
                       src={item.images}
-                      alt={item.title}
-                      className="w-50 h-50 object-cover"
+                      alt=""
+                      className="w-20 h-20 object-cover"
                     />
                   </td>
                   <td className="px-6 py-4 max-w-[170px] overflow-hidden text-ellipsis line-clamp-5">{item.title}</td>
@@ -159,6 +183,23 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
           </tbody>
         </table>
       </div>
+      <div className="flex justify-center my-4">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="mr-2 px-4 py-2 bg-gray-300 text-gray-700 rounded"
+        >
+          Previous
+        </button>
+        <span className="mx-2 my-2 text-gray-700">{`Page ${currentPage} of ${totalPages}`}</span>
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="ml-2 px-4 py-2 bg-gray-300 text-gray-700 rounded"
+        >
+          Next
+        </button>
+      </div>      
     </>
   );
 }

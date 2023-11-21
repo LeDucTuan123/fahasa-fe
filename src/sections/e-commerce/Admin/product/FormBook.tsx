@@ -1,13 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { storage } from 'src/services/firebase/firebase';
-import { useDropzone } from 'react-dropzone';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { toast } from 'react-toastify';
-import fetch from 'src/services/axios/Axios';
-import ListBook from './ListBook';
-import { BookType } from 'src/types/book';
-import { apiPaths } from 'src/services/api/path-api';
 import { Icon } from '@iconify/react';
+import { UploadTask, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useCallback, useEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
+import { apiPaths } from 'src/services/api/path-api';
+import fetch from 'src/services/axios/Axios';
+import { storage } from 'src/services/firebase/firebase';
+import ListBook from './ListBook';
 // import { apiPaths } from 'src/services/api/path-api';
 // import { CategoryType } from 'src/types';
 // import { BookType } from 'src/types/book';
@@ -68,6 +67,7 @@ export default function FormBook() {
         }).then(() => {});
         toast.success('Thêm sản phẩm thành công');
         setIsLoading(false);
+
         return setfetchDataBook((prev) => [
           //khi thêm thành công thì update lại state khỏi cần load lại page
           ...prev,
@@ -81,10 +81,21 @@ export default function FormBook() {
           },
         ]);
       }, 2000);
+      setDataBook(formBook); //reset form
     } catch (error) {
       toast.success('Thêm sản phẩm thất bại');
     }
   };
+
+  // vì lí do state image set chậm 1 nhịp nên phải bỏ vào useEffect để khi image thay đổi giá trị thì addBook đc gọi
+  useEffect(() => {
+    if (!isShowEdit && isLoading && dataBook.images) {
+      addBook();
+    }
+    if (isShowEdit && isLoading) {
+      uploadImage();
+    }
+  }, [dataBook.images]);
 
   //thêm sản phẩm
   const handleAddBook = async (e: any) => {
@@ -92,7 +103,7 @@ export default function FormBook() {
     if (imageUpload === null) return toast.error('Vui lòng thêm ảnh');
     setIsLoading(true);
     const id = Math.random() * 1000;
-    const imageRef = ref(storage, `imagesFahasa/book/${imageUpload.name + id} `);
+    const imageRef = ref(storage, `imagesFahasa/book/add-book/${imageUpload.name + id} `);
     const uploadTask = uploadBytesResumable(imageRef, imageUpload);
 
     //Tải ảnh lên firebase
@@ -112,22 +123,26 @@ export default function FormBook() {
             break;
         }
       },
-
       (error) => {
         // Handle unsuccessful uploads
         console.log(error);
       },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setDataBook({ ...dataBook, images: String(downloadURL) });
-          console.log('File available at', dataBook.images);
-        });
+      async () => {
+        await getDowloadUrlImage(uploadTask);
       },
     );
 
-    addBook();
+    // addBook();
+  };
+
+  const getDowloadUrlImage = async (uploadTask: UploadTask) => {
+    try {
+      const img = await getDownloadURL(uploadTask.snapshot.ref);
+      setDataBook({ ...dataBook, images: String(img) });
+      console.log('File available at', dataBook.images);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleEditBook = (item: any) => {
@@ -144,9 +159,7 @@ export default function FormBook() {
     setIsShowEdit(true);
   };
 
-  const handleUpdateBook = (e: any) => {
-    setIsLoading(true);
-    e.preventDefault();
+  const uploadImage = () => {
     setTimeout(async () => {
       await fetch({
         method: 'PUT',
@@ -184,6 +197,40 @@ export default function FormBook() {
         ),
       );
     }, 2000);
+  };
+
+  const handleUpdateBook = (e: any) => {
+    setIsLoading(true);
+    e.preventDefault();
+
+    const urlImage = ref(storage, dataBook.images);
+    const pathImage = ref(storage, urlImage.fullPath);
+    const uploadTask = uploadBytesResumable(pathImage, imageUpload);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // Quan sát các sự kiện thay đổi trạng thái như tiến trình, tạm dừng và tiếp tục
+        // Lấy tiến độ nhiệm vụ, bao gồm số byte đã tải lên và tổng số byte cần tải lên
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+        console.log(error);
+      },
+      async () => {
+        await getDowloadUrlImage(uploadTask);
+      },
+    );
   };
 
   const handleResetForm = () => {

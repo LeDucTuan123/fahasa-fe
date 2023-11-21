@@ -6,9 +6,11 @@ export interface BookType {
   price: number;
   discount: number;
   description: string;
+  quantity?: number;
   stock?: string;
   productId?: string;
   cats?: [];
+  orderdetails?: [];
   //   ...
 }
 

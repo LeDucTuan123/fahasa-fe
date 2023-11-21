@@ -8,7 +8,7 @@ function ListAddress(props: ListAddressProps) {
   }
   return (
     <>
-      <div className="p-7 shadow-lg">
+      <div className="p-7 shadow-lg rounded-lg">
         <div className="flex justify-between items-center">
           <h1 className="text-[#C92127] uppercase text-lg mt-5 font-bold">Sổ địa chỉ</h1>
           <button
