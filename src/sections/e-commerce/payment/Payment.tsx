@@ -196,7 +196,7 @@ export default function Payment() {
             fetch
               .get(`/orders/momo-pay/${res.data.id}`)
               .then((res) => {
-                console.log(res.data);
+                window.location.href = res.data;
               })
               .catch((error) => {
                 console.log(error);

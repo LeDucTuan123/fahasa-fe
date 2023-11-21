@@ -9,6 +9,16 @@ function PaymentSuccess() {
   const { id } = useParams();
   const [products, setProducts] = useState<any[]>([]);
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paymentStatus = params.get('status');
+
+    // Xử lý trạng thái thanh toán và hiển thị thông báo
+    if (paymentStatus === 'success') {
+      alert('Thanh toán thành công!');
+    } else {
+      alert('Thanh toán không thành công.');
+    }
+
     fetch
       .get(`/rest/orderdetail/success/${id}`)
       .then((res) => {
