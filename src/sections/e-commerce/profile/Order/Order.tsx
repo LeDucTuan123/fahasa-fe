@@ -3,15 +3,15 @@ import Detail from './Detail';
 import { useEffect, useState } from 'react';
 import Table from './Table';
 import fetch from 'src/services/axios/Axios';
-
-const u = localStorage.getItem('user');
-const user = JSON.parse(u ? u : '');
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 
 function Order() {
   const [isChange, setIsChange] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [order, setOrder] = useState<any>();
+  const user: any = useSelector((state: RootState) => state.user.userData);
 
   useEffect(() => {
     fetch

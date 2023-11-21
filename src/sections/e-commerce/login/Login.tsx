@@ -15,8 +15,7 @@ export default function Login() {
 
   const tools = useSelector((state: RootState) => state.tool.tools);
   const books = useSelector((state: RootState) => state.book.books);
-  const u = localStorage.getItem('user');
-  const user = u && JSON.parse(u);
+  const user: any = useSelector((state: RootState) => state.user.userData);
 
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const loading = useSelector((state: RootState) => state.auth.loading);
@@ -49,7 +48,7 @@ export default function Login() {
 
     dispatch(login({ email, password }));
     dispatch(getUser());
-
+    pushCartFromLocalToDB();
   };
   const navigate = useNavigate();
 
@@ -94,14 +93,10 @@ export default function Login() {
     if (token) {
       dispatch(setIsLogin(true));
     }
-    if (user) {
-      pushCartFromLocalToDB();
-    }
     if (isLogin) {
       navigate('/');
     }
   }, [dispatch, isLogin, user]);
-
 
   return (
     <>
