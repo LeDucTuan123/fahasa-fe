@@ -9,4 +9,5 @@ export interface ToolType {
   quantity?: number;
   orderdetails?: [];
   category?: string;
+  favorite?: [];
 }

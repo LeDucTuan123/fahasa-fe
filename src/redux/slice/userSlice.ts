@@ -11,7 +11,9 @@ export const getUser = createAsyncThunk('user/userData', async () => {
     });
     const userData = response.data;
 
+
     console.log('User data:', userData);
+
     return response.data;
   } catch (error) {
     throw error;

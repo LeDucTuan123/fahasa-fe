@@ -5,5 +5,6 @@ export const apiPaths = {
   category: '/rest/category',
   cat: '/rest/cat',
   voucher: '/rest/voucher',
+  favorite: 'rest/favorite',
   //   ...
 };
