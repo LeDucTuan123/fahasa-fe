@@ -2,7 +2,6 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 
-
 import { addToFavoriteBook, addToFavoriteTool, setCategory } from 'src/redux/slice/commonSlice';
 
 import { RootState, useAppDispatch } from 'src/redux/store';
@@ -13,7 +12,6 @@ import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 import Filter from './Filter'; // Hãy đảm bảo rằng bạn đã import thành phần Filter đúng cách
 
-import Pagination from 'src/Pagination';
 import { Icon } from '@iconify/react';
 import { toast } from 'react-toastify';
 
@@ -55,11 +53,13 @@ export default function Products() {
     }
   };
 
-
   const fetchApiSearch = useCallback(async () => {
     if (searchInputText) {
       try {
-        const apiUrl = cate === 'book' ? `${apiPaths.book}/search?q=${searchInputText}` : `${apiPaths.school}/search?q=${searchInputText}`;
+        const apiUrl =
+          cate === 'book'
+            ? `${apiPaths.book}/search?q=${searchInputText}`
+            : `${apiPaths.school}/search?q=${searchInputText}`;
         const res = await fetch.get(apiUrl);
         setCategoryResult(res.data);
       } catch (error) {
@@ -75,10 +75,10 @@ export default function Products() {
   // Lọc kết quả tìm kiếm dựa trên phạm vi giá được chọn
   const filteredResults = selectedPriceRange
     ? categoryResult.filter((item) => {
-      const [minPrice, maxPrice] = selectedPriceRange.split('-');
-      const itemPrice = item.price - (item.price * item.discount) / 100;
-      return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
-    })
+        const [minPrice, maxPrice] = selectedPriceRange.split('-');
+        const itemPrice = item.price - (item.price * item.discount) / 100;
+        return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
+      })
     : categoryResult;
 
   useEffect(() => {
@@ -147,8 +147,6 @@ export default function Products() {
     // resetPagination(); // Chuyển resetPagination vào đây nếu muốn gọi reset mỗi khi totalPosts thay đổi
   }, [filteredResults.length, currentPage, pages, setCurrentPage, resetPagination]);
 
-
-
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = searchResult.slice(firstPostIndex, lastPostIndex);
@@ -202,7 +200,6 @@ export default function Products() {
       }),
     );
   };
-
 
   return (
     <div className="grid grid-cols-4">
@@ -268,8 +265,7 @@ export default function Products() {
               <p className="m-1">Không có sản phẩm</p>
             </div>
           ) : (
-
-            currentPosts.map((item) => {
+            searchResult.map((item: BookType) => {
               let isFavorite = false;
               const favoritepr = localStorage.getItem('favoriteItems');
               if (favoritepr) {
@@ -319,57 +315,112 @@ export default function Products() {
                       />
                     </div>
                   </div>
-
-            searchResult.map((item: BookType) => (
-              <div
-                key={item.id}
-                className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
-              >
-                <Link to={`/detailproduct/${item.id}`}>
-                  <img
-                    src={item.images}
-                    alt={'img'}
-                    className="w-full max-h-[190px] object-cover"
-                  />
-                </Link>
-                <div className="pt-2 ">
-                  <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
-                  <p className="text-lg font-semibold text-[#C92127] mt-2">
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-                      item.price - (item.price * item.discount) / 100,
-                    )}
-                  </p>
-                  <p className="text-sm text-[#888888] line-through">
-                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
-                  </p>
-                  <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
-                    {item.discount}%
-                  </span>
-
                 </div>
               );
             })
           )}
         </div>
-
         <div className="mt-3 flex flex-wrap justify-center">
-          <Pagination
-            totalPosts={searchResult.length}
-            postsPerPage={postsPerPage}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-
-        <div className='mt-3 flex flex-wrap justify-center'>
           <Pagination
             totalPosts={filteredResults.length}
             postsPerPage={postsPerPage}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
             resetPagination={() => setCurrentPage(1)}
-
           />
         </div>
       </div>
     </div>
   );
 }
+// {searchResult.length === 0 ? (
+//   <div className="text-center">
+//     <img
+//       src={emptyCartImageUrl}
+//       alt="Empty Cart"
+//     />
+//     <p className="m-1">Không có sản phẩm</p>
+//   </div>
+// ) : (
+
+//   currentPosts.map((item) => {
+//     let isFavorite = false;
+//     const favoritepr = localStorage.getItem('favoriteItems');
+//     if (favoritepr) {
+//       let fv: any = JSON.parse(favoritepr);
+//       fv.filter((i: any) => {
+//         if (i.title === item.title) {
+//           isFavorite = true;
+//         }
+//       });
+//     }
+//     return (
+//       <div
+//         key={item.id}
+//         className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+//       >
+//         <Link to={`/detailproduct/${item.id}`}>
+//           <img
+//             src={item.images}
+//             alt={'img'}
+//             className="w-full max-h-[190px] object-cover"
+//           />
+//         </Link>
+//         <div className="pt-2 ">
+//           <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+//           <div className="flex flex-row justify-between items-center">
+//             <div>
+//               <p className="text-lg font-semibold text-[#C92127] mt-2">
+//                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+//                   item.price - (item.price * item.discount) / 100,
+//                 )}
+//               </p>
+//               <p className="text-sm text-[#888888] line-through">
+//                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+//               </p>
+//               <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+//                 {item.discount}%
+//               </span>
+//             </div>
+//             <Icon
+//               onClick={() => {
+//                 cate === 'book' ? handleAddFavoriteBook(item) : handleAddFavoriteTool(item);
+//               }}
+//               icon={'ic:round-favorite'}
+//               className={`hover:text-red-500 text-3xl  cursor-pointer ${
+//                 isFavorite ? 'text-red-500' : 'text-slate-300'
+//               }`}
+//             />
+//           </div>
+//         </div>
+// ):(
+//   searchResult.map((item: BookType) => (
+//     <div
+//       key={item.id}
+//       className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+//     >
+//       <Link to={`/detailproduct/${item.id}`}>
+//         <img
+//           src={item.images}
+//           alt={'img'}
+//           className="w-full max-h-[190px] object-cover"
+//         />
+//       </Link>
+//       <div className="pt-2 ">
+//         <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+//         <p className="text-lg font-semibold text-[#C92127] mt-2">
+//           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+//             item.price - (item.price * item.discount) / 100,
+//           )}
+//         </p>
+//         <p className="text-sm text-[#888888] line-through">
+//           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
+//         </p>
+//         <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
+//           {item.discount}%
+//         </span>
+
+//       </div>
+//     );
+//   })
+// }
