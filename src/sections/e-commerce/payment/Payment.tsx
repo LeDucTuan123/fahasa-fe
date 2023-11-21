@@ -8,9 +8,6 @@ import fetch from 'src/services/axios/Axios';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
 
-const u = localStorage.getItem('user');
-const user = JSON.parse(u ? u : '');
-
 export default function Payment() {
   const navigate = useNavigate();
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
@@ -43,6 +40,8 @@ export default function Payment() {
   });
   const books = useSelector((state: RootState) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
+  const user: any = useSelector((state: RootState) => state.user.userData);
+
   console.log(cart);
   useEffect(() => {
     fetch
