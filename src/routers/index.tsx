@@ -21,6 +21,7 @@ import {
   ProfileOrder,
   Register,
   AdminCategory,
+  AdminSupport,
 } from './elements';
 
 import ProfileLayout from 'src/layouts/ProfileLayout';
@@ -44,6 +45,7 @@ export default function Route() {
         { path: '/cart', element: <Cart /> },
         { path: '/payment', element: <Payment /> },
         { path: '/success/:id', element: <PaymentSuccess /> },
+        { path: '/support', element: <AdminSupport /> },
       ],
     },
     // login
