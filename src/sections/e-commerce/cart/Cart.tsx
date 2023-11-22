@@ -20,9 +20,8 @@ export default function Cart() {
   const [vouchers, setVouchers] = useState([]);
   const [applyVoucher, setApplyVoucher] = useState<any>();
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
-  const u = localStorage.getItem('user');
   const cartProduct = localStorage.getItem('cart');
-  const user = u && JSON.parse(u);
+  const user: any = useSelector((state: RootState) => state.user.userData);
   const books = useSelector((state: RootState) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
   const navigate = useNavigate();
@@ -63,7 +62,7 @@ export default function Cart() {
     }
     test();
     // lấy dữ liệu voucher
-  }, [books, cartProduct, isLogin, tools]);
+  }, [books, cartProduct, isLogin, tools, user.id]);
 
   // check tất cả sản phẩm vào mảng thanh toán
   function handleCheckAll(e: React.ChangeEvent<HTMLInputElement>) {
@@ -216,8 +215,12 @@ export default function Cart() {
   }
 
   function handleNavigateToPayment() {
-    localStorage.setItem('payment', JSON.stringify({ cart: productPay, voucher: applyVoucher }));
-    navigate('/payment');
+    if (isLogin) {
+      localStorage.setItem('payment', JSON.stringify({ cart: productPay, voucher: applyVoucher }));
+      navigate('/payment');
+    } else {
+      navigate('/login');
+    }
   }
 
   return (
