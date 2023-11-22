@@ -53,7 +53,7 @@ export default function Payment() {
         console.log(error);
       });
     setInformation({
-      fullname: user && user.lastname && user.firstname ? user.lastname + user.firstname : '',
+      fullname: user && user.lastname && user.firstname ? user.firstname + ' ' + user.lastname : '',
       email: user && user.email ? user.email : '',
       phone: user && user.phone ? user.phone : '',
       address: user && user.address ? user.address : '',
@@ -200,8 +200,15 @@ export default function Payment() {
               .catch((error) => {
                 console.log(error);
               });
-          } else if (paymentMedthod === 'zalo') {
-            console.log('thanh toán bằng zalo pay');
+          } else if (paymentMedthod === 'vnpay') {
+            fetch
+              .get(`/payment/vnpay/${res.data.id}`)
+              .then((res) => {
+                window.location.href = res.data;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           } else {
             navigate(`/success/${res.data.id}`);
           }
@@ -262,16 +269,16 @@ export default function Payment() {
               <input
                 type="radio"
                 className=""
-                value={'zalo'}
-                checked={paymentMedthod === 'zalo'}
+                value={'vnpay'}
+                checked={paymentMedthod === 'vnpay'}
                 onChange={(e) => ChangePaymentMedthod(e)}
               />{' '}
               <img
-                src="https://cdn0.fahasa.com/skin/frontend/base/default/images/payment_icon/ico_zalopayapp.svg?q=10298"
+                src="https://cdn0.fahasa.com/skin/frontend/base/default/images/payment_icon/ico_vnpay.svg?q=10327"
                 alt="img"
                 className="inline-block mx-1"
               />
-              Ví Zalo pay
+              VNPAY
             </label>
             <label className="text-[14px] block mt-4">
               <input
