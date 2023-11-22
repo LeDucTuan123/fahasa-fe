@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Role } from './enums';
 
 
@@ -8,6 +9,8 @@ interface User {
   id: number;
   firstname: string;
   lastname: string;
+  birthday: string;
+  gender: string;
   password: string;
   email: string;
   phone: string;
@@ -54,9 +57,9 @@ export default function User() {
       await axios.put(`http://localhost:8080/api/v1/admin/users/update/${userId}`, {
         role: newRole,
       });
-      console.log('Vai trò đã được cập nhật thành công.');
+      toast.success('Cập nhật quyền thành công');
     } catch (error) {
-      console.error('Lỗi khi cập nhật vai trò:', error);
+      toast.success('Cập nhật quyền thất bại');
     }
   };
 
@@ -106,7 +109,7 @@ export default function User() {
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-8">
         <table className="w-full text-sm text-gray-500 dark:text-gray-400 text-center">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-blue-500 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th
                 scope="col"
@@ -125,6 +128,18 @@ export default function User() {
                 className="px-6 py-3"
               >
                 Tên
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3"
+              >
+                Ngày sinh
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3"
+              >
+                Giới tính
               </th>
               <th
                 scope="col"
@@ -177,17 +192,23 @@ export default function User() {
                 </th>
                 <td className="px-6 py-4 max-w-[170px]">{user.lastname}</td>
                 <td className="px-6 py-4 max-w-[170px]">{user.firstname}</td>
-                <td className="px-6 py-4 max-w-[170px]">
-                  <input disabled className='rounded-lg w-36'
+                <td className="px-6 py-4 max-w-[130px]">{user.birthday}</td>
+                <td className="px-6 py-4 max-w-[50px]">{user.gender}</td>
+                <td className="px-6 py-4 max-w-[145px]">
+                  <input disabled className='rounded-2xl w-24'
                     type='password'
                     value={user.password}
                     onChange={(e) => handlePasswordChange(index, e.target.value)}
-                    maxLength={40}
+                    maxLength={15}
                   />
                 </td>
-                <td className="px-6 py-4 max-w-[170px]">{user.email}</td>
-                <td className="px-6 py-4 max-w-[170px]">{user.phone}</td>
-                <td className="px-6 py-4 max-w-[170px]" >{user.address}</td>
+                <td className="px-6 py-4 max-w-[220px]">{user.email.length > 25 ? `${user.email.slice(0, 25)}...` : user.email}</td>
+                <td className="px-6 py-4 max-w-[150px]">{user.phone}</td>
+                <td className="px-6 py-4 max-w-[170px]" >
+                  {user.address && user.address.length > 20
+                    ? `${user.address.substring(0, 20)}...`
+                    : user.address}
+                </td>
                 <td className="px-6 py-4 max-w-[170px]" >{user.role}</td>
                 <td className="px-6 py-4 max-w-[170px] text-center">
                   <input

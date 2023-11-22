@@ -1,8 +1,8 @@
-import { RootState } from 'src/redux/store';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { RootState } from 'src/redux/store';
 interface formProps {
   changeToPass: () => void;
 }
@@ -72,8 +72,8 @@ function FormProfile(props: formProps) {
               className="w-3/4 border p-2 pl-3 font-bold text-sm text-[#495057] outline-blue-500 rounded-md"
               type="text"
               placeholder="Nhập họ"
-              value={profile.firstname}
-              onChange={(e) => handleInputChange(e, 'firstname')}
+              value={profile.lastname}
+              onChange={(e) => handleInputChange(e, 'lastname')}
             />
           </div>
           <div className="py-3">
@@ -82,8 +82,8 @@ function FormProfile(props: formProps) {
               className="w-3/4 border p-2 pl-3 font-bold text-sm text-[#495057] outline-blue-500 rounded-md"
               type="text"
               placeholder="Nhập tên"
-              value={profile.lastname}
-              onChange={(e) => handleInputChange(e, 'lastname')}
+              value={profile.firstname}
+              onChange={(e) => handleInputChange(e, 'firstname')}
             />
           </div>
           <div className="py-3">
