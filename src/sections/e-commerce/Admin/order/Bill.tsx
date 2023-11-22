@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import fetch from 'src/services/axios/Axios';
 import Detail from './Detail';
 import Table from './Table';
-import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 
 const u = localStorage.getItem('user');
 const user = JSON.parse(u ? u : '');
@@ -19,13 +18,6 @@ export default function Feedback() {
   const [newStatusId, setNewStatusId] = useState<number>(/* giá trị khởi tạo */);
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
 
-  useEffect(() => {
-    // Lọc đơn hàng theo điều kiện id chẵn và chia hết cho 2
-    const filteredData = orders.filter((order) => order.id % 2 === 0);
-  
-    // Cập nhật state với dữ liệu đã lọc
-    setFilteredOrders(filteredData);
-  }, [orders]);
 
   useEffect(() => {
     fetch
@@ -113,11 +105,11 @@ export default function Feedback() {
         ) : (
           <Table
             changeToDetail={changeToDetail}
-            orders={filteredOrders}
+            orders={orders}
             onStatusChange={handleStatusChange}
             showPhone={true} // Thêm dòng này để hiển thị cột số điện thoại
             user={user}
-           
+
           />
         )}
       </div>

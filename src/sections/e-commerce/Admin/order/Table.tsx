@@ -87,7 +87,7 @@ function Table(props: TableProps, details: DetailProps) {
 
                 return (
                   <tr key={item.id} className="bg-white text-sm border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td className="px-6 py-4 max-w-[40px] overflow-hidden overflow-ellipsis">{item.id/2}</td>
+                    <td className="px-6 py-4 max-w-[40px] overflow-hidden overflow-ellipsis">{item.id}</td>
                     <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">{ConvertToVietNamDong(item.totalamount)}</td>
                     <td className="px-6 py-4 max-w-[140px] overflow-hidden overflow-ellipsis">{item.receiver}</td>
                     <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">{formatDateToDDMMYYYY(item.orderdate)}</td>
