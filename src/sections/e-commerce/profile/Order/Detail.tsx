@@ -1,4 +1,6 @@
 import { Icon } from '@iconify/react';
+import { Button } from 'flowbite-react';
+import fetch from 'src/services/axios/Axios';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 
 interface DetailProps {
@@ -6,20 +8,46 @@ interface DetailProps {
   order: any;
   products: any[];
   user: any;
+  setOrders: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 function Detail(props: DetailProps) {
+  function handleDeleteOrder() {
+    fetch
+      .delete(`/rest/order/delete/${props.order.id}`)
+      .then((res) => {
+        props.changeToTable();
+        props.setOrders((prev: any[]) => {
+          return prev.filter((item: any) => {
+            return item.id !== props.order.id;
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   return (
     <>
-      <div
-        className="inline-flex items-center hover:cursor-pointer hover:font-bold rounded-lg"
-        onClick={() => props.changeToTable()}
-      >
-        <Icon
-          icon="material-symbols:keyboard-arrow-left"
-          className="text-[#2489F4]"
-        />
-        <span className="text-[#2489F4]  inline-block">Quay lại</span>
+      <div className="flex justify-between items-center">
+        <div
+          className="inline-flex items-center hover:cursor-pointer hover:font-bold rounded-lg"
+          onClick={() => props.changeToTable()}
+        >
+          <Icon
+            icon="material-symbols:keyboard-arrow-left"
+            className="text-[#2489F4]"
+          />
+          <span className="text-[#2489F4]  inline-block">Quay lại</span>
+        </div>
+        {props.order && props.order.statuss.id === 3 && (
+          <Button
+            onClick={() => handleDeleteOrder()}
+            className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm me-2 mt-1 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+          >
+            Hủy đơn hàng
+          </Button>
+        )}
       </div>
       <div className="p-5 shadow-lg w-full rounded-lg">
         <h1 className="font-bold text-[#C92127]">Chi tiết đơn hàng</h1>
