@@ -13,7 +13,10 @@ function ListAddress({ listAddress, changeToForm, addressId, changeAddress }: Li
         {listAddress &&
           listAddress.map((item: any) => {
             return (
-              <div className="flex justify-between mt-3">
+              <div
+                key={item.id}
+                className="flex justify-between mt-3"
+              >
                 <label>
                   <input
                     type="radio"

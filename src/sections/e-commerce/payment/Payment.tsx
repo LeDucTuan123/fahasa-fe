@@ -67,7 +67,7 @@ export default function Payment() {
       const a = user.listAddress.find((item: any) => {
         return item.isactive;
       });
-      return a.id;
+      return a && a.id;
     });
   }, [user]);
   // kiểm lỗi mỗi lần information thay đổi
@@ -355,7 +355,7 @@ export default function Payment() {
               <input
                 type="radio"
                 className=""
-                checked
+                defaultChecked
               />{' '}
               Giao hàng tiêu chuẩn:{' '}
               {openForm ? (
@@ -448,7 +448,10 @@ export default function Payment() {
               {cart &&
                 cart.map((item: any) => {
                   return (
-                    <div className="grid grid-cols-5 gap-2 py-2">
+                    <div
+                      key={item.id}
+                      className="grid grid-cols-5 gap-2 py-2"
+                    >
                       <div className="max-w-[150px] max-h-[150px]">
                         <img
                           src={item.images}
