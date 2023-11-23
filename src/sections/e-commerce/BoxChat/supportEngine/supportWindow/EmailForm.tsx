@@ -43,13 +43,11 @@ const EmailForm = (props: any) => {
   function handleSubmit(event: any) {
     event.preventDefault();
     setLoading(true);
-    console.log('Sending Email', email);
     getOrCreateUser((user: any) => {
       props.setUser(user);
       getOrCreateChat((chat: any) => props.setChat(chat));
     });
   }
-
   return (
     <div
       style={{

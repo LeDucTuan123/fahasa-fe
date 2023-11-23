@@ -11,13 +11,13 @@ const SupportWindow = (props: any) => {
       style={{ ...styles.supportWindow, ...{ opacity: props.visible ? '1' : '0' } }}
     >
       <EmailForm
-        setUser={(user: React.SetStateAction<null>) => setUser(user)}
-        setChat={(chat: React.SetStateAction<null>) => setChat(chat)}
+        setUser={(user: any) => setUser(user)}
+        setChat={(chat: any) => setChat(chat)}
         visible={user === null || chat === null}
       />
 
       <ChatEngine
-        visible={user !== null || chat !== null}
+        visible={user !== null && chat !== null}
         user={user}
         chat={chat}
       />
