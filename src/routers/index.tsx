@@ -21,6 +21,7 @@ import {
   ProfileOrder,
   Register,
   AdminCategory,
+  AdminSupport,
 } from './elements';
 
 import ProfileLayout from 'src/layouts/ProfileLayout';
@@ -70,6 +71,7 @@ export default function Route() {
         { path: '/admin/orther', element: <AdminOrther /> },
         { path: '/admin/voucher', element: <AdminVoucher /> },
         { path: '/admin/category', element: <AdminCategory /> },
+        { path: '/admin/support', element: <AdminSupport /> },
       ],
     },
     // profile layout
