@@ -14,6 +14,8 @@ export const Login = Loadable(lazy(() => import('../pages/LoginPage')));
 export const Register = Loadable(lazy(() => import('../sections/e-commerce/login/Register')));
 export const Error = Loadable(lazy(() => import('../pages/Error404')));
 
+export const SpinLuckyVoucher = Loadable(lazy(() => import('../pages/SpinLucky')));
+
 export const Cart = Loadable(lazy(() => import('../pages/CartPage')));
 export const Payment = Loadable(lazy(() => import('../pages/PaymentPage')));
 export const PaymentSuccess = Loadable(lazy(() => import('../pages/PaymentSuccessPage')));
