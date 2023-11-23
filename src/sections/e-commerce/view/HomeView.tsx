@@ -11,6 +11,7 @@ export default function HomeView() {
   const books: BookType[] = useSelector((state: any) => state.book.books);
   const tools: ToolType[] = useSelector((state: RootState) => state.tool.tools);
   const user: any = useSelector((state: RootState) => state.user.userData);
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
 
   // đẩy dữ liệu từ local lên db khi đăng nhập thành công và xóa cart trong localstorage
   function pushCartFromLocalToDB() {
@@ -49,7 +50,7 @@ export default function HomeView() {
   }
 
   useEffect(() => {
-    if (user && user.id) {
+    if (user && user.id && isLogin) {
       pushCartFromLocalToDB();
     }
   }, []);

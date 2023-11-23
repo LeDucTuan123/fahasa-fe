@@ -1,5 +1,7 @@
 import { Icon } from '@iconify/react';
 import { Button } from 'flowbite-react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 import fetch from 'src/services/axios/Axios';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 
@@ -12,6 +14,15 @@ interface DetailProps {
 }
 
 function Detail(props: DetailProps) {
+  const user: any = useSelector((state: RootState) => state.user.userData);
+  const address: any =
+    user.listAddress &&
+    user.listAddress.find((item: any) => {
+      return item.orders.some((item: any) => {
+        return item.id === props.order.id;
+      });
+    });
+
   function handleDeleteOrder() {
     fetch
       .delete(`/rest/order/delete/${props.order.id}`)
@@ -88,7 +99,10 @@ function Detail(props: DetailProps) {
                 Người nhận: <span className="font-bold">{props.order.receiver}</span>
               </li>
               <li className="mt-3">
-                Địa chỉ: <span className="font-bold">Địa chỉ</span>
+                Địa chỉ:{' '}
+                <span className="font-bold">
+                  {address && address.address + ', ' + address.ward + ', ' + address.district + ', ' + address.city}
+                </span>
               </li>
               <li className="mt-3">
                 Số điện thoại: <span className="font-bold">{props.user.phone}</span>
