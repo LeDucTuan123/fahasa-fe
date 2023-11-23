@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from 'src/redux/store';
 import { getBook } from 'src/redux/slice/bookSlice';
 import { getTools } from 'src/redux/slice/ToolSlice';
+import ProgressBar from './ProgressBar';
+import ModalReview from './ModalReview';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
@@ -17,6 +19,9 @@ export default function DetailProduct() {
   const u = localStorage.getItem('user');
   const user = u && JSON.parse(u);
   const dispatch = useAppDispatch();
+
+  //state để đóng mở modal
+  const [openModal, setOpenModal] = useState<boolean>(false);
   // Lấy danh sách book trong redux bookSlice
   const books: BookType[] = useSelector((state: any) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
@@ -109,6 +114,10 @@ export default function DetailProduct() {
       handleAddProduct();
     }
     navigate('/cart');
+  }
+
+  function closeModal() {
+    setOpenModal(false);
   }
 
   return (
@@ -281,7 +290,228 @@ export default function DetailProduct() {
 
       <hr />
 
+      <div className="mt-3 p-3 bg-white w-full rounded">
+        <h1 className="font-bold text-2xl text-[#333]">Đánh giá sản phẩm</h1>
+        <div className="flex mt-3 border-b-2 pb-3">
+          <div className="flex">
+            <div className="flex-col mx-10 items-center">
+              <p className="text-center font-bold text-2xl mt-7">27</p>
+              <p className="m-auto text-center font-bold text-xl">Lượt đánh giá</p>
+            </div>
+            <div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">5 sao</span>
+                <ProgressBar percent={93} />
+                <span className="ms-3 text-[#333] text-[18px]">93%</span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">4 sao</span>
+                <ProgressBar percent={93} />
+                <span className="ms-3 text-[#333] text-[18px]">93%</span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">3 sao</span>
+                <ProgressBar percent={93} />
+                <span className="ms-3 text-[#333] text-[18px]">93%</span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">2 sao</span>
+                <ProgressBar percent={93} />
+                <span className="ms-3 text-[#333] text-[18px]">93%</span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">1 sao</span>
+                <ProgressBar percent={93} />
+                <span className="ms-3 text-[#333] text-[18px]">93%</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-1">
+            <button
+              onClick={() => setOpenModal(true)}
+              className="m-auto py-1 px-20 font-semibold text-[18px] text-[#C92127] border-[#C92127] border-2 rounded-lg flex items-center"
+            >
+              <Icon
+                icon="solar:pen-linear"
+                className="me-2"
+              />
+              Viết đánh giá
+            </button>
+          </div>
+        </div>
+        <div>
+          <div className="flex mt-5">
+            <div className="min-w-[172px]">
+              <p className="font-semibold whitespace-nowrap overflow-hidden text-ellipsis w-full">Pun</p>
+              <p className="text-[#7A7E7F]">07/09/2020</p>
+            </div>
+            <div>
+              <div className="flex mb-3">
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+              </div>
+              <p>
+                Nhắc đến hai chữ tuổi thơ, trong đầu bạn sẽ nghĩ đến điều gì? Đối với mình là những buổi trưa hè trốn
+                cha mẹ đi chơi cùng lũ bạn. Nào bắn bi, nào đánh khăng, nào trốn tìm, nào tập bơi uống nước no căng
+                bụng, nhiều không kể hết và thích thú nhất là những que kem đá mát lạnh mua ở chỗ xe kem có cái thùng gỗ
+                bạc thếch phía sau, lúc nào cũng phát ra tiếng còi bóp toe toe vang dậy cả một góc đường. Sau này lớn
+                hơn một chút, khi Internet bắt đầu buổi bình minh, mỗi phố huyện mới chỉ có một, hai tiệm net nho nhỏ.
+                Khi ấy đứa nào dành dụm được vài nghìn bạc để thuê máy là ngay lập tức đằng sau nó xuất hiện một “hội
+                đồng” đứng xem, chỉ chỉ trỏ trỏ. Rồi đứa này xin chơi ké, đứa kia xin di thử con chuột khiến cho đứa
+                đang ngồi chơi bỗng chốc thấy mình chở nên quyền lực hơn người. Nhưng đời đâu có như mơ, khi phụ huynh
+                bắt được, cái đám đứng sau đó lủi nhanh như cuốc, bỏ lại khổ chủ với mấy cái quật đau đến điếng người.
+                Một quãng tuổi thơ như thế, giờ đây nhắc lại, so với các em, các cháu sinh ra quen với máy móc, smart
+                phone; với nhà cao tầng, chung cư kín mít; vẫn được thế hệ 9x tụi mình tự hào là tuổi thơ dữ dội, nhưng
+                đấy chỉ là cái dữ dội của thời bình. Còn tuổi thơ trong thời chiến mà mình may mắn được đọc và biết đến
+                trong quyển sách mang tên “Tuổi thơ dữ dội” của nhà văn Phùng Quán, quả thực vượt xa những gì mình tưởng
+                tượng. Quyển này mình được cô bạn cùng tổ tặng. “Quà sinh nhật”. Nó bảo thế, mặc dù lúc nhận sách, sinh
+                nhật đã qua được cả tháng rồi. Tiểu thuyết khá dài, gồm 8 phần, độ ngót ngét 800 trang, đặc tiếng địa
+                Huế, may mà mình với kinh nghiệm 5 năm có lẻ ở Vinh nên không gặp khó khăn khi đọc. Chứ phải đưa cho ai
+                đó người Bắc, chưa nghe tiếng miền Trung bao giờ thì đến phải vừa đọc vừa tra từ điển. Nội dung tác phẩm
+                kể về câu chuyện xảy ra ở mặt trận Thừa Thiên những ngày mới bắt đầu cuộc kháng chiến chống Pháp. Đọc
+                đến những cái tên như cầu Tràng Tiền, chùa Từ Đàm, Đông Ba, An Cựu, Bao Vinh và cả cái đoạn này “ Mới xa
+                Huế chưa đầy tháng mà chúng có cảm tưởng đã xa Huế hàng năm trời. Biết bao kỷ niệm da diết… Huế tưng
+                bừng, sôi sục trong ngày tổng khởi nghĩa, Huế lẫm liệt ngang tàng nổ súng kháng chiến. Huế gầm thét dữ
+                dội năm mươi ngày đêm vây hãm quân thù. Huế hài hước cười cợt bất cứ trong hoàn cảnh nào” tự nhiên trong
+                lòng có một nỗi mong muốn tha thiết đến Huế, thăm lại cái xứ mộng mơ mà hồi bé tí ti chưa biết gì mình
+                dịp một lần đi với bố. Nhân vật chính là những đội viên Đội thiếu niên trinh sát thuộc Trung đoàn Trần
+                Cao Vân, gồm ba mươi hai bạn nhỏ chạc mười ba, mười bốn tuổi như Mừng, Lượm sứt, Vịnh sưa, Quỳnh Sơn Ca,
+                Bồng da rắn, Tư dát,… - những cái tên đặc biệt đã tóm lược được phần nào tính cách và ngoại hình của mỗi
+                nhân vật. Phùng Quán kể cho chúng ta nghe về tình bạn, lòng yêu cách mạng nhiệt thành, quá trình sống,
+                chiến đấu, trưởng thành và hy sinh – lẽ tất nhiên, có cuộc chiến nào mà không có những mất mát, đau
+                thương - giữa muôn vàn khó khăn trong buổi đầu kháng chiến của các em Đọc cả tiểu thuyết, mình ấn tượng
+                nhất với hai thứ. Một là cuộc “trường kỳ” vượt ngục đến ba lần, hấp dẫn và hồi hộp chả kém gì phim hành
+                động Hollywood bên trời Tây của Lượm - chiến sĩ cộng sản nòi. Nhưng mà vượt ngục một mình thì thật bình
+                thường quá, Lượm của chúng ta còn dắt theo cả Thúi – thằng nhóc bán kẹo kéo ốm nhom ốm nhách - và Lép
+                sẹo - đứa tù giang hồ đã từng đánh nhau thừa sống thiếu chết với nó – cao chạy xa bay khỏi cái nhà lao
+                Thừa Phủ khét tiếng. Biến tất cả những tên cai tù có thừa sự độc ác, xảo trá và chiêu trò bỗng chốc trở
+                thành vài tên học việc chưa thạo nghề. Xét về độ nghĩa hiệp, Lượm thật chả kém cạnh gì mấy anh hùng
+                giang hồ trong tiểu thuyết kiếm hiệp của Kim Dung. Mà các bạn có biết vì sao Lượm vượt ngục thành công
+                không? Vì nó là tù nhân duy nhất biết tiếng Pháp. Đấy, việc học hành đến nơi đến chốn rất quan trọng, ở
+                tù cũng phân ra loại có học và không có học cơ mà. Điều thứ hai là nỗi oan khiên của Mừng, nó có giải
+                thích thế nào cũng chẳng được. Không ai chịu hiểu nó! Cả chiến khu giờ đây quay mặt. Nó từ đứa nhóc tì
+                liên lạc được mọi người quý mến trở thành kẻ Việt gian lành nghề đáng ghê tởm. Mừng khóc tức tưởi khi
+                ngay cả mẹ, người coi nó là cả lẽ sống và cũng là người nó yêu quý nhất trên đời – sẵn lòng trèo lên tất
+                cả các ngọn cây bút bút trong thành phố Huế giữa những ngày chiến trận để lấy cây tầm gửi đem về chữa
+                bệnh hen suyễn cho mẹ và từ đó mở ra cơ duyên tham gia Vệ Quốc Đoàn – đến lúc chết đi cũng không tin
+                tưởng nó “ Rứa mà chừ mạ được gặp con thì té ra con đi làm Việt gian, bị Chánh phủ giam tù. Ôi chao, đau
+                lòng mạ quá con ơi! Biết nông nỗi ni thì mạ đừng gặp con còn hơn!...”. Giọt nước mắt ấy thực sự làm mình
+                gai người, bất giác thấy giống như Phùng Quán đang mượn nhân vật Mừng để bộc bạch những nỗi niềm trong
+                lòng về quãng thời gian “cá trộm, rượu chịu, văn chui” đầy tủi nhục suốt mấy chục năm của mình. Nói tóm
+                lại cho cùng “Tuổi thơ dữ dội”, được viết bởi Phùng Quán - một nhà văn thuộc thế hệ cũ. Lẽ hiển nhiên,
+                nó mang trong mình âm hưởng của một bản anh hùng ca, ngợi ca về cuộc chiến mà dân tộc Việt Nam chúng ta
+                đã dám bước vào, chiến đấu và chiến thắng.
+              </p>
+            </div>
+          </div>
+          <div className="flex mt-5">
+            <div className="min-w-[172px]">
+              <p className="font-semibold whitespace-nowrap overflow-hidden text-ellipsis w-full">Pun</p>
+              <p className="text-[#7A7E7F]">07/09/2020</p>
+            </div>
+            <div>
+              <div className="flex mb-3">
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+                <img
+                  src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                  alt="img"
+                />
+              </div>
+              <p>
+                Nhắc đến hai chữ tuổi thơ, trong đầu bạn sẽ nghĩ đến điều gì? Đối với mình là những buổi trưa hè trốn
+                cha mẹ đi chơi cùng lũ bạn. Nào bắn bi, nào đánh khăng, nào trốn tìm, nào tập bơi uống nước no căng
+                bụng, nhiều không kể hết và thích thú nhất là những que kem đá mát lạnh mua ở chỗ xe kem có cái thùng gỗ
+                bạc thếch phía sau, lúc nào cũng phát ra tiếng còi bóp toe toe vang dậy cả một góc đường. Sau này lớn
+                hơn một chút, khi Internet bắt đầu buổi bình minh, mỗi phố huyện mới chỉ có một, hai tiệm net nho nhỏ.
+                Khi ấy đứa nào dành dụm được vài nghìn bạc để thuê máy là ngay lập tức đằng sau nó xuất hiện một “hội
+                đồng” đứng xem, chỉ chỉ trỏ trỏ. Rồi đứa này xin chơi ké, đứa kia xin di thử con chuột khiến cho đứa
+                đang ngồi chơi bỗng chốc thấy mình chở nên quyền lực hơn người. Nhưng đời đâu có như mơ, khi phụ huynh
+                bắt được, cái đám đứng sau đó lủi nhanh như cuốc, bỏ lại khổ chủ với mấy cái quật đau đến điếng người.
+                Một quãng tuổi thơ như thế, giờ đây nhắc lại, so với các em, các cháu sinh ra quen với máy móc, smart
+                phone; với nhà cao tầng, chung cư kín mít; vẫn được thế hệ 9x tụi mình tự hào là tuổi thơ dữ dội, nhưng
+                đấy chỉ là cái dữ dội của thời bình. Còn tuổi thơ trong thời chiến mà mình may mắn được đọc và biết đến
+                trong quyển sách mang tên “Tuổi thơ dữ dội” của nhà văn Phùng Quán, quả thực vượt xa những gì mình tưởng
+                tượng. Quyển này mình được cô bạn cùng tổ tặng. “Quà sinh nhật”. Nó bảo thế, mặc dù lúc nhận sách, sinh
+                nhật đã qua được cả tháng rồi. Tiểu thuyết khá dài, gồm 8 phần, độ ngót ngét 800 trang, đặc tiếng địa
+                Huế, may mà mình với kinh nghiệm 5 năm có lẻ ở Vinh nên không gặp khó khăn khi đọc. Chứ phải đưa cho ai
+                đó người Bắc, chưa nghe tiếng miền Trung bao giờ thì đến phải vừa đọc vừa tra từ điển. Nội dung tác phẩm
+                kể về câu chuyện xảy ra ở mặt trận Thừa Thiên những ngày mới bắt đầu cuộc kháng chiến chống Pháp. Đọc
+                đến những cái tên như cầu Tràng Tiền, chùa Từ Đàm, Đông Ba, An Cựu, Bao Vinh và cả cái đoạn này “ Mới xa
+                Huế chưa đầy tháng mà chúng có cảm tưởng đã xa Huế hàng năm trời. Biết bao kỷ niệm da diết… Huế tưng
+                bừng, sôi sục trong ngày tổng khởi nghĩa, Huế lẫm liệt ngang tàng nổ súng kháng chiến. Huế gầm thét dữ
+                dội năm mươi ngày đêm vây hãm quân thù. Huế hài hước cười cợt bất cứ trong hoàn cảnh nào” tự nhiên trong
+                lòng có một nỗi mong muốn tha thiết đến Huế, thăm lại cái xứ mộng mơ mà hồi bé tí ti chưa biết gì mình
+                dịp một lần đi với bố. Nhân vật chính là những đội viên Đội thiếu niên trinh sát thuộc Trung đoàn Trần
+                Cao Vân, gồm ba mươi hai bạn nhỏ chạc mười ba, mười bốn tuổi như Mừng, Lượm sứt, Vịnh sưa, Quỳnh Sơn Ca,
+                Bồng da rắn, Tư dát,… - những cái tên đặc biệt đã tóm lược được phần nào tính cách và ngoại hình của mỗi
+                nhân vật. Phùng Quán kể cho chúng ta nghe về tình bạn, lòng yêu cách mạng nhiệt thành, quá trình sống,
+                chiến đấu, trưởng thành và hy sinh – lẽ tất nhiên, có cuộc chiến nào mà không có những mất mát, đau
+                thương - giữa muôn vàn khó khăn trong buổi đầu kháng chiến của các em Đọc cả tiểu thuyết, mình ấn tượng
+                nhất với hai thứ. Một là cuộc “trường kỳ” vượt ngục đến ba lần, hấp dẫn và hồi hộp chả kém gì phim hành
+                động Hollywood bên trời Tây của Lượm - chiến sĩ cộng sản nòi. Nhưng mà vượt ngục một mình thì thật bình
+                thường quá, Lượm của chúng ta còn dắt theo cả Thúi – thằng nhóc bán kẹo kéo ốm nhom ốm nhách - và Lép
+                sẹo - đứa tù giang hồ đã từng đánh nhau thừa sống thiếu chết với nó – cao chạy xa bay khỏi cái nhà lao
+                Thừa Phủ khét tiếng. Biến tất cả những tên cai tù có thừa sự độc ác, xảo trá và chiêu trò bỗng chốc trở
+                thành vài tên học việc chưa thạo nghề. Xét về độ nghĩa hiệp, Lượm thật chả kém cạnh gì mấy anh hùng
+                giang hồ trong tiểu thuyết kiếm hiệp của Kim Dung. Mà các bạn có biết vì sao Lượm vượt ngục thành công
+                không? Vì nó là tù nhân duy nhất biết tiếng Pháp. Đấy, việc học hành đến nơi đến chốn rất quan trọng, ở
+                tù cũng phân ra loại có học và không có học cơ mà. Điều thứ hai là nỗi oan khiên của Mừng, nó có giải
+                thích thế nào cũng chẳng được. Không ai chịu hiểu nó! Cả chiến khu giờ đây quay mặt. Nó từ đứa nhóc tì
+                liên lạc được mọi người quý mến trở thành kẻ Việt gian lành nghề đáng ghê tởm. Mừng khóc tức tưởi khi
+                ngay cả mẹ, người coi nó là cả lẽ sống và cũng là người nó yêu quý nhất trên đời – sẵn lòng trèo lên tất
+                cả các ngọn cây bút bút trong thành phố Huế giữa những ngày chiến trận để lấy cây tầm gửi đem về chữa
+                bệnh hen suyễn cho mẹ và từ đó mở ra cơ duyên tham gia Vệ Quốc Đoàn – đến lúc chết đi cũng không tin
+                tưởng nó “ Rứa mà chừ mạ được gặp con thì té ra con đi làm Việt gian, bị Chánh phủ giam tù. Ôi chao, đau
+                lòng mạ quá con ơi! Biết nông nỗi ni thì mạ đừng gặp con còn hơn!...”. Giọt nước mắt ấy thực sự làm mình
+                gai người, bất giác thấy giống như Phùng Quán đang mượn nhân vật Mừng để bộc bạch những nỗi niềm trong
+                lòng về quãng thời gian “cá trộm, rượu chịu, văn chui” đầy tủi nhục suốt mấy chục năm của mình. Nói tóm
+                lại cho cùng “Tuổi thơ dữ dội”, được viết bởi Phùng Quán - một nhà văn thuộc thế hệ cũ. Lẽ hiển nhiên,
+                nó mang trong mình âm hưởng của một bản anh hùng ca, ngợi ca về cuộc chiến mà dân tộc Việt Nam chúng ta
+                đã dám bước vào, chiến đấu và chiến thắng.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <LatestBooks books={books} />
+      <ModalReview
+        openModal={openModal}
+        CloseModal={closeModal}
+      />
     </div>
   );
 }
