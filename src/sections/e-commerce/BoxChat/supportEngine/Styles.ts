@@ -1,6 +1,5 @@
 export const styles: any = {
   chatWithMeButton: {
-    zIndex: '999999999999999999999',
     cursor: 'pointer',
     boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
     // Border
@@ -42,7 +41,7 @@ export const styles: any = {
     backgroundColor: 'white',
     // Border
     borderRadius: '12px',
-    border: `2px solid #7a39e0`,
+    border: `2px solid #20B2AA`,
     overflow: 'hidden',
     // Shadow
     boxShadow: '0px 0px 16px 6px rgba(0, 0, 0, 0.33)',
@@ -59,7 +58,7 @@ export const styles: any = {
     top: '-45px',
     width: '100%',
     height: '308px',
-    backgroundColor: '#7a39e0',
+    backgroundColor: '#20B2AA',
     transform: 'skewY(-12deg)',
   },
   topText: {
@@ -76,13 +75,13 @@ export const styles: any = {
     outline: 'none',
     padding: '12px',
     borderRadius: '12px',
-    border: '2px solid #7a39e0',
+    border: '2px solid #20B2AA',
   },
   bottomText: {
     position: 'absolute',
     width: '100%',
     top: '60%',
-    color: '#7a39e0',
+    color: '#20B2AA',
     fontSize: '24px',
     fontWeight: '600',
   },
@@ -94,7 +93,7 @@ export const styles: any = {
     backgroundColor: 'white',
   },
   loadingIcon: {
-    color: '#7a39e0',
+    color: '#20B2AA',
     position: 'absolute',
     top: 'calc(50% - 51px)',
     left: 'calc(50% - 51px)',

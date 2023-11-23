@@ -1,11 +1,25 @@
-import { useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Avatar from './Avatar';
 import { SupportWindow } from './supportWindow';
 
-export default function SupportEngine() {
+const SupportEngine = () => {
+  const ref = useRef(null);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !(ref.current as any).contains(event.target)) {
+        setVisible(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
+
   return (
-    <div className="absolute top-0">
+    <div ref={ref}>
       <SupportWindow visible={visible} />
       <Avatar
         onClick={() => setVisible(true)}
@@ -13,4 +27,6 @@ export default function SupportEngine() {
       />
     </div>
   );
-}
+};
+
+export default SupportEngine;

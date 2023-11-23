@@ -45,7 +45,6 @@ export default function Route() {
         { path: '/cart', element: <Cart /> },
         { path: '/payment', element: <Payment /> },
         { path: '/success/:id', element: <PaymentSuccess /> },
-        { path: '/support', element: <AdminSupport /> },
       ],
     },
     // login
@@ -72,6 +71,7 @@ export default function Route() {
         { path: '/admin/orther', element: <AdminOrther /> },
         { path: '/admin/voucher', element: <AdminVoucher /> },
         { path: '/admin/category', element: <AdminCategory /> },
+        { path: '/admin/support', element: <AdminSupport /> },
       ],
     },
     // profile layout
