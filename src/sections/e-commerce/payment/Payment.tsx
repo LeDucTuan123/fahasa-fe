@@ -7,11 +7,13 @@ import ModalVoucher from '../cart/ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
+import ListAddress from './ListAddress';
 
 export default function Payment() {
   const navigate = useNavigate();
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openForm, setOpenForm] = useState<boolean>(false);
   const paymentLocal = localStorage.getItem('payment');
   const payment = JSON.parse(paymentLocal ? paymentLocal : '');
   const cart = payment.cart;
@@ -41,8 +43,6 @@ export default function Payment() {
   const books = useSelector((state: RootState) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
   const user: any = useSelector((state: RootState) => state.user.userData);
-
-  console.log(cart);
   useEffect(() => {
     fetch
       .get('/rest/voucher')
@@ -61,7 +61,7 @@ export default function Payment() {
       district: '',
       ward: '',
     });
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setInformationError(() => validation(information));
@@ -221,6 +221,11 @@ export default function Payment() {
     }
   }
 
+  // phần này truyền cho ListAddress
+  function changeToForm() {
+    setOpenForm(true);
+  }
+
   return (
     <>
       <div className="pt-5">
@@ -241,13 +246,21 @@ export default function Payment() {
             Đăng nhập ngay
           </Link>
         </div> */}
-        <Form
-          information={information}
-          setInformationError={setInformationError}
-          informationError={informationError}
-          setInformation={setInformation}
-          validation={validation}
-        />
+        {openForm ? (
+          <Form
+            information={information}
+            setInformationError={setInformationError}
+            informationError={informationError}
+            setInformation={setInformation}
+            validation={validation}
+          />
+        ) : (
+          <ListAddress
+            listAddress={user.listAddress}
+            changeToForm={changeToForm}
+          />
+        )}
+
         <div className="bg-white p-5 mt-4">
           <h3 className="uppercase font-bold text-[14px] border-b-2 pb-2">Phương thức vận chuyển</h3>
           <div className="mt-3">
