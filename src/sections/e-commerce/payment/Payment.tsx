@@ -17,14 +17,16 @@ export default function Payment() {
   const paymentLocal = localStorage.getItem('payment');
   const payment = JSON.parse(paymentLocal ? paymentLocal : '');
   const cart = payment.cart;
+  const [addressId, setAddressId] = useState<number>(0);
+  const [address, setAddress] = useState<any>();
   const sum = cart.reduce((accum: number, item: any) => {
     return accum + item.quantity * (item.price - (item.price * item.discount) / 100);
   }, 0);
   const [voucher, setVoucher] = useState<any>(payment.voucher);
   const [vouchers, setVouchers] = useState<any[]>([]);
   const [information, setInformation] = useState<any>({
-    fullname: '',
-    email: '',
+    firstname: '',
+    lastname: '',
     phone: '',
     address: '',
     city: '',
@@ -32,8 +34,8 @@ export default function Payment() {
     ward: '',
   });
   const [informationError, setInformationError] = useState<any>({
-    fullname: '',
-    email: '',
+    firstname: '',
+    lastname: '',
     phone: '',
     address: '',
     city: '',
@@ -53,38 +55,44 @@ export default function Payment() {
         console.log(error);
       });
     setInformation({
-      fullname: user && user.lastname && user.firstname ? user.firstname + ' ' + user.lastname : '',
-      email: user && user.email ? user.email : '',
+      firstname: user && user.firstname,
+      lastname: user && user.lastname ? user.lastname : '',
       phone: user && user.phone ? user.phone : '',
-      address: user && user.address ? user.address : '',
+      address: '',
       city: '',
       district: '',
       ward: '',
     });
+    setAddressId(() => {
+      const a = user.listAddress.find((item: any) => {
+        return item.isactive;
+      });
+      return a.id;
+    });
   }, [user]);
-
+  // kiểm lỗi mỗi lần information thay đổi
   useEffect(() => {
     setInformationError(() => validation(information));
   }, [information]);
 
+  // thay đổi địa chỉ mỗi lần addressId thay đổi
+  useEffect(() => {
+    const a = user.listAddress.find((item: any) => {
+      return item.id === addressId;
+    });
+
+    setAddress(a);
+  }, [addressId, user]);
+
   function validation(i: any) {
-    let error = { fullname: '', email: '', phone: '', address: '', city: '', district: '', ward: '' };
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let error = { firstname: '', lastname: '', phone: '', address: '', city: '', district: '', ward: '' };
     const phoneNumberRegex = /^(0[1-9])+([0-9]{8})\b/;
-    if (i.fullname.trim().length === 0) {
-      error.fullname = 'Thông tin này không được để trống';
+    if (i.firstname.trim().length === 0) {
+      error.firstname = 'Thông tin này không được để trống';
     }
 
-    if (i.fullname.trim().length < 3 && i.fullname.trim().length > 0) {
-      error.fullname = 'Tên ít nhất phải có 3 ký tự';
-    }
-
-    if (!emailRegex.test(i.email)) {
-      error.email = 'Không phải định dạng email';
-    }
-
-    if (i.email.trim().length === 0) {
-      error.email = 'Thông tin này không được để trống';
+    if (i.lastname.trim().length === 0) {
+      error.lastname = 'Thông tin này không được để trống';
     }
 
     if (i.phone.trim().length === 0) {
@@ -144,8 +152,8 @@ export default function Payment() {
 
   function valid() {
     if (
-      informationError.fullname === '' &&
-      informationError.email === '' &&
+      informationError.firstname === '' &&
+      informationError.lastname === '' &&
       informationError.phone === '' &&
       informationError.address === '' &&
       informationError.city === '' &&
@@ -159,7 +167,7 @@ export default function Payment() {
   }
 
   function handlePayment() {
-    if (valid()) {
+    if (valid() && openForm) {
       fetch
         .post('/rest/order/payment', {
           orderdate: new Date(),
@@ -167,11 +175,79 @@ export default function Payment() {
             sum -
             (voucher ? voucher.valuev : 0) +
             (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
-          receiver: information.fullname,
+          receiver: information.firstname,
           ship: information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
           user: {
             id: user.id,
           },
+          statuss: {
+            id: 3,
+          },
+          address: {
+            firstname: information.firstname,
+            lastname: information.lastname,
+            phone: information.phone,
+            city: information.city,
+            district: information.district,
+            ward: information.ward,
+            address: information.address,
+            user: { id: user.id },
+          },
+          voucher: voucher ? { id: voucher.id } : null,
+          orderdetails: cart.map((item: any) => {
+            return {
+              id: item.odid,
+              quantity: item.quantity,
+              price: item.price - (item.price * item.discount) / 100,
+              book: books.find((book) => {
+                return book.title === item.title;
+              }),
+              schooltool: tools.find((tool) => {
+                return tool.title === item.title;
+              }),
+            };
+          }),
+        })
+        .then((res) => {
+          if (paymentMedthod === 'momo') {
+            fetch
+              .get(`/orders/momo-pay/${res.data.id}`)
+              .then((res) => {
+                window.location.href = res.data;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else if (paymentMedthod === 'vnpay') {
+            fetch
+              .get(`/payment/vnpay/${res.data.id}`)
+              .then((res) => {
+                window.location.href = res.data;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            navigate(`/success/${res.data.id}`);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else if (!openForm) {
+      fetch
+        .post('/rest/order/payment', {
+          orderdate: new Date(),
+          totalamount:
+            sum -
+            (voucher ? voucher.valuev : 0) +
+            (address.city && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+          receiver: address.lastname + ' ' + address.firstname,
+          ship: address.city && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
+          user: {
+            id: user.id,
+          },
+          address: { id: address.id },
           statuss: {
             id: 3,
           },
@@ -217,13 +293,21 @@ export default function Payment() {
           console.log(error);
         });
     } else {
-      console.log('có lỗi');
+      console.log('Có lỗi');
     }
   }
 
   // phần này truyền cho ListAddress
   function changeToForm() {
     setOpenForm(true);
+  }
+
+  function changeToListAddress() {
+    setOpenForm(false);
+  }
+
+  function changeAddress(e: React.ChangeEvent<HTMLInputElement>) {
+    setAddressId(Number(e.target.value));
   }
 
   return (
@@ -253,11 +337,14 @@ export default function Payment() {
             informationError={informationError}
             setInformation={setInformation}
             validation={validation}
+            changeToListAddress={changeToListAddress}
           />
         ) : (
           <ListAddress
             listAddress={user.listAddress}
             changeToForm={changeToForm}
+            addressId={addressId}
+            changeAddress={changeAddress}
           />
         )}
 
@@ -271,7 +358,11 @@ export default function Payment() {
                 checked
               />{' '}
               Giao hàng tiêu chuẩn:{' '}
-              {information.city && information.city === 'Thành phố Hồ Chí Minh' ? 'Miễn phí' : '31.000đ'}
+              {openForm ? (
+                <span>{information.city && information.city === 'Thành phố Hồ Chí Minh' ? 'Miễn phí' : '31.000đ'}</span>
+              ) : (
+                <span>{address && address.city === 'Thành phố Hồ Chí Minh' ? 'Miễn phí' : '31.000đ'}</span>
+              )}
             </label>
           </div>
         </div>

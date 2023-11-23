@@ -1,9 +1,11 @@
 interface ListAddressProps {
   listAddress: any[];
   changeToForm: () => void;
+  addressId: number;
+  changeAddress: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function ListAddress({ listAddress, changeToForm }: ListAddressProps) {
+function ListAddress({ listAddress, changeToForm, addressId, changeAddress }: ListAddressProps) {
   return (
     <div className="bg-white p-5 mt-4">
       <h3 className="uppercase font-bold text-[14px] border-b-2 pb-2">Địa chỉ giao hàng</h3>
@@ -16,6 +18,9 @@ function ListAddress({ listAddress, changeToForm }: ListAddressProps) {
                   <input
                     type="radio"
                     className="h-[20px] w-[20px]"
+                    value={item.id}
+                    checked={item.id === addressId}
+                    onChange={(e) => changeAddress(e)}
                   />{' '}
                   {item.lastname} {item.firstname} | {item.address}, {item.ward}, {item.district}, {item.city} |{' '}
                   {item.phone}
