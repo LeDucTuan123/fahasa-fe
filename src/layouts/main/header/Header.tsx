@@ -10,15 +10,12 @@ import fetch from 'src/services/axios';
 import Logo from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
 
-
-
+import { JwtPayload, jwtDecode } from 'jwt-decode';
 
 import Search from './search';
 
-
 import { toast } from 'react-toastify';
 import { getUser } from 'src/redux/slice/userSlice';
-
 
 // là mảng chứa những category level 2
 let level2: any = null;
@@ -159,6 +156,22 @@ export default function Header() {
     dispatch(setIsLogin(false));
     toast.success('Đăng xuất thành công');
   };
+
+  const storedToken: any = token;
+  if (storedToken) {
+    const decoded: any = jwtDecode(storedToken);
+    console.log(decoded);
+
+    // Kiểm tra thông tin thời gian hết hạn
+    if (decoded.exp * 1000 < Date.now()) {
+      // Token đã hết hạn
+      logout();
+    } else {
+      // Token vẫn còn hạn sử dụng
+    }
+  } else {
+    // Nếu không có token, không cần thực hiện việc giải mã
+  }
 
   return (
     <div className="lg:container mx-auto py-2 ">
@@ -341,8 +354,9 @@ export default function Header() {
 
         {/* Mobile menu */}
         <div
-          className={`lg:hidden fixed bg-[#f8f6f0] top-0 right-0 transition-all w-screen h-full duration-500 z-50 ${openMenu ? 'left-0' : 'left-[-100%]'
-            }`}
+          className={`lg:hidden fixed bg-[#f8f6f0] top-0 right-0 transition-all w-screen h-full duration-500 z-50 ${
+            openMenu ? 'left-0' : 'left-[-100%]'
+          }`}
         >
           {/* Header mobile */}
           <div className="flex justify-between bg-indigo-300 grid-cols-2 px-2">

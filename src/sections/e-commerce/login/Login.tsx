@@ -7,6 +7,7 @@ import { login, setIsLogin } from 'src/redux/slice/authSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
 import { getUser } from 'src/redux/slice/userSlice';
 import { useNavigate } from 'react-router-dom';
+import ForgotPassword from './ForgotPassword';
 
 export default function Login() {
   const dispatch = useAppDispatch();
@@ -57,6 +58,8 @@ export default function Login() {
       navigate('/');
     }
   }, [dispatch, isLogin, user]);
+
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
@@ -137,7 +140,12 @@ export default function Login() {
               Đăng nhập với Google
             </button>
 
-            <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
+            <p
+              onClick={() => {
+                setOpenModal(true);
+              }}
+              className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300"
+            >
               Quên mật khẩu?
             </p>
 
@@ -162,6 +170,7 @@ export default function Login() {
           </div>
         </div>
       </section>
+      {openModal && <ForgotPassword onClose={() => setOpenModal(false)} />}
     </>
   );
 }
