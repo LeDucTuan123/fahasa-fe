@@ -12,6 +12,7 @@ export interface BookType {
   cats?: [];
   orderdetails?: [];
   favorite?: [];
+  reviews: [];
   //   ...
 }
 
