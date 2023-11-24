@@ -6,6 +6,7 @@ import { useAppDispatch } from 'src/redux/store';
 import Footer from './footer';
 import Header from './header';
 import Rightbar from './rightbar';
+import SpinLucky from './spinlucky';
 
 export default function MainLayout() {
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ export default function MainLayout() {
           <Footer />
         </div>
 
+        <SpinLucky />
         <Rightbar />
       </div>
     </>

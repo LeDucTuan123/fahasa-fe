@@ -22,6 +22,7 @@ import {
   Register,
   AdminCategory,
   SpinLuckyVoucher,
+  ProfileMyvoucher,
 } from './elements';
 
 import ProfileLayout from 'src/layouts/ProfileLayout';
@@ -82,6 +83,7 @@ export default function Route() {
         { path: 'profile', element: <Profile /> },
         { path: 'address', element: <ProfileAddress /> },
         { path: 'order', element: <ProfileOrder /> },
+        { path: 'myvoucher', element: <ProfileMyvoucher /> },
       ],
     },
   ]);

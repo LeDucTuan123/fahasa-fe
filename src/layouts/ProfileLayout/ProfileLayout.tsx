@@ -62,6 +62,22 @@ function Profilelayout() {
                   Đơn hàng của tôi
                 </NavLink>
               </li>
+              <li>
+                <NavLink
+                  to="/member/myvoucher"
+                  className={({ isActive }) =>
+                    isActive
+                      ? 'flex items-center px-5 py-3 text-[#1435cd] font-semibold w-full'
+                      : 'flex items-center px-5 py-3 hover:text-[#1435cd] hover:bg-[#f5f5f5] w-full'
+                  }
+                >
+                  <Icon
+                    icon="mdi:voucher-outline"
+                    className="mr-3"
+                  />
+                  Ví voucher
+                </NavLink>
+              </li>
             </ul>
           </div>
           <div className="w-full ml-3 bg-white rounded-lg">
