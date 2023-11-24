@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ProgressBarProps {
   percent: number;
 }
 const ProgressBar = ({ percent }: ProgressBarProps) => {
   const [progress, setProgress] = useState<number>(percent);
+  useEffect(() => {
+    setProgress(percent);
+  }, [percent]);
   return (
     <div className="w-[224px] h-[5px] bg-gray-200">
       <div
