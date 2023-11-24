@@ -1,7 +1,8 @@
 import { Button, Modal } from 'flowbite-react';
 import { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { getBook } from 'src/redux/slice/bookSlice';
+import { RootState, useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 
@@ -9,13 +10,15 @@ interface ModalReviewProps {
   openModal: boolean;
   CloseModal: () => void;
   data: any;
+  fetchData: () => void;
 }
 
-function ModalReview({ openModal, CloseModal, data }: ModalReviewProps) {
+function ModalReview({ openModal, CloseModal, data, fetchData }: ModalReviewProps) {
   const [rating, setRating] = useState<number>(5);
   const user: any = useSelector((state: RootState) => state.user.userData);
   const books: BookType[] = useSelector((state: RootState) => state.book.books);
   const tools: any = useSelector((state: RootState) => state.tool.tools);
+  const dispatch = useAppDispatch();
   const [information, setInformation] = useState({
     username: user && user.lastname ? user.lastname + user.firstname : '',
     comment: '',
@@ -80,6 +83,13 @@ function ModalReview({ openModal, CloseModal, data }: ModalReviewProps) {
         })
         .then((res) => {
           console.log(res);
+          dispatch(getBook());
+          fetchData();
+          CloseModal();
+          setRating(5);
+          setInformation((prev) => {
+            return { ...prev, comment: '' };
+          });
         })
         .catch((error) => {
           console.log(error);
