@@ -412,7 +412,7 @@ export default function Cart() {
             />
 
             {/* thành tiền */}
-            <div className="bg-gray-100 mt-2 max-h-48 rounded-lg">
+            <div className="bg-gray-100 mt-9 max-h-48 rounded-lg ">
               <div className="grid grid-cols-2 border-b-2 max-h-12">
                 <div className="text-left p-2">Thành tiền</div>
                 <div className="text-right p-2">

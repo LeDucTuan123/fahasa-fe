@@ -20,46 +20,52 @@ export default function SpinLuckyVoucher() {
 
   const listGift = [
     { id: 1, title: 'Chúc bạn may mắn lần sau', percent: 15 / 100 },
-    { id: 2, title: 'Voucher giảm 8k ', code: String(faker.random.alphaNumeric(5)), valuev: 8000.0, percent: 15 / 100 },
+    {
+      id: 2,
+      title: 'Voucher giảm 8k ',
+      code: String(faker.random.alphaNumeric(15)),
+      valuev: 8000.0,
+      percent: 15 / 100,
+    },
     {
       id: 3,
       title: 'Mã giảm giá 20k ',
-      code: String(faker.random.alphaNumeric(5)),
+      code: String(faker.random.alphaNumeric(15)),
       valuev: 20000.0,
       percent: 15 / 100,
     },
     {
       id: 4,
       title: 'Mã giảm giá 30k ',
-      code: String(faker.random.alphaNumeric(5)),
+      code: String(faker.random.alphaNumeric(15)),
       valuev: 30000.0,
       percent: 15 / 100,
     },
     {
       id: 5,
       title: 'Mã giảm giá 50k ',
-      code: String(faker.random.alphaNumeric(5)),
+      code: String(faker.random.alphaNumeric(15)),
       valuev: 50000.0,
       percent: 10 / 100,
     },
     {
       id: 6,
       title: 'Mã giảm giá 10k ',
-      code: String(faker.random.alphaNumeric(5)),
+      code: String(faker.random.alphaNumeric(15)),
       valuev: 10000.0,
       percent: 10 / 100,
     },
     {
       id: 7,
       title: 'Mã giảm giá 99k ',
-      code: String(faker.random.alphaNumeric(5)),
+      code: String(faker.random.alphaNumeric(15)),
       valuev: 99000.0,
       percent: 10 / 100,
     },
     {
       id: 8,
       title: 'Mã siêu Voucher giảm 999k ',
-      code: String(faker.random.alphaNumeric(5)),
+      code: String(faker.random.alphaNumeric(15)),
       valuev: 999000.0,
       percent: 5 / 100,
     },
@@ -182,7 +188,7 @@ export default function SpinLuckyVoucher() {
           Quay thưởng
         </button>
         <div className="flex flex-col">
-          <p className="text-lg">Bạn có Lượt {countSpin} quay</p>
+          <p className="text-2xl">Bạn có Lượt {countSpin} quay</p>
         </div>
         <Modal
           dismissible
@@ -228,7 +234,10 @@ export default function SpinLuckyVoucher() {
                   <li>Tên mã: {showMsg.title}</li>
                   <li>Code: {showMsg.code}</li>
                   <li>ngày hết hạn: {getDate}</li>
-                  <li>Giảm giá: {showMsg.valuev}</li>
+                  <li>
+                    Giảm giá:{' '}
+                    {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(showMsg.valuev)}
+                  </li>
                   <li>Số lượng: 1</li>
                 </ul>
 

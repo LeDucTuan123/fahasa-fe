@@ -177,7 +177,7 @@ export default function Payment() {
     const applyMyVoucherLocal = applyMyVoucher && !applyMyVoucher[0] ? applyMyVoucher.valuev : 0;
     const cityShippingFee = information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000;
 
-    if (applyMyVoucher && voucher) {
+    if (applyMyVoucher && voucher && applyMyVoucher[0]) {
       return sum - (voucherValue + applyMyVoucherValue) + cityShippingFee;
     }
 
@@ -185,7 +185,7 @@ export default function Payment() {
       return sum - voucherValue + cityShippingFee;
     }
 
-    if (!voucher && applyMyVoucher) {
+    if (!voucher && applyMyVoucher && applyMyVoucher[0]) {
       return sum - applyMyVoucherValue + cityShippingFee;
     }
 
@@ -376,7 +376,7 @@ export default function Payment() {
         <div className="bg-white p-5 mt-4">
           <h3 className="uppercase font-bold text-[14px] border-b-2 pb-2">Mã khuyến mãi/Mã quà tặng</h3>
           <div className="mt-3">
-            <div className="flex items-center">
+            <div className="flex items-center pb-4">
               <label className="text-[15px] inline-block">Mã KM/Quà tặng</label>
               {voucher && (
                 <span className="mx-3 bg-[#FFB3234D] text-[#FFB323] py-1 px-2 rounded-lg font-bold flex items-center">
@@ -593,7 +593,7 @@ export default function Payment() {
       <ModalMyVoucher
         openMyModal={openMyModal}
         setCloseModal={() => setOpenMyModal(false)}
-        myVouchers={myVouchers}
+        myVouchers={myVouchers && myVouchers}
         productPay={cart}
         applyMyVoucher={applyMyVoucher}
         handleApplyMyVoucher={handleApplyMyVoucher}

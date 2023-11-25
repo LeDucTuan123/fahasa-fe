@@ -51,7 +51,7 @@ const CountdownTimer = ({ initialTime, onFinish, countSpin }: Props) => {
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
-  return <div>{countSpin === 0 && <p>Thời gian còn lại: {formatTime(timeLeft)}</p>}</div>;
+  return <div>{countSpin === 0 && <p className="text-2xl">Thời gian còn lại: {formatTime(timeLeft)}</p>}</div>;
 };
 
 export default CountdownTimer;

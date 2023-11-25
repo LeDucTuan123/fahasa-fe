@@ -1,8 +1,5 @@
 import { Icon } from '@iconify/react';
 import { Modal } from 'flowbite-react';
-import ProgressBar from './ProgressBar';
-import { Link } from 'react-router-dom';
-import { formatDateToDDMMYYYY } from 'src/util/SupportFnc';
 
 interface modalVoucherProps {
   openMyModal: boolean | undefined;
@@ -67,43 +64,13 @@ function ModalMyVoucher({
                     />
                   </div>
                   <div className="ml-3 flex-1 relative">
-                    <h2 className="font-semibold text-lg uppercase">
-                      Mã giảm {ConvertToVietNamDong(item[0].valuev)}000
-                    </h2>
+                    <h2 className="font-semibold text-lg uppercase">Mã giảm {ConvertToVietNamDong(item[0].valuev)}</h2>
                     <p className="text-[#7A7E7F] text-sm">Ngày hết hạn: {item[0].expdate}</p>
                     <p className="text-[#7A7E7F] text-sm">Số lượng còn lại: {item[0].quantity}</p>
                     <div className="grid grid-cols-3">
-                      <div className="col-span-2 grid grid-rows-2">
-                        {/* <div className="h-[5px] w-56 bg-gradient-to-r from-blue-500 to-blue-900 animate-pulse"></div>*/}
-                        {/* <ProgressBar
-                          totalMoney={item.condition}
-                          currentMoney={productPay?.reduce((accum, currentValue) => {
-                            return (
-                              accum +
-                              (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
-                                currentValue.quantity
-                            );
-                          }, 0)}
-                        /> */}
-                        {/* <div className="grid grid-cols-3">
-                          <p className="col-span-2 text-[10px]">
-                            Mua thêm{' '}
-                            {ConvertToVietNamDong(
-                              item.condition -
-                                productPay?.reduce((accum, currentValue) => {
-                                  return (
-                                    accum +
-                                    (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
-                                      currentValue.quantity
-                                  );
-                                }, 0),
-                            )}{' '}
-                            để nhận mã
-                          </p>
-                          <p className="text-[10px]">{ConvertToVietNamDong(item.condition)}</p>
-                        </div> */}
-                      </div>
-                      {applyMyVoucher && applyMyVoucher[0].id === item[0].id ? (
+                      <div className="col-span-2 grid grid-rows-2">{/* ... */}</div>
+                      {(applyMyVoucher && !applyMyVoucher[0] && applyMyVoucher.id === item[0].id) ||
+                      (applyMyVoucher && applyMyVoucher[0] && applyMyVoucher[0].id === item[0].id) ? (
                         <button
                           onClick={() => removeApplyMyVoucher()}
                           className="text-blue-500 border-2 border-blue-500 border-solid rounded hover:bg-blue-500 hover:text-white"
@@ -112,15 +79,6 @@ function ModalMyVoucher({
                         </button>
                       ) : (
                         <>
-                          {/* {item.condition -
-                            productPay?.reduce((accum, currentValue) => {
-                              return (
-                                accum +
-                                (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
-                                  currentValue.quantity
-                              );
-                            }, 0) <
-                          0 ? ( */}
                           {item[0].orders.length > 0 ? (
                             <span className="text-gray-500 text-lg">Đã sử dụng</span>
                           ) : (
@@ -131,14 +89,6 @@ function ModalMyVoucher({
                               Áp dụng
                             </button>
                           )}
-                          {/* ) : (
-                            <Link
-                              to={'/'}
-                              className="bg-blue-500 text-white rounded-lg me-2 leading-[30px] text-center"
-                            >
-                              Mua thêm
-                            </Link>
-                          )} */}
                         </>
                       )}
                     </div>
