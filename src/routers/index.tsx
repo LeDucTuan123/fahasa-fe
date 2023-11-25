@@ -21,12 +21,15 @@ import {
   ProfileOrder,
   Register,
   AdminCategory,
+  SpinLuckyVoucher,
+  ProfileMyvoucher,
   AdminSupport,
 } from './elements';
 
 import ProfileLayout from 'src/layouts/ProfileLayout';
 import AdminLayout from 'src/layouts/AdminLayout';
 import PaymentSuccess from 'src/sections/e-commerce/PaymentSuccess/PaymentSuccess';
+import { SpinLuckyLayout } from 'src/layouts/spinlucky-layout';
 
 export default function Route() {
   return useRoutes([
@@ -45,6 +48,13 @@ export default function Route() {
         { path: '/cart', element: <Cart /> },
         { path: '/payment', element: <Payment /> },
         { path: '/success/:id', element: <PaymentSuccess /> },
+      ],
+    },
+    {
+      element: <SpinLuckyLayout />,
+      children: [
+        { element: <SpinLuckyVoucher />, index: true },
+        { path: '/spin/lucky', element: <SpinLuckyVoucher /> },
       ],
     },
     // login
@@ -82,6 +92,7 @@ export default function Route() {
         { path: 'profile', element: <Profile /> },
         { path: 'address', element: <ProfileAddress /> },
         { path: 'order', element: <ProfileOrder /> },
+        { path: 'myvoucher', element: <ProfileMyvoucher /> },
       ],
     },
   ]);

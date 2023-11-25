@@ -7,7 +7,12 @@ import ModalVoucher from '../cart/ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
+
+import ModalMyVoucher from '../cart/ModalMyVoucher';
+import { apiPaths } from 'src/services/api/path-api';
+
 import ListAddress from './ListAddress';
+
 
 export default function Payment() {
   const navigate = useNavigate();
@@ -22,7 +27,7 @@ export default function Payment() {
   const sum = cart.reduce((accum: number, item: any) => {
     return accum + item.quantity * (item.price - (item.price * item.discount) / 100);
   }, 0);
-  const [voucher, setVoucher] = useState<any>(payment.voucher);
+  const [voucher, setVoucher] = useState<any>(payment.voucher && payment.voucher);
   const [vouchers, setVouchers] = useState<any[]>([]);
   const [information, setInformation] = useState<any>({
     firstname: '',
@@ -45,6 +50,17 @@ export default function Payment() {
   const books = useSelector((state: RootState) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
   const user: any = useSelector((state: RootState) => state.user.userData);
+
+
+  const [openMyModal, setOpenMyModal] = useState(false);
+  const [myVouchers, setMyVouchers] = useState([]);
+  const [applyMyVoucher, setApplyMyVoucher] = useState<any>(payment.myvoucher && payment.myvoucher);
+
+  console.log('payment myvoucher:', applyMyVoucher);
+
+  console.log(cart);
+
+
   useEffect(() => {
     fetch
       .get('/rest/voucher')
@@ -54,6 +70,10 @@ export default function Payment() {
       .catch((error) => {
         console.log(error);
       });
+    fetch
+      .get(`${apiPaths.myvoucher}/success/${user.id}`)
+      .then((res) => setMyVouchers(res.data))
+      .catch((error) => console.log(error));
     setInformation({
       firstname: user && user.firstname,
       lastname: user && user.lastname ? user.lastname : '',
@@ -165,17 +185,59 @@ export default function Payment() {
       return false;
     }
   }
+  console.log(myVouchers);
+
+  function calculateTotalAmount() {
+    const voucherValue = voucher ? voucher.valuev : 0;
+    const applyMyVoucherValue = applyMyVoucher && applyMyVoucher[0] ? applyMyVoucher[0].valuev : 0;
+    const applyMyVoucherLocal = applyMyVoucher && !applyMyVoucher[0] ? applyMyVoucher.valuev : 0;
+    const cityShippingFee = information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000;
+
+    if (applyMyVoucher && voucher && applyMyVoucher[0]) {
+      return sum - (voucherValue + applyMyVoucherValue) + cityShippingFee;
+    }
+
+    if (voucher && !applyMyVoucher) {
+      return sum - voucherValue + cityShippingFee;
+    }
+
+    if (!voucher && applyMyVoucher && applyMyVoucher[0]) {
+      return sum - applyMyVoucherValue + cityShippingFee;
+    }
+
+    if (!voucher && !applyMyVoucher) {
+      return sum + cityShippingFee;
+    }
+    //local
+    if (voucher && applyMyVoucher && !applyMyVoucher[0]) {
+      return sum - (voucherValue + applyMyVoucherLocal) + cityShippingFee;
+    }
+
+    if (!voucher && applyMyVoucher && !applyMyVoucher[0]) {
+      return sum - applyMyVoucherLocal + cityShippingFee;
+    }
+    /////
+    // Return a default value or handle other cases as needed
+    return sum;
+  }
+
+  console.log('user id: ', applyMyVoucher?.id);
 
   function handlePayment() {
     if (valid() && openForm) {
       fetch
         .post('/rest/order/payment', {
           orderdate: new Date(),
+
+          totalamount: calculateTotalAmount(),
+          receiver: information.fullname,
+
           totalamount:
             sum -
             (voucher ? voucher.valuev : 0) +
             (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
           receiver: information.firstname,
+
           ship: information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
           user: {
             id: user.id,
@@ -183,6 +245,13 @@ export default function Payment() {
           statuss: {
             id: 3,
           },
+
+          voucher: voucher && voucher.id ? { id: voucher.id } : null,
+          myvoucher:
+            (applyMyVoucher && !applyMyVoucher[0] && { id: applyMyVoucher.id }) ||
+            (applyMyVoucher && applyMyVoucher[0] && { id: applyMyVoucher[0].id }) ||
+            (!applyMyVoucher && !applyMyVoucher[0] && null),
+
           address: {
             firstname: information.firstname,
             lastname: information.lastname,
@@ -252,6 +321,7 @@ export default function Payment() {
             id: 3,
           },
           voucher: voucher ? { id: voucher.id } : null,
+
           orderdetails: cart.map((item: any) => {
             return {
               id: item.odid,
@@ -296,6 +366,16 @@ export default function Payment() {
       console.log('Có lỗi');
     }
   }
+
+  function handleApplyMyVoucher(id: number) {
+    console.log('id: ', id);
+    setApplyMyVoucher(
+      myVouchers.find((item: any) => {
+        console.log('item: ', item);
+        return item[0]?.id === id;
+      }),
+    );
+    console.log(applyMyVoucher);
 
   // phần này truyền cho ListAddress
   function changeToForm() {
@@ -419,7 +499,7 @@ export default function Payment() {
         <div className="bg-white p-5 mt-4">
           <h3 className="uppercase font-bold text-[14px] border-b-2 pb-2">Mã khuyến mãi/Mã quà tặng</h3>
           <div className="mt-3">
-            <div className="flex items-center">
+            <div className="flex items-center pb-4">
               <label className="text-[15px] inline-block">Mã KM/Quà tặng</label>
               {voucher && (
                 <span className="mx-3 bg-[#FFB3234D] text-[#FFB323] py-1 px-2 rounded-lg font-bold flex items-center">
@@ -435,6 +515,41 @@ export default function Payment() {
               <span
                 className="underline text-blue-600 hover:cursor-pointer"
                 onClick={() => setOpenModal(true)}
+              >
+                Chọn mã khuyến mãi
+              </span>
+            </div>
+            <h3 className="uppercase font-bold text-[14px] border-b-2 py-2">Mã khuyến mãi của tôi</h3>
+            <div className="flex items-center pt-2">
+              <label className="text-[15px] inline-block">Mã KM/Quà tặng</label>
+              {applyMyVoucher && applyMyVoucher[0] && (
+                <>
+                  <span className="mx-3 bg-[#FFB3234D] text-[#FFB323] py-1 px-2 rounded-lg font-bold flex items-center">
+                    Chọn mã thành công - Mã giảm giá {applyMyVoucher[0].valuev / 1000}k
+                    <Icon
+                      icon="system-uicons:cross"
+                      className="hover:cursor-pointer ml-1"
+                    />
+                  </span>
+                  ,
+                </>
+              )}
+              {applyMyVoucher && !applyMyVoucher[0] && (
+                <>
+                  <span className="mx-3 bg-[#FFB3234D] text-[#FFB323] py-1 px-2 rounded-lg font-bold flex items-center">
+                    Chọn mã thành công - Mã giảm giá {applyMyVoucher.valuev / 1000}k
+                    <Icon
+                      icon="system-uicons:cross"
+                      className="hover:cursor-pointer ml-1"
+                    />
+                  </span>
+                  ,
+                </>
+              )}
+
+              <span
+                className="underline text-blue-600 hover:cursor-pointer"
+                onClick={() => setOpenMyModal(true)}
               >
                 Chọn mã khuyến mãi
               </span>
@@ -493,6 +608,22 @@ export default function Payment() {
                     <p className="w-[150px] text-end text-[15px]">-{ConvertToVietNamDong(voucher.valuev)}</p>
                   </div>
                 )}
+                {applyMyVoucher && !applyMyVoucher[0] && (
+                  <div className="flex justify-end mt-1">
+                    <p className="text-[15px]">
+                      Giảm giá (Nhập mã thành công - Mã giảm giá {applyMyVoucher.valuev / 1000}K)
+                    </p>
+                    <p className="w-[150px] text-end text-[15px]">-{ConvertToVietNamDong(applyMyVoucher.valuev)}</p>
+                  </div>
+                )}
+                {applyMyVoucher && applyMyVoucher[0] && (
+                  <div className="flex justify-end mt-1">
+                    <p className="text-[15px]">
+                      Giảm giá (Nhập mã thành công - Mã giảm giá {applyMyVoucher[0].valuev / 1000}K)
+                    </p>
+                    <p className="w-[150px] text-end text-[15px]">-{ConvertToVietNamDong(applyMyVoucher[0].valuev)}</p>
+                  </div>
+                )}
 
                 <div className="flex justify-end mt-1">
                   <p className="text-[15px]">Phí vận chuyển (Giao hàng tiêu chuẩn)</p>
@@ -503,11 +634,52 @@ export default function Payment() {
                 <div className="flex justify-end mt-1">
                   <p className="text-[15px] font-bold">Tổng Số Tiền (gồm VAT)</p>
                   <p className="w-[150px] text-end text-[#F39801] font-semibold">
-                    {ConvertToVietNamDong(
-                      sum -
-                        (voucher ? voucher.valuev : 0) +
-                        (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
-                    )}
+                    {applyMyVoucher &&
+                      voucher &&
+                      applyMyVoucher[0] &&
+                      ConvertToVietNamDong(
+                        sum -
+                          (voucher.valuev + applyMyVoucher[0].valuev) +
+                          (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                      )}
+                    {voucher &&
+                      !applyMyVoucher &&
+                      ConvertToVietNamDong(
+                        sum -
+                          voucher.valuev +
+                          (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                      )}
+                    {!voucher &&
+                      applyMyVoucher &&
+                      applyMyVoucher[0] &&
+                      ConvertToVietNamDong(
+                        sum -
+                          applyMyVoucher[0].valuev +
+                          (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                      )}
+                    {!voucher &&
+                      !applyMyVoucher &&
+                      ConvertToVietNamDong(
+                        sum + (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                      )}
+
+                    {/*mới vô lấy myvoucher từ local */}
+                    {applyMyVoucher &&
+                      voucher &&
+                      !applyMyVoucher[0] &&
+                      ConvertToVietNamDong(
+                        sum -
+                          (voucher.valuev + applyMyVoucher.valuev) +
+                          (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                      )}
+                    {applyMyVoucher &&
+                      !voucher &&
+                      !applyMyVoucher[0] &&
+                      ConvertToVietNamDong(
+                        sum -
+                          applyMyVoucher.valuev +
+                          (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+                      )}
                   </p>
                 </div>
               </div>
@@ -542,6 +714,16 @@ export default function Payment() {
         applyVoucher={voucher}
         handleApplyVoucher={handleApplyVoucher}
         removeApplyVoucher={removeApplyVoucher}
+      />
+
+      <ModalMyVoucher
+        openMyModal={openMyModal}
+        setCloseModal={() => setOpenMyModal(false)}
+        myVouchers={myVouchers && myVouchers}
+        productPay={cart}
+        applyMyVoucher={applyMyVoucher}
+        handleApplyMyVoucher={handleApplyMyVoucher}
+        removeApplyMyVoucher={() => setApplyMyVoucher(undefined)}
       />
     </>
   );

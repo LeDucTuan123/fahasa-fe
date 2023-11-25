@@ -71,6 +71,12 @@ body {
   color: white;
 }
 
+.bg-lucky {
+  background-image: url('https://cdn.vectorstock.com/i/preview-1x/13/60/wheel-fortune-spinning-lucky-vector-37561360.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 /* css arrow */
 
 .ce-my-message-bubble {

@@ -122,6 +122,8 @@ function Form({
             onChange={(e) => handleChange(e)}
             placeholder="Nhập first name"
             className={
+              informationError.fullname.length > 0
+                ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600 '
               informationError.firstname.length > 0
                 ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
                 : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '

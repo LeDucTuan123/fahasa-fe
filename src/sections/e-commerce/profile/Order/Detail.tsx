@@ -14,6 +14,10 @@ interface DetailProps {
 }
 
 function Detail(props: DetailProps) {
+
+  console.log('orther: ', props.order);
+  console.log('product: ', props.products);
+
   const user: any = useSelector((state: RootState) => state.user.userData);
   const address: any =
     user.listAddress &&
@@ -38,6 +42,7 @@ function Detail(props: DetailProps) {
         console.log(error);
       });
   }
+
   return (
     <>
       <div className="flex justify-between items-center">

@@ -10,6 +10,8 @@ import { BookType } from 'src/types/book';
 import { ToolType } from 'src/types/tool';
 import { useNavigate } from 'react-router-dom';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
+import { apiPaths } from 'src/services/api/path-api';
+import ModalMyVoucher from './ModalMyVoucher';
 
 export default function Cart() {
   // const IsmUp = useResponsive('up', 'md');
@@ -17,9 +19,18 @@ export default function Cart() {
   const [productPay, setProductPay] = useState<Array<any>>([]);
   const [checkAll, setCheckAll] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openMyModal, setOpenMyModal] = useState(false);
+
   const [vouchers, setVouchers] = useState([]);
+  const [myVouchers, setMyVouchers] = useState([]);
+
   const [applyVoucher, setApplyVoucher] = useState<any>();
+  const [applyMyVoucher, setApplyMyVoucher] = useState<any>();
+
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const u = localStorage.getItem('user');
+  const user = u && JSON.parse(u);
+  const cartProduct = localStorage.getItem('cart');
   const cartProduct = localStorage.getItem('cart');
   const user: any = useSelector((state: RootState) => state.user.userData);
   const books = useSelector((state: RootState) => state.book.books);
@@ -29,7 +40,9 @@ export default function Cart() {
   useEffect(() => {
     async function test() {
       const voucher = await fetch.get('/rest/voucher');
+      const myVoucher = await fetch.get(`${apiPaths.myvoucher}/success/${user.id}`);
       setVouchers(voucher.data);
+      setMyVouchers(myVoucher.data);
       if (isLogin) {
         // lấy dữ liệu db đổ lên cart
         const res = await fetch.get(`/rest/order/cart/${user.id}`);
@@ -205,9 +218,22 @@ export default function Cart() {
   function handleApplyVoucher(id: number) {
     setApplyVoucher(
       vouchers.find((item: any) => {
+        console.log('item: ', item);
         return item.id === id;
       }),
     );
+    console.log(applyVoucher);
+  }
+
+  function handleApplyMyVoucher(id: number) {
+    console.log('id: ', id);
+    setApplyMyVoucher(
+      myVouchers.find((item: any) => {
+        console.log('item: ', item);
+        return item[0].id === id;
+      }),
+    );
+    console.log(applyMyVoucher);
   }
 
   function removeApplyVoucher() {
@@ -215,12 +241,24 @@ export default function Cart() {
   }
 
   function handleNavigateToPayment() {
+
+    localStorage.setItem(
+      'payment',
+      JSON.stringify({
+        cart: productPay,
+        voucher: applyVoucher && applyVoucher,
+        myvoucher: applyMyVoucher && applyMyVoucher[0],
+      }),
+    );
+    navigate('/payment');
+
     if (isLogin) {
       localStorage.setItem('payment', JSON.stringify({ cart: productPay, voucher: applyVoucher }));
       navigate('/payment');
     } else {
       navigate('/login');
     }
+
   }
 
   return (
@@ -377,13 +415,15 @@ export default function Cart() {
             <Voucher
               vouchers={vouchers}
               handleOpenModal={handleOpenModal}
+              handleOpenMyModal={() => setOpenMyModal(true)}
               productPay={productPay}
               handleApplyVoucher={handleApplyVoucher}
               applyVoucher={applyVoucher}
               removeApplyVoucher={removeApplyVoucher}
             />
+
             {/* thành tiền */}
-            <div className="bg-gray-100 mt-2 max-h-48 rounded-lg">
+            <div className="bg-gray-100 mt-9 max-h-48 rounded-lg ">
               <div className="grid grid-cols-2 border-b-2 max-h-12">
                 <div className="text-left p-2">Thành tiền</div>
                 <div className="text-right p-2">
@@ -410,20 +450,62 @@ export default function Cart() {
                 </div>
               )}
 
+              {applyMyVoucher && (
+                <div className="grid grid-cols-2 border-b-2 min-h-12">
+                  <div className="text-left p-2 flex flex-col">
+                    <span>Mã giảm {applyMyVoucher && applyMyVoucher[0].valuev / 1000}k</span>
+                    <span>Mã code: {applyMyVoucher && applyMyVoucher[0].code}</span>
+                  </div>
+                  <div className="text-right p-2">
+                    {ConvertToVietNamDong(applyMyVoucher && applyMyVoucher[0].valuev)}
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-5 min-h-12">
                 <strong className="col-span-3 text-left text-base p-2">Tổng số tiền (gồm VAT)</strong>
                 <strong className="col-span-2 text-right p-2 text-red-700 text-xl">
-                  {productPay && productPay?.length > 0 && applyVoucher ? (
+                  {(productPay && productPay?.length > 0 && applyVoucher) ||
+                  (productPay && productPay?.length > 0 && applyMyVoucher) ||
+                  (productPay && productPay?.length > 0 && applyVoucher && applyMyVoucher) ? (
                     <>
-                      {ConvertToVietNamDong(
-                        productPay?.reduce((accum, currentValue) => {
-                          return (
-                            accum +
-                            (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
-                              currentValue.quantity
-                          );
-                        }, 0) - applyVoucher.valuev,
-                      )}
+                      {applyVoucher &&
+                        !applyMyVoucher &&
+                        ConvertToVietNamDong(
+                          productPay?.reduce((accum, currentValue) => {
+                            return (
+                              accum +
+                              (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                currentValue.quantity
+                            );
+                          }, 0) - applyVoucher.valuev,
+                        )}
+
+                      {!applyVoucher &&
+                        applyMyVoucher &&
+                        ConvertToVietNamDong(
+                          productPay?.reduce((accum, currentValue) => {
+                            return (
+                              accum +
+                              (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                currentValue.quantity
+                            );
+                          }, 0) - applyMyVoucher[0].valuev,
+                        )}
+
+                      {applyVoucher &&
+                        applyMyVoucher &&
+                        ConvertToVietNamDong(
+                          productPay?.reduce((accum, currentValue) => {
+                            return (
+                              accum +
+                              (currentValue.price - (currentValue.price * currentValue.discount) / 100) *
+                                currentValue.quantity
+                            );
+                          }, 0) -
+                            applyVoucher.valuev -
+                            applyMyVoucher[0].valuev,
+                        )}
                     </>
                   ) : (
                     <>
@@ -470,6 +552,15 @@ export default function Cart() {
         applyVoucher={applyVoucher}
         handleApplyVoucher={handleApplyVoucher}
         removeApplyVoucher={removeApplyVoucher}
+      />
+      <ModalMyVoucher
+        openMyModal={openMyModal}
+        setCloseModal={() => setOpenMyModal(false)}
+        myVouchers={myVouchers}
+        productPay={productPay}
+        applyMyVoucher={applyMyVoucher}
+        handleApplyMyVoucher={handleApplyMyVoucher}
+        removeApplyMyVoucher={() => setApplyMyVoucher(undefined)}
       />
     </>
   );
