@@ -6,7 +6,11 @@ import { useAppDispatch } from 'src/redux/store';
 import Footer from './footer';
 import Header from './header';
 import Rightbar from './rightbar';
+
 import SpinLucky from './spinlucky';
+
+import { SupportEngine } from 'src/sections/e-commerce/BoxChat/supportEngine';
+
 
 export default function MainLayout() {
   const dispatch = useAppDispatch();
@@ -31,7 +35,11 @@ export default function MainLayout() {
           <Footer />
         </div>
 
+
         <SpinLucky />
+
+        <SupportEngine />
+
         <Rightbar />
       </div>
     </>

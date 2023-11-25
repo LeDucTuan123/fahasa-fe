@@ -22,7 +22,7 @@ function Order() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [user.id]);
 
   // thay đổi giữa table và detail
   function changeToDetail(id: number) {
@@ -64,6 +64,7 @@ function Order() {
           changeToTable={changeToTable}
           order={order}
           products={products}
+          setOrders={setOrders}
         />
       ) : (
         <Table

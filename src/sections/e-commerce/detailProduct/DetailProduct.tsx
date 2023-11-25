@@ -8,6 +8,9 @@ import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from 'src/redux/store';
 import { getBook } from 'src/redux/slice/bookSlice';
 import { getTools } from 'src/redux/slice/ToolSlice';
+import ProgressBar from './ProgressBar';
+import ModalReview from './ModalReview';
+import { ConvertToVietNamDong, formatDateToDDMMYYYY } from 'src/util/SupportFnc';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
@@ -17,6 +20,63 @@ export default function DetailProduct() {
   const u = localStorage.getItem('user');
   const user = u && JSON.parse(u);
   const dispatch = useAppDispatch();
+  const percent5Star =
+    data &&
+    (data?.reviews?.reduce((accum: any, item: any) => {
+      if (item.rating === 5) {
+        return accum + 1;
+      } else {
+        return accum;
+      }
+    }, 0) /
+      data.reviews.length) *
+      100;
+  const percent4Star =
+    data &&
+    (data?.reviews?.reduce((accum: any, item: any) => {
+      if (item.rating === 4) {
+        return accum + 1;
+      } else {
+        return accum;
+      }
+    }, 0) /
+      data.reviews.length) *
+      100;
+  const percent3Star =
+    data &&
+    (data?.reviews?.reduce((accum: any, item: any) => {
+      if (item.rating === 3) {
+        return accum + 1;
+      } else {
+        return accum;
+      }
+    }, 0) /
+      data.reviews.length) *
+      100;
+  const percent2Star =
+    data &&
+    (data?.reviews?.reduce((accum: any, item: any) => {
+      if (item.rating === 2) {
+        return accum + 1;
+      } else {
+        return accum;
+      }
+    }, 0) /
+      data.reviews.length) *
+      100;
+  const percent1Star =
+    data &&
+    (data?.reviews?.reduce((accum: any, item: any) => {
+      if (item.rating === 1) {
+        return accum + 1;
+      } else {
+        return accum;
+      }
+    }, 0) /
+      data.reviews.length) *
+      100;
+  //state để đóng mở modal
+  const [openModal, setOpenModal] = useState<boolean>(false);
   // Lấy danh sách book trong redux bookSlice
   const books: BookType[] = useSelector((state: any) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
@@ -111,6 +171,11 @@ export default function DetailProduct() {
     navigate('/cart');
   }
 
+  function closeModal() {
+    setOpenModal(false);
+  }
+
+  console.log(percent5Star);
   return (
     <div className="flex flex-col space-y-2 pt-4">
       <div className="flex flex-row">
@@ -228,8 +293,12 @@ export default function DetailProduct() {
           </div>
 
           <div className="flex flex-row items-center gap-2">
-            <div className="text-[2rem] font-extrabold text-gray-800">{data?.price} đ</div>
-            <span className="line-through">{data?.stock}</span>
+            <div className="text-[2rem] font-extrabold text-gray-800">
+              {ConvertToVietNamDong(
+                data?.price && data.discount ? data?.price - (data?.price * data?.discount) / 100 : 0,
+              )}
+            </div>
+            <span className="line-through">{ConvertToVietNamDong(data?.price ? data.price : 0)}</span>
             <div className="discount">{data?.discount}%</div>
           </div>
 
@@ -259,7 +328,7 @@ export default function DetailProduct() {
                 type="text"
                 value={counter}
                 style={{
-                  width: '25px',
+                  width: '40px',
                   height: '90%',
                   outline: 'none',
                   border: 'none',
@@ -281,7 +350,139 @@ export default function DetailProduct() {
 
       <hr />
 
+      <div className="mt-3 p-3 bg-white w-full rounded">
+        <h1 className="font-bold text-2xl text-[#333]">Đánh giá sản phẩm</h1>
+        <div className="flex mt-3 border-b-2 pb-3">
+          <div className="flex">
+            <div className="flex-col mx-10 items-center">
+              <p className="text-center font-bold text-2xl mt-7">{data?.reviews?.length}</p>
+              <p className="m-auto text-center font-bold text-xl">Lượt đánh giá</p>
+            </div>
+            <div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">5 sao</span>
+                <ProgressBar
+                  percent={percent5Star === undefined || isNaN(percent5Star) ? 0 : Math.round(percent5Star)}
+                />
+                <span className="ms-3 text-[#333] text-[18px]">
+                  {percent5Star === undefined || isNaN(percent5Star) ? '0%' : Math.round(percent5Star) + '%'}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[rgb(51,51,51)] text-[18px]">4 sao</span>
+                <ProgressBar
+                  percent={percent4Star === undefined || isNaN(percent4Star) ? 0 : Math.round(percent4Star)}
+                />
+                <span className="ms-3 text-[#333] text-[18px]">
+                  {percent4Star === undefined || isNaN(percent4Star) ? '0%' : Math.round(percent4Star) + '%'}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">3 sao</span>
+                <ProgressBar
+                  percent={percent3Star === undefined || isNaN(percent3Star) ? 0 : Math.round(percent3Star)}
+                />
+                <span className="ms-3 text-[#333] text-[18px]">
+                  {' '}
+                  {percent3Star === undefined || isNaN(percent3Star) ? '0%' : Math.round(percent3Star) + '%'}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">2 sao</span>
+                <ProgressBar
+                  percent={percent2Star === undefined || isNaN(percent2Star) ? 0 : Math.round(percent2Star)}
+                />
+                <span className="ms-3 text-[#333] text-[18px]">
+                  {' '}
+                  {percent2Star === undefined || isNaN(percent2Star) ? '0%' : Math.round(percent2Star) + '%'}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <span className="me-3 text-[#333] text-[18px]">1 sao</span>
+                <ProgressBar
+                  percent={percent1Star === undefined || isNaN(percent1Star) ? 0 : Math.round(percent1Star)}
+                />
+                <span className="ms-3 text-[#333] text-[18px]">
+                  {' '}
+                  {percent1Star === undefined || isNaN(percent1Star) ? '0%' : Math.round(percent1Star) + '%'}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-1">
+            <button
+              onClick={() => setOpenModal(true)}
+              className="m-auto py-1 px-20 font-semibold text-[18px] text-[#C92127] border-[#C92127] border-2 rounded-lg flex items-center"
+            >
+              <Icon
+                icon="solar:pen-linear"
+                className="me-2"
+              />
+              Viết đánh giá
+            </button>
+          </div>
+        </div>
+        <div>
+          {data?.reviews?.map((item: any) => {
+            return (
+              <div
+                key={item.id}
+                className="flex mt-5"
+              >
+                <div className="min-w-[172px]">
+                  <p className="font-semibold whitespace-nowrap overflow-hidden text-ellipsis w-full">
+                    {item.username}
+                  </p>
+                  <p className="text-[#7A7E7F]">{formatDateToDDMMYYYY(item.createdate)}</p>
+                </div>
+                <div>
+                  <div className="flex mb-3">
+                    {item.rating >= 1 && (
+                      <img
+                        src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                        alt="img"
+                      />
+                    )}
+                    {item.rating >= 2 && (
+                      <img
+                        src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                        alt="img"
+                      />
+                    )}
+                    {item.rating >= 3 && (
+                      <img
+                        src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                        alt="img"
+                      />
+                    )}
+                    {item.rating >= 4 && (
+                      <img
+                        src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                        alt="img"
+                      />
+                    )}
+                    {item.rating >= 5 && (
+                      <img
+                        src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/ico_star_yellow.svg"
+                        alt="img"
+                      />
+                    )}
+                  </div>
+                  <p>{item.comment}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <LatestBooks books={books} />
+      <ModalReview
+        openModal={openModal}
+        CloseModal={closeModal}
+        data={data}
+        fetchData={fetchData}
+      />
     </div>
   );
 }

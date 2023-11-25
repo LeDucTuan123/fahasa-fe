@@ -54,6 +54,12 @@ const List_Item_Sidebar: itemType[] = [
   },
   {
     id: 7,
+    title: 'Hỗ trợ',
+    icon: 'ic:round-support-agent',
+    path: '/admin/support',
+  },
+  {
+    id: 8,
     title: 'Khác',
     icon: 'icon-park-solid:other',
     path: '/admin/orther',

@@ -1,6 +1,8 @@
 import { Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getUser } from 'src/redux/slice/userSlice';
+import { useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios/Axios';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 
@@ -8,7 +10,9 @@ function PaymentSuccess() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [products, setProducts] = useState<any[]>([]);
+  const dispatch = useAppDispatch();
   useEffect(() => {
+    dispatch(getUser());
     const params = new URLSearchParams(window.location.search);
     const paymentMomoStatus = params.get('resultCode');
     const paymentVnStatus = params.get('vnp_TransactionStatus');
