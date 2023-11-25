@@ -9,6 +9,7 @@ interface VoucherProps {
   handleApplyVoucher: (id: number) => void;
   applyVoucher: any;
   removeApplyVoucher: () => void;
+  handleOpenMyModal: () => void;
 }
 
 function Voucher({
@@ -18,6 +19,7 @@ function Voucher({
   handleApplyVoucher,
   applyVoucher,
   removeApplyVoucher,
+  handleOpenMyModal,
 }: VoucherProps) {
   const [countVoucher, setCountVoucher] = useState(0);
 
@@ -244,13 +246,40 @@ function Voucher({
               );
             })}
         {/* footer khuyến mãi */}
-        <div className="grid grid-rows-2 p-2 text-left">
+        <div className="grid grid-rows-2 p-2 text-left gap-2">
           <button
             onClick={() => handleOpenModal()}
             className="grid grid-cols-5 row-span-2 h-10 bg-blue-300 text-blue-900 font-medium text-sm text-left ps-1 rounded-lg"
           >
             <div className="col-span-4 grid grid-cols-3 m-[10px]">
               <p className="col-span-2">{countVoucher} khuyến mãi đủ điều kiện</p>
+              <svg
+                className="col-span-1 mt-1"
+                xmlns="http://www.w3.org/2000/svg"
+                height="1em"
+                viewBox="0 0 512 512"
+              >
+                <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+              </svg>
+            </div>
+
+            <div className="col-span-1 p-3 flex justify-end items-end">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="1em"
+                viewBox="0 0 320 512"
+              >
+                <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
+              </svg>
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleOpenMyModal()}
+            className="grid grid-cols-5 row-span-2 h-10 bg-blue-300 text-blue-900 font-medium text-sm text-left ps-1 rounded-lg"
+          >
+            <div className="col-span-4 grid grid-cols-3 m-[10px]">
+              <p className="col-span-2">Sử dụng voucher của tôi</p>
               <svg
                 className="col-span-1 mt-1"
                 xmlns="http://www.w3.org/2000/svg"

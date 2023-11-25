@@ -1,12 +1,12 @@
-import { Modal } from 'flowbite-react';
-import { useEffect, useState } from 'react';
 import { faker } from '@faker-js/faker';
-import './style.css';
-import fetch from 'src/services/axios/Axios';
+import { Modal } from 'flowbite-react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
 import { Link } from 'src/components/Link';
+import { RootState } from 'src/redux/store';
+import fetch from 'src/services/axios/Axios';
 import CountdownTimer from './CountDownTimer';
+import './style.css';
 
 export default function SpinLuckyVoucher() {
   const [currentRotate, setCurrentRotate] = useState(0);
@@ -19,7 +19,7 @@ export default function SpinLuckyVoucher() {
   const user: any = useSelector((state: RootState) => state.user.userData);
 
   const listGift = [
-    { id: 1, title: 'Chúc bạn may mắn lần sau', code: String(faker.random.alphaNumeric(5)), percent: 15 / 100 },
+    { id: 1, title: 'Chúc bạn may mắn lần sau', percent: 15 / 100 },
     { id: 2, title: 'Voucher giảm 8k ', code: String(faker.random.alphaNumeric(5)), valuev: 8000.0, percent: 15 / 100 },
     {
       id: 3,
@@ -86,7 +86,7 @@ export default function SpinLuckyVoucher() {
       .toString()
       .padStart(2, '0')}-${futureDate.getDate().toString().padStart(2, '0')}`;
     setGetDate(String(formattedFutureDate));
-    if (gift.id !== '1') {
+    if (gift.id !== 1) {
       try {
         fetch({
           url: 'http://localhost:8080/rest/myvoucher',

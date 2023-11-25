@@ -9,6 +9,8 @@ interface DetailProps {
 }
 
 function Detail(props: DetailProps) {
+  console.log('orther: ', props.order);
+  console.log('product: ', props.products);
   return (
     <>
       <div

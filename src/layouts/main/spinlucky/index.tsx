@@ -1,27 +1,6 @@
-import { Icon } from '@iconify/react';
-import React, { useState } from 'react';
 import { Link } from 'src/components/Link';
 
 export default function SpinLucky() {
-  const [isShowRightbar, setIsShowSidebar] = useState(false);
-  const [valueRightbar, setValueRightbar] = useState('');
-
-  const handleButtonFavorite = () => {
-    setIsShowSidebar(true);
-    setValueRightbar('favorite');
-    if (isShowRightbar && valueRightbar === 'favorite') {
-      setIsShowSidebar(false);
-    }
-  };
-
-  const handleButtonSuggest = () => {
-    setIsShowSidebar(true);
-    setValueRightbar('suggest');
-    if (isShowRightbar && valueRightbar === 'suggest') {
-      setIsShowSidebar(false);
-    }
-  };
-
   return (
     <Link to="/spin/lucky">
       <div className="absolute w-12 h-12 rounded-tl-lg rounded-bl-lg shadow-2xl top-80 flex flex-row right-4 cursor-pointer transform  duration-300">
