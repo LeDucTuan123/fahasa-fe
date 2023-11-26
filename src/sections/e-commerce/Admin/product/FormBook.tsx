@@ -62,7 +62,7 @@ export default function FormBook() {
             description: dataBook.description,
             images: String(dataBook.images),
             product: dataBook.product,
-            // cats: dataBook.cats,
+            cats: dataBook.cats,
           }),
         }).then(() => {});
         toast.success('Thêm sản phẩm thành công');
@@ -72,6 +72,7 @@ export default function FormBook() {
           //khi thêm thành công thì update lại state khỏi cần load lại page
           ...prev,
           {
+            id: dataBook.id,
             author: dataBook.author,
             description: dataBook.description,
             discount: dataBook.discount,
@@ -234,15 +235,7 @@ export default function FormBook() {
   };
 
   const handleResetForm = () => {
-    setDataBook((prev) => ({
-      ...prev,
-      id: '',
-      author: '',
-      description: '',
-      discount: 0,
-      title: '',
-      price: 0,
-    }));
+    setDataBook(formBook);
   };
 
   return (
