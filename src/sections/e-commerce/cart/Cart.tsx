@@ -28,9 +28,8 @@ export default function Cart() {
   const [applyMyVoucher, setApplyMyVoucher] = useState<any>();
 
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
-  const u = localStorage.getItem('user');
-  const user = u && JSON.parse(u);
-  const cartProduct = localStorage.getItem('cart');
+  // const u = localStorage.getItem('user');
+  // const user = u && JSON.parse(u);
   const cartProduct = localStorage.getItem('cart');
   const user: any = useSelector((state: RootState) => state.user.userData);
   const books = useSelector((state: RootState) => state.book.books);
@@ -241,7 +240,6 @@ export default function Cart() {
   }
 
   function handleNavigateToPayment() {
-
     localStorage.setItem(
       'payment',
       JSON.stringify({
@@ -253,12 +251,14 @@ export default function Cart() {
     navigate('/payment');
 
     if (isLogin) {
-      localStorage.setItem('payment', JSON.stringify({ cart: productPay, voucher: applyVoucher }));
+      localStorage.setItem(
+        'payment',
+        JSON.stringify({ cart: productPay, voucher: applyVoucher, myvoucher: applyMyVoucher }),
+      );
       navigate('/payment');
     } else {
       navigate('/login');
     }
-
   }
 
   return (

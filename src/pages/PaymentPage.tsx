@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import FormPayment from 'src/sections/e-commerce/payment';
+import { Payment } from 'src/sections/e-commerce/payment';
 
 export default function PaymentPage() {
   return (
@@ -9,7 +9,7 @@ export default function PaymentPage() {
         <title>Payment</title>
       </Helmet>
 
-      <FormPayment />
+      <Payment />
     </>
   );
 }
