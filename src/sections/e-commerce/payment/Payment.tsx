@@ -13,7 +13,6 @@ import { apiPaths } from 'src/services/api/path-api';
 
 import ListAddress from './ListAddress';
 
-
 export default function Payment() {
   const navigate = useNavigate();
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
@@ -51,7 +50,6 @@ export default function Payment() {
   const tools = useSelector((state: RootState) => state.tool.tools);
   const user: any = useSelector((state: RootState) => state.user.userData);
 
-
   const [openMyModal, setOpenMyModal] = useState(false);
   const [myVouchers, setMyVouchers] = useState([]);
   const [applyMyVoucher, setApplyMyVoucher] = useState<any>(payment.myvoucher && payment.myvoucher);
@@ -59,7 +57,6 @@ export default function Payment() {
   console.log('payment myvoucher:', applyMyVoucher);
 
   console.log(cart);
-
 
   useEffect(() => {
     fetch
@@ -75,9 +72,9 @@ export default function Payment() {
       .then((res) => setMyVouchers(res.data))
       .catch((error) => console.log(error));
     setInformation({
-      firstname: user && user.firstname,
-      lastname: user && user.lastname ? user.lastname : '',
-      phone: user && user.phone ? user.phone : '',
+      firstname: user && user.firstname === null ? '' : user.firstname,
+      lastname: user && user.lastname === null ? '' : user.lastname,
+      phone: user && user.phone === null ? '' : user.phone,
       address: '',
       city: '',
       district: '',
@@ -107,7 +104,7 @@ export default function Payment() {
   function validation(i: any) {
     let error = { firstname: '', lastname: '', phone: '', address: '', city: '', district: '', ward: '' };
     const phoneNumberRegex = /^(0[1-9])+([0-9]{8})\b/;
-    if (i.firstname.trim().length === 0) {
+    if (i.firstname.trim().length === 0 || i.firstname === null) {
       error.firstname = 'Thông tin này không được để trống';
     }
 
@@ -186,36 +183,38 @@ export default function Payment() {
     }
   }
   console.log(myVouchers);
-
+  console.log(address);
   function calculateTotalAmount() {
     const voucherValue = voucher ? voucher.valuev : 0;
-    const applyMyVoucherValue = applyMyVoucher && applyMyVoucher[0] ? applyMyVoucher[0].valuev : 0;
-    const applyMyVoucherLocal = applyMyVoucher && !applyMyVoucher[0] ? applyMyVoucher.valuev : 0;
+    const applyMyVoucherValue = applyMyVoucher && applyMyVoucher.length > 0 ? applyMyVoucher[0].valuev : 0;
+    const applyMyVoucherLocal = applyMyVoucher && applyMyVoucher.length === 0 ? applyMyVoucher.valuev : 0;
     const cityShippingFee = information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000;
+    const cityAddress = address && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000;
 
-    if (applyMyVoucher && voucher && applyMyVoucher[0]) {
-      return sum - (voucherValue + applyMyVoucherValue) + cityShippingFee;
+    if (applyMyVoucher && voucher && applyMyVoucher.length > 0) {
+      return sum - (voucherValue + applyMyVoucherValue) + (openForm ? cityShippingFee : cityAddress);
     }
 
     if (voucher && !applyMyVoucher) {
-      return sum - voucherValue + cityShippingFee;
+      return sum - voucherValue + (openForm ? cityShippingFee : cityAddress);
     }
 
-    if (!voucher && applyMyVoucher && applyMyVoucher[0]) {
-      return sum - applyMyVoucherValue + cityShippingFee;
+    if (!voucher && applyMyVoucher && applyMyVoucher.length > 0) {
+      return sum - applyMyVoucherValue + (openForm ? cityShippingFee : cityAddress);
     }
 
     if (!voucher && !applyMyVoucher) {
-      return sum + cityShippingFee;
+      return sum + (openForm ? cityShippingFee : cityAddress);
     }
     //local
-    if (voucher && applyMyVoucher && !applyMyVoucher[0]) {
-      return sum - (voucherValue + applyMyVoucherLocal) + cityShippingFee;
+    if (voucher && applyMyVoucher && applyMyVoucher.length === 0) {
+      return sum - (voucherValue + applyMyVoucherLocal) + (openForm ? cityShippingFee : cityAddress);
     }
 
-    if (!voucher && applyMyVoucher && !applyMyVoucher[0]) {
-      return sum - applyMyVoucherLocal + cityShippingFee;
+    if (!voucher && applyMyVoucher && applyMyVoucher.length === 0) {
+      return sum - applyMyVoucherLocal + (openForm ? cityShippingFee : cityAddress);
     }
+
     /////
     // Return a default value or handle other cases as needed
     return sum;
@@ -231,13 +230,6 @@ export default function Payment() {
 
           totalamount: calculateTotalAmount(),
           receiver: information.fullname,
-
-          totalamount:
-            sum -
-            (voucher ? voucher.valuev : 0) +
-            (information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
-          receiver: information.firstname,
-
           ship: information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
           user: {
             id: user.id,
@@ -245,12 +237,11 @@ export default function Payment() {
           statuss: {
             id: 3,
           },
-
           voucher: voucher && voucher.id ? { id: voucher.id } : null,
           myvoucher:
-            (applyMyVoucher && !applyMyVoucher[0] && { id: applyMyVoucher.id }) ||
-            (applyMyVoucher && applyMyVoucher[0] && { id: applyMyVoucher[0].id }) ||
-            (!applyMyVoucher && !applyMyVoucher[0] && null),
+            (applyMyVoucher && applyMyVoucher.length === 0 && { id: applyMyVoucher.id }) ||
+            (applyMyVoucher && applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id }) ||
+            (!applyMyVoucher && null),
 
           address: {
             firstname: information.firstname,
@@ -262,7 +253,6 @@ export default function Payment() {
             address: information.address,
             user: { id: user.id },
           },
-          voucher: voucher ? { id: voucher.id } : null,
           orderdetails: cart.map((item: any) => {
             return {
               id: item.odid,
@@ -307,10 +297,10 @@ export default function Payment() {
       fetch
         .post('/rest/order/payment', {
           orderdate: new Date(),
-          totalamount:
-            sum -
-            (voucher ? voucher.valuev : 0) +
-            (address.city && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
+          totalamount: calculateTotalAmount(),
+          // sum -
+          // (voucher ? voucher.valuev : 0) +
+          // (address.city && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000),
           receiver: address.lastname + ' ' + address.firstname,
           ship: address.city && address.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
           user: {
@@ -321,7 +311,10 @@ export default function Payment() {
             id: 3,
           },
           voucher: voucher ? { id: voucher.id } : null,
-
+          myvoucher:
+            (applyMyVoucher && applyMyVoucher.length === 0 && { id: applyMyVoucher.id }) ||
+            (applyMyVoucher && applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id }) ||
+            (!applyMyVoucher && null),
           orderdetails: cart.map((item: any) => {
             return {
               id: item.odid,
@@ -376,7 +369,7 @@ export default function Payment() {
       }),
     );
     console.log(applyMyVoucher);
-
+  }
   // phần này truyền cho ListAddress
   function changeToForm() {
     setOpenForm(true);
