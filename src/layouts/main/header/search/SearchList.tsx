@@ -12,7 +12,6 @@ interface Props {
 
 export function SearchDefault({ data }: Props) {
   const dispatch = useAppDispatch();
-  console.log(data);
   return (
     <>
       <p className="text-xl font-bold">Từ khóa hot</p>

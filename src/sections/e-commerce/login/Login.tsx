@@ -5,10 +5,15 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { login, setIsLogin } from 'src/redux/slice/authSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
+import { getUser } from 'src/redux/slice/userSlice';
+import { useNavigate } from 'react-router-dom';
+import ForgotPassword from './ForgotPassword';
 
 export default function Login() {
   const dispatch = useAppDispatch();
+  const user: any = useSelector((state: RootState) => state.user.userData);
 
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const loading = useSelector((state: RootState) => state.auth.loading);
   const error = useSelector((state: RootState) => state.auth.error);
 
@@ -38,7 +43,9 @@ export default function Login() {
     }
 
     dispatch(login({ email, password }));
+    dispatch(getUser());
   };
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
 
@@ -46,7 +53,13 @@ export default function Login() {
     if (token) {
       dispatch(setIsLogin(true));
     }
-  }, [dispatch]);
+
+    if (isLogin) {
+      navigate('/');
+    }
+  }, [dispatch, isLogin, user]);
+
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
@@ -127,7 +140,12 @@ export default function Login() {
               Đăng nhập với Google
             </button>
 
-            <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
+            <p
+              onClick={() => {
+                setOpenModal(true);
+              }}
+              className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300"
+            >
               Quên mật khẩu?
             </p>
 
@@ -152,6 +170,7 @@ export default function Login() {
           </div>
         </div>
       </section>
+      {openModal && <ForgotPassword onClose={() => setOpenModal(false)} />}
     </>
   );
 }

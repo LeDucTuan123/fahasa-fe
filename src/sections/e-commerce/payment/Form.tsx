@@ -2,21 +2,21 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 interface FormProps {
-  setAddress: React.Dispatch<any>;
   informationError: any;
   setInformationError: React.Dispatch<any>;
   information: any;
   setInformation: React.Dispatch<any>;
   validation: (i: any) => any;
+  changeToListAddress: () => void;
 }
 
 function Form({
-  setAddress,
   informationError,
   information,
   setInformationError,
   setInformation,
   validation,
+  changeToListAddress,
 }: FormProps) {
   // các state để lưu địa chỉ
   const [listAddress, setListAddress] = useState<Array<any>>([]);
@@ -42,15 +42,16 @@ function Form({
     });
     if (c) {
       setListDistrics(c.Districts);
-      setAddress((a: any) => {
-        return { ...a, city: c.Name };
+      setInformation((i: any) => {
+        return { ...i, city: c.Name };
       });
     } else {
       setListDistrics([]);
+      setInformation((i: any) => {
+        return { ...i, city: '', district: '', ward: '' };
+      });
     }
     setListWards([]);
-
-    setInformationError(() => validation({ ...information, city: e.target.value }));
   }
 
   // hàm sẽ chạy khi chọn phường
@@ -60,25 +61,30 @@ function Form({
     });
     if (d) {
       setListWards(d.Wards);
-      setAddress((a: any) => {
-        return { ...a, distrct: d.Name };
+      setInformation((i: any) => {
+        return { ...i, district: d.Name };
       });
     } else {
       setListWards([]);
+      setInformation((i: any) => {
+        return { ...i, district: '', ward: '' };
+      });
     }
-    setInformationError(() => validation({ ...information, district: e.target.value }));
   }
-
+  // hàm sẽ chạy khi chọn xã
   function handleChangeWard(e: React.ChangeEvent<HTMLSelectElement>) {
     const w = listWards.find((item) => {
       return item.Id === e.target.value;
     });
     if (w) {
-      setAddress((a: any) => {
-        return { ...a, ward: w.Name };
+      setInformation((i: any) => {
+        return { ...i, ward: w.Name };
+      });
+    } else {
+      setInformation((i: any) => {
+        return { ...i, ward: '' };
       });
     }
-    setInformationError(() => validation({ ...information, ward: e.target.value }));
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -94,52 +100,60 @@ function Form({
 
     setInformationError(() => validation(updatedInfo));
   }
-
+  console.log('informationErr: ', informationError);
   return (
     <div className="bg-white p-5 mt-4">
-      <h3 className="uppercase font-bold text-[14px] border-b-2 pb-2">Địa chỉ giao hàng</h3>
+      <div className="flex justify-between border-b-2">
+        <h3 className="uppercase font-bold text-[14px]  pb-2">Địa chỉ giao hàng</h3>
+        <button
+          className="text-[#007bff] font-semibold hover:font-bold"
+          onClick={() => changeToListAddress()}
+        >
+          Danh sách địa chỉ có sẵn
+        </button>
+      </div>
       <div className="mt-3">
         <div>
-          <label className="text-[15px] mr-3 w-[170px] inline-block">Họ và tên người nhận</label>
+          <label className="text-[15px] mr-3 w-[170px] inline-block">First Name</label>
           <input
             type="text"
-            name="fullname"
-            value={information.fullname}
+            name="firstname"
+            value={information.firstname}
             onChange={(e) => handleChange(e)}
-            placeholder="Nhập họ và tên người nhận"
+            placeholder="Nhập first name"
             className={
-              informationError.fullname.length > 0
+              informationError.firstname.length > 0
                 ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
                 : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
             }
           />
         </div>
-        {informationError.fullname.length > 0 && (
+        {informationError.firstname.length > 0 && (
           <div className="mt-2">
             <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
-            <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.fullname}</p>
+            <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.firstname}</p>
           </div>
         )}
 
         <div className="mt-4">
-          <label className="text-[15px] mr-3 w-[170px] inline-block">Email</label>
+          <label className="text-[15px] mr-3 w-[170px] inline-block">Last name</label>
           <input
-            type="email"
-            name="email"
-            value={information.email}
-            placeholder="Nhập email"
+            type="text"
+            name="lastname"
+            value={information.lastname}
+            placeholder="Nhập lastname"
             onChange={(e) => handleChange(e)}
             className={
-              informationError.email.length > 0
+              informationError.lastname.length > 0
                 ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
                 : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
             }
           />
         </div>
-        {informationError.email.length > 0 && (
+        {informationError.lastname.length > 0 && (
           <div className="mt-2">
             <label className="text-[15px] mr-3 w-[170px] inline-block"></label>
-            <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.email}</p>
+            <p className="inline-block text-[13px] text-red-600 font-semibold">{informationError.lastname}</p>
           </div>
         )}
         <div className="mt-4">
@@ -152,7 +166,7 @@ function Form({
             placeholder="Ví dụ: 0979123xxx (10 ký tự số)"
             maxLength={10}
             className={
-              informationError.email.length > 0
+              informationError.phone.length > 0
                 ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
                 : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
             }
@@ -170,7 +184,7 @@ function Form({
             onChange={(e) => handleChangeCity(e)}
             className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
           >
-            <option value="-1">-- Chọn tỉnh thành --</option>
+            <option value="">-- Chọn tỉnh thành --</option>
             {listAddress &&
               listAddress.map((item) => {
                 return (
@@ -197,7 +211,7 @@ function Form({
             onChange={(e) => handleChangeDistric(e)}
             className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
           >
-            <option value="-1">-- Chọn quận huyện --</option>
+            <option value="">-- Chọn quận huyện --</option>
             {listDistrics &&
               listDistrics.map((item) => {
                 return (
@@ -224,7 +238,7 @@ function Form({
             disabled={listWards && listWards.length === 0}
             className="py-1 text-[14px] font-bold outline-1 outline-blue-300 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057]"
           >
-            <option value="-1">-- Chọn phường xã --</option>
+            <option value="">-- Chọn phường xã --</option>
             {listWards &&
               listWards.map((item) => {
                 return (
@@ -253,7 +267,7 @@ function Form({
             onChange={(e) => handleChange(e)}
             placeholder="Nhập địa chỉ nhận hàng"
             className={
-              informationError.email.length > 0
+              informationError.address.length > 0
                 ? 'py-1 text-[14px] font-bold outline outline-1 border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] outline-red-600'
                 : 'py-1 text-[14px] font-bold border-[#ced4da] rounded-sm h-[30px] w-[446px] text-[#495057] '
             }

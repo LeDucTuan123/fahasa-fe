@@ -5,6 +5,12 @@ import { getBook } from 'src/redux/slice/bookSlice';
 import { useAppDispatch } from 'src/redux/store';
 import Footer from './footer';
 import Header from './header';
+import Rightbar from './rightbar';
+
+import SpinLucky from './spinlucky';
+
+import { SupportEngine } from 'src/sections/e-commerce/BoxChat/supportEngine';
+
 
 export default function MainLayout() {
   const dispatch = useAppDispatch();
@@ -16,15 +22,26 @@ export default function MainLayout() {
 
   return (
     <>
-      <Header />
+      <div className="relative h-screen overflow-x-hidden">
+        <div className="h-full overflow-y-scroll">
+          <Header />
 
-      <main className="bg-[#f0f0f0] pb-5 ">
-        <div className="lg:container w-full ml-auto mr-auto block box-border">
-          <Outlet />
+          <main className="bg-[#f0f0f0] pb-5 ">
+            <div className=" lg:container w-full ml-auto mr-auto block box-border ">
+              <Outlet />
+            </div>
+          </main>
+
+          <Footer />
         </div>
-      </main>
 
-      <Footer />
+
+        <SpinLucky />
+
+        <SupportEngine />
+
+        <Rightbar />
+      </div>
     </>
   );
 }

@@ -2,6 +2,8 @@
     width: 40px;
     height: 40px;
     border-radius: 3px;
+    border: 1px dotted red;
+    margin: 5px;
 }
 
 .pagination button.active{
