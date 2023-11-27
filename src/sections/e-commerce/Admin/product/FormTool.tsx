@@ -34,12 +34,12 @@ export default function FormTool() {
   useEffect(() => {
     fetch
       .get(apiPaths.school2)
-      .then((res) => setfetchDataTool(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res: any) => setfetchDataTool(res.data))
+      .catch((err: any) => console.log(err.message));
     fetch
       .get(apiPaths.category)
-      .then((res) => setfetchDataCate(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res: any) => setfetchDataCate(res.data))
+      .catch((err: any) => console.log(err.message));
   }, []);
 
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -68,7 +68,7 @@ export default function FormTool() {
             product: dataTool.product,
             category: dataTool.category,
           }),
-        }).then((res) => {
+        }).then((res: any) => {
           toast.success('Thêm sản phẩm thành công');
           setIsLoading(false);
           return setfetchDataTool((prev) => [

@@ -34,8 +34,8 @@ export default function FormBook() {
   useEffect(() => {
     fetch
       .get(apiPaths.book)
-      .then((res) => setfetchDataBook(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res: any) => setfetchDataBook(res.data))
+      .catch((err: any) => console.log(err.message));
   }, []);
 
   const onDrop = useCallback((acceptedFiles: any) => {
