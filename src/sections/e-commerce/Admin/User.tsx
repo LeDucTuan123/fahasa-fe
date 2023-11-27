@@ -159,12 +159,7 @@ export default function User() {
               >
                 Số điện thoại
               </th>
-              <th
-                scope="col"
-                className="px-6 py-3"
-              >
-                Địa chỉ
-              </th>
+
               <th
                 scope="col"
                 className="px-6 py-3"
@@ -204,11 +199,7 @@ export default function User() {
                 </td>
                 <td className="px-6 py-4 max-w-[220px]">{user.email.length > 25 ? `${user.email.slice(0, 25)}...` : user.email}</td>
                 <td className="px-6 py-4 max-w-[150px]">{user.phone}</td>
-                <td className="px-6 py-4 max-w-[170px]" >
-                  {user.address && user.address.length > 20
-                    ? `${user.address.substring(0, 20)}...`
-                    : user.address}
-                </td>
+
                 <td className="px-6 py-4 max-w-[170px]" >{user.role}</td>
                 <td className="px-6 py-4 max-w-[170px] text-center">
                   <input
