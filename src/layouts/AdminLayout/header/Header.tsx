@@ -1,8 +1,35 @@
 import { Icon } from '@iconify/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { setIsLogin } from 'src/redux/slice/authSlice';
+import { getUser } from 'src/redux/slice/userSlice';
+import { RootState, useAppDispatch } from 'src/redux/store';
 
 export default function Header() {
+  const dispatch = useAppDispatch();
   const [isShow, setIshow] = useState(true);
+
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const user: any = useSelector((state: RootState) => state.user.userData);
+
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (token) {
+      dispatch(setIsLogin(true));
+    }
+    if (isLogin === true || token) {
+      dispatch(getUser());
+    }
+  }, [dispatch]);
+  // const isAdmin = user.authorities[0].authority === 'ADMIN';
+  const isAdmin = user && user.authorities && user.authorities[0].authority === 'USER';
+  useEffect(() => {
+    if (!isAdmin) {
+      <Navigate to={'/'} />;
+    }
+  });
 
   return (
     <>

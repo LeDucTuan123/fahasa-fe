@@ -25,6 +25,7 @@ let level3: any = null;
 export default function Header() {
   // const user = useSelector((state: RootState) => state.user.userData);
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const user: any = useSelector((state: RootState) => state.user.userData);
 
   // Đây là đoạn code gọi api category -- start
   const [categoryLevel1, setCategoryLevel1] = useState([]);
@@ -281,10 +282,29 @@ export default function Header() {
                       {isLogin && (
                         <div className="w-[250px] top-[65px] z-10 right-0 absolute bg-slate-200 rounded-lg border shadow items-center">
                           <div className="px-2 py-2">
+                            {user && user.authorities[0] && user.authorities[0].authority === 'ADMIN' && (
+                              <>
+                                <div className="p-1 hover:bg-gray-50">
+                                  <Link to="/admin/dashboard">
+                                    <div className="flex items-center w-full">
+                                      <Icon
+                                        icon="grommet-icons:user-admin"
+                                        className="text-xl"
+                                      />
+                                      <span className="px-2">Thông tin Tài Khoản</span>
+                                    </div>
+                                  </Link>
+                                </div>
+                                <hr className="border-gray-300 py-1" />
+                              </>
+                            )}
                             <div className="p-1 hover:bg-gray-50">
                               <Link to="/member/profile">
                                 <div className="flex items-center w-full">
-                                  <Icon icon="ri:user-settings-line" />
+                                  <Icon
+                                    icon="ri:user-settings-line"
+                                    className="text-xl"
+                                  />
                                   <span className="px-2">Thông tin Tài Khoản</span>
                                 </div>
                               </Link>
@@ -293,7 +313,10 @@ export default function Header() {
                             <div className="p-1 hover:bg-gray-50">
                               <Link to="/member/order">
                                 <div className="flex items-center w-full">
-                                  <Icon icon="icon-park-outline:transaction-order" />
+                                  <Icon
+                                    icon="icon-park-outline:transaction-order"
+                                    className="text-xl"
+                                  />
                                   <span className="px-2">Đơn hàng của tôi</span>
                                 </div>
                               </Link>
@@ -302,7 +325,10 @@ export default function Header() {
                             <div className="p-1 hover:bg-gray-50">
                               <div onClick={logout}>
                                 <div className="flex items-center">
-                                  <Icon icon="heroicons-outline:logout" />
+                                  <Icon
+                                    icon="heroicons-outline:logout"
+                                    className="text-xl"
+                                  />
                                   <span className="px-2">Đăng xuất</span>
                                 </div>
                               </div>
