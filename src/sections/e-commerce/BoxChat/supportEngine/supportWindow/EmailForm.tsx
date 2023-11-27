@@ -54,7 +54,7 @@ const EmailForm = (props: any) => {
         ...styles.emailFormWindow,
         ...{
           height: props.visible ? '100%' : '0px',
-          display: props.visible ? 'flex' : 'none',
+          display: props.visible ? 'block' : 'none',
         },
       }}
     >
