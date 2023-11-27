@@ -229,7 +229,7 @@ export default function Payment() {
           orderdate: new Date(),
 
           totalamount: calculateTotalAmount(),
-          receiver: information.fullname,
+          receiver: information.lastname + information.firstname,
           ship: information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
           user: {
             id: user.id,
