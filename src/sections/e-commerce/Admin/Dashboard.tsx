@@ -40,20 +40,20 @@ export default function Dashboard() {
   useEffect(() => {
     fetch
       .get(apiPaths.order)
-      .then((res) => setFetchDataOrder(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res: any) => setFetchDataOrder(res.data))
+      .catch((err: any) => console.log(err.message));
   }, []);
   useEffect(() => {
     fetch
       .get(apiPaths.book)
-      .then((res) => setbooks(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res: any) => setbooks(res.data))
+      .catch((err: any) => console.log(err.message));
   }, []);
   useEffect(() => {
     fetch
       .get(apiPaths.school)
-      .then((res) => settools(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res: any) => settools(res.data))
+      .catch((err: any) => console.log(err.message));
   }, []);
   
   useEffect(() => {
@@ -159,7 +159,7 @@ export default function Dashboard() {
             </span>
             <div className="relative">
               <p className="text-gray-500 text-xl">Tổng doanh thu</p>
-              <span>{totalRevenue}đ</span>
+              <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}</span>
               {/* <span className="text-green-400 text-sm absolute top-6 pl-1">+300$</span> */}
             </div>
           </div>
