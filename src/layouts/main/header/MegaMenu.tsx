@@ -36,9 +36,9 @@ const MegaMenu = ({
   };
 
   const handelOnClickCate2 = (e: CategoryType) => {
-    if (e.id === 1 || e.id === 2) {
+    if (e.parent.id === 1 || e.parent.id === 2) {
       dispatch(setCategory('book'));
-    } else if (e.id === 3) {
+    } else if (e.parent.id === 3) {
       dispatch(setCategory('schooltool'));
     }
     dispatch(setCatelvId(e.level));
@@ -47,9 +47,9 @@ const MegaMenu = ({
   };
 
   const handelOnClickCate3 = (e: CategoryType) => {
-    if (e.id === 1 || e.id === 2) {
+    if (e.parent.parent.id === 1 || e.parent.parent.id === 2) {
       dispatch(setCategory('book'));
-    } else if (e.id === 3) {
+    } else if (e.parent.parent.id === 3) {
       dispatch(setCategory('schooltool'));
     }
     dispatch(setCatelvId(e.level));

@@ -54,17 +54,22 @@ export default function Products() {
   };
 
   const fetchApiSearch = useCallback(async () => {
-    if (searchInputText) {
-      try {
+    try {
+      if (searchInputText) {
         const apiUrl =
           cate === 'book'
             ? `${apiPaths.book}/search?q=${searchInputText}`
             : `${apiPaths.school}/search?q=${searchInputText}`;
         const res = await fetch.get(apiUrl);
         setCategoryResult(res.data);
-      } catch (error) {
-        console.error('Error fetching search results:', error);
       }
+      // else if (!searchInputText) {
+      //   const apiUrl = cate === 'book' ? `${apiPaths.book}/search?q=` : `${apiPaths.school}/search?q=`;
+      //   const res = await fetch.get(apiUrl);
+      //   setCategoryResult(res.data);
+      // }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
     }
   }, [cate, searchInputText]);
 
@@ -132,7 +137,8 @@ export default function Products() {
     const newLastPostIndex = currentPage * postsPerPage;
     const newFirstPostIndex = newLastPostIndex - postsPerPage;
     setSearchResult(sortedCategoryResult.slice(newFirstPostIndex, newLastPostIndex));
-  }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
+  }, [sortCriteria, postsPerPage, currentPage, categoryResult]);
+  // }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
 
   const pages = Math.ceil(filteredResults.length / postsPerPage);
 
