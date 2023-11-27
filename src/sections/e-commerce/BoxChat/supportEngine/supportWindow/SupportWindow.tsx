@@ -8,7 +8,7 @@ const SupportWindow = (props: any) => {
   return (
     <div
       className="transition-5"
-      style={{ ...styles.supportWindow, ...{ opacity: props.visible ? '1' : '0' } }}
+      style={{ ...styles.supportWindow, ...{ display: props.visible ? 'flex' : 'none' } }}
     >
       <EmailForm
         setUser={(user: any) => setUser(user)}
