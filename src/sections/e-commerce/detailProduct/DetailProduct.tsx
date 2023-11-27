@@ -178,7 +178,7 @@ export default function DetailProduct() {
   console.log(percent5Star);
   return (
     <div className="flex flex-col space-y-2 pt-4">
-      <div className="flex flex-row">
+      <div className="flex flex-row bg-white p-3">
         <div className="flex flex-col w-[40%]">
           <div className="flex flex-row w-[400px] gap-2">
             <div className="hidden sm:block ">
@@ -348,7 +348,7 @@ export default function DetailProduct() {
         </div>
       </div>
 
-      <hr />
+      {/* <hr /> */}
 
       <div className="mt-3 p-3 bg-white w-full rounded">
         <h1 className="font-bold text-2xl text-[#333]">Đánh giá sản phẩm</h1>

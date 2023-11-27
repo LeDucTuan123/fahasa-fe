@@ -113,9 +113,14 @@ export default function LatestBooks({ books }: LastestProps) {
     );
   };
   return (
-    <div className="w-full pt-5">
-      <p className="text-xl py-5">Sản phẩm mới nhất</p>
-
+    <div className="w-full pt-5 bg-white p-3 mt-4">
+      <div className="flex items-center py-5 gap-3 ">
+        <Icon
+          icon={'clarity:new-line'}
+          className="text-4xl h-full font-extrabold text-red-400"
+        />
+        <p className="text-xl font-semibold">Sách mới nhất</p>
+      </div>
       <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4">
         {books.slice(200, displayedItems).map((item: BookType) => {
           let isFavorite = false;

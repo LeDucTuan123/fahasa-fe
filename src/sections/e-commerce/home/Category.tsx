@@ -1,52 +1,7 @@
-import { Box, Grid, Paper, Stack, Typography, styled } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
-import useResponsive from 'src/hooks/useResponsive';
 import fetch from 'src/services/axios/Axios';
-
-const category = [
-  {
-    title: 'Sách tâm lý',
-    image:
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-  },
-  {
-    title: 'Sách tâm lý',
-    image:
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-  },
-  {
-    title: 'Sách tâm lý',
-    image:
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-  },
-  {
-    title: 'Sách tâm lý',
-    image:
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-  },
-  {
-    title: 'Sách tâm lý',
-    image:
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-  },
-  {
-    title: 'Sách tâm lý',
-    image:
-      'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8Ym9va3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
-  },
-];
-
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-//   // ...theme.typography.body2,
-//   // padding: theme.spacing(2),
-//   color: theme.palette.text.secondary,
-//   // border: "1px solid #3333",
-//   // height: "200px",
-//   cursor: 'pointer',
-//   textAlign: 'center',
-// }));
 
 export default function Category() {
   const [categoryWithImage, setCategoryWithImage] = useState([]);
@@ -62,20 +17,9 @@ export default function Category() {
         console.log(error);
       });
   }, []);
-  // const settings = {
-  //   dots: true,
-  //   infinite: true,
-  //   slidesToShow: 2,
-  //   slidesToScroll: 1,
-  //   autoplay: true,
-  //   autoplaySpeed: 2000,
-  //   pauseOnHover: true,
-  //   centerMode: true,
-  //   cssEase: 'linear',
-  // };
 
   const settings = {
-    dots: true,
+    // dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 6,
@@ -85,8 +29,14 @@ export default function Category() {
   };
 
   return (
-    <div className="w-full pt-5">
-      <p className="text-xl py-5">Danh mục sản phẩm</p>
+    <div className="w-full mt-10 bg-white">
+      <div className="flex w-full items-center px-5 gap-3 py-3 font-semibold">
+        <Icon
+          icon={'iconamoon:category-thin'}
+          className="text-3xl text-red-400 font-bold"
+        />
+        <p className="text-xl">Danh mục sản phẩm</p>
+      </div>
 
       {/* <div className="sm:flex hidden"> */}
       {/* grid lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-4 */}
@@ -95,7 +45,7 @@ export default function Category() {
           {categoryWithImage.map((item: any) => (
             <div
               key={item.id}
-              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md text-center"
+              className="p-5 text-center"
             >
               <div className="flex">
                 <img
