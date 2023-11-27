@@ -6,7 +6,7 @@ import { addToFavoriteBook, addToFavoriteTool, setCategory } from 'src/redux/sli
 
 import { RootState, useAppDispatch } from 'src/redux/store';
 
-import Pagination, { resetPagination } from 'src/Pagination';
+import Pagination, { resetPagination } from 'src/components/Pagination/Pagination';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';

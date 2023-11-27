@@ -7,5 +7,6 @@ export const apiPaths = {
   voucher: '/rest/voucher',
   myvoucher: '/rest/myvoucher',
   favorite: 'rest/favorite',
+  order: 'rest/order',
   //   ...
 };
