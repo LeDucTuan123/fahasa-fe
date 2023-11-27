@@ -56,8 +56,14 @@ export default function BestSellingBooks({ books }: props) {
   };
 
   return (
-    <div className="w-full pt-5">
-      <p className="text-xl py-5">Sách bán chạy</p>
+    <div className="w-full pt-5 bg-white p-3 mt-4">
+      <div className="flex items-center py-5 gap-3 ">
+        <Icon
+          icon={'arcticons:best-before'}
+          className="text-3xl font-extrabold text-red-400"
+        />
+        <p className="text-xl font-semibold">Sách bán chạy</p>
+      </div>
       <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4">
         {/* {category.map((pr, index) => (
           <div
@@ -93,7 +99,7 @@ export default function BestSellingBooks({ books }: props) {
           return (
             <div
               key={item.id}
-              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
+              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative bg-white"
             >
               <Link to={`/detailproduct/${item.id}`}>
                 <img
