@@ -5,7 +5,7 @@ export const styles: any = {
     // Border
     borderRadius: '50%',
     // Background
-    backgroundImage: `url(https://chat-engine-assets.s3.amazonaws.com/tutorials/my-face-min.png)`,
+    backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/poly-java-6-5ef9e.appspot.com/o/imagesFahasa%2F6893886.jpg?alt=media&token=d83b833e-acde-4774-a3a3-f530ea4af71c)`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundSize: '84px',
