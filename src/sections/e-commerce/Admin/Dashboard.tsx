@@ -75,7 +75,9 @@ export default function Dashboard() {
   };
   useEffect(() => {
     if (fetchDataOrder.length > 0) {
-      const mergedData = fetchDataOrder.reduce((acc, data) => {
+      const filteredData = fetchDataOrder.filter(data => data.statuss.id !== 1 && data.statuss.id !== 3);
+
+      const mergedData = filteredData.reduce((acc, data) => {
         const existingIndex = acc.labels.indexOf(data.orderdate);
 
         if (existingIndex !== -1) {
