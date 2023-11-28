@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { Banner, BestSellingBooks, Category, LatestBooks } from '../home';
 import { BookType } from 'src/types/book';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { RootState, useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios/Axios';
 import { ToolType } from 'src/types/tool';
+import { getBook } from 'src/redux/slice/bookSlice';
+import { getTools } from 'src/redux/slice/ToolSlice';
 
 export default function HomeView() {
   const cartProduct = localStorage.getItem('cart');
@@ -12,6 +14,7 @@ export default function HomeView() {
   const tools: ToolType[] = useSelector((state: RootState) => state.tool.tools);
   const user: any = useSelector((state: RootState) => state.user.userData);
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  const dispatch = useAppDispatch();
 
   // đẩy dữ liệu từ local lên db khi đăng nhập thành công và xóa cart trong localstorage
   function pushCartFromLocalToDB() {
@@ -42,6 +45,8 @@ export default function HomeView() {
         })
         .then((res) => {
           localStorage.removeItem('cart');
+          dispatch(getBook());
+          dispatch(getTools());
         })
         .catch((error) => {
           console.log(error);

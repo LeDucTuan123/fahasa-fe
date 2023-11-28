@@ -39,11 +39,11 @@ export default function Cart() {
   useEffect(() => {
     async function test() {
       const voucher = await fetch.get('/rest/voucher');
-      const myVoucher = await fetch.get(`${apiPaths.myvoucher}/success/${user.id}`);
       setVouchers(voucher.data);
-      setMyVouchers(myVoucher.data);
       if (isLogin) {
         // lấy dữ liệu db đổ lên cart
+        const myVoucher = await fetch.get(`${apiPaths.myvoucher}/success/${user.id}`);
+        setMyVouchers(myVoucher.data);
         const res = await fetch.get(`/rest/order/cart/${user.id}`);
         if (res.data) {
           let orderdetails = res.data.orderdetails;
@@ -110,6 +110,7 @@ export default function Cart() {
   //xóa sản phẩm khỏi giỏ hàng
   function handleDeleteProduct(title: string, id: number) {
     if (isLogin) {
+      console.log(id);
       fetch
         .delete(`/rest/orderdetail/delete/${id}`)
         .then((res) => {

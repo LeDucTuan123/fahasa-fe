@@ -217,7 +217,7 @@ export default function Payment() {
 
     /////
     // Return a default value or handle other cases as needed
-    return sum;
+    return sum >= 0 ? sum : 0;
   }
 
   console.log('user id: ', applyMyVoucher?.id);
@@ -239,8 +239,10 @@ export default function Payment() {
           },
           voucher: voucher && voucher.id ? { id: voucher.id } : null,
           myvoucher:
-            (applyMyVoucher && applyMyVoucher.length === 0 && { id: applyMyVoucher.id }) ||
-            (applyMyVoucher && applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length === 0 && { id: applyMyVoucher.id, quantity: applyMyVoucher.quantity }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id, quantity: applyMyVoucher.quantity }) ||
             (!applyMyVoucher && null),
 
           address: {
@@ -310,10 +312,12 @@ export default function Payment() {
           statuss: {
             id: 3,
           },
-          voucher: voucher ? { id: voucher.id } : null,
+          voucher: voucher ? { id: voucher.id, quantity: voucher.quantity } : null,
           myvoucher:
-            (applyMyVoucher && applyMyVoucher.length === 0 && { id: applyMyVoucher.id }) ||
-            (applyMyVoucher && applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length === 0 && { id: applyMyVoucher.id, quantity: applyMyVoucher.quantity }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id, quantity: applyMyVoucher.quantity }) ||
             (!applyMyVoucher && null),
           orderdetails: cart.map((item: any) => {
             return {
