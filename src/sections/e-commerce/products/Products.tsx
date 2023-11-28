@@ -137,7 +137,7 @@ export default function Products() {
     const newLastPostIndex = currentPage * postsPerPage;
     const newFirstPostIndex = newLastPostIndex - postsPerPage;
     setSearchResult(sortedCategoryResult.slice(newFirstPostIndex, newLastPostIndex));
-  }, [sortCriteria, postsPerPage, currentPage, categoryResult]);
+  }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
   // }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
 
   const pages = Math.ceil(filteredResults.length / postsPerPage);
