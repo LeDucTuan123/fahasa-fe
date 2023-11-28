@@ -11,6 +11,7 @@ import Avatar from '../Avatar';
 const EmailForm = (props: any) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isEmailError, setIsEmailError] = useState(true);
 
   function getOrCreateUser(callback: any) {
     axios
@@ -42,12 +43,33 @@ const EmailForm = (props: any) => {
 
   function handleSubmit(event: any) {
     event.preventDefault();
-    setLoading(true);
-    getOrCreateUser((user: any) => {
-      props.setUser(user);
-      getOrCreateChat((chat: any) => props.setChat(chat));
-    });
+    if (isEmailError === false) {
+      setLoading(true);
+      getOrCreateUser((user: any) => {
+        props.setUser(user);
+        getOrCreateChat((chat: any) => props.setChat(chat));
+      });
+    }
   }
+
+  const validateEmail = (inputEmail: any) => {
+    // Biểu thức chính quy để kiểm tra định dạng email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (emailRegex.test(inputEmail)) {
+      setIsEmailError(false); // Địa chỉ email hợp lệ, không có lỗi
+      return true;
+    } else {
+      setIsEmailError(true);
+      return false;
+    }
+  };
+
+  const handleEmailChange = (e: any) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    validateEmail(newEmail);
+  };
   return (
     <div
       style={{
@@ -106,8 +128,9 @@ const EmailForm = (props: any) => {
         >
           <input
             placeholder="Điền Email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             style={styles.emailInput}
+            type="email"
           />
         </form>
 
