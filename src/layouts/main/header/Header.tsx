@@ -10,7 +10,7 @@ import fetch from 'src/services/axios';
 import Logo from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
 
-import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 import Search from './search';
 
@@ -161,7 +161,6 @@ export default function Header() {
   const storedToken: any = token;
   if (storedToken) {
     const decoded: any = jwtDecode(storedToken);
-    console.log(decoded);
 
     // Kiểm tra thông tin thời gian hết hạn
     if (decoded.exp * 1000 < Date.now()) {

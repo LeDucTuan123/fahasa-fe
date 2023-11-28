@@ -6,11 +6,12 @@ import * as Yup from 'yup';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
-interface formProps {
+interface EditAddressProps {
   changeToList: () => void;
+  id: string;
 }
 
-function Form(props: formProps) {
+function EditAddress(props: EditAddressProps) {
   // các state để lưu địa chỉ
   const [listAddress, setListAddress] = useState<Array<any>>([]);
   const [listDistrics, setListDistrics] = useState<Array<any>>([]);
@@ -22,12 +23,12 @@ function Form(props: formProps) {
       user: {
         id: user.id,
       },
-      firstname: user.firstname || '',
-      lastname: user.lastname || '',
+      firstname: '',
+      lastname: '',
       phone: '',
-      city: '',
-      district: '',
-      ward: '',
+      city: 1,
+      district: 6,
+      ward: 199,
       address: '',
       isactive: false,
     },
@@ -43,49 +44,41 @@ function Form(props: formProps) {
       address: Yup.string().required('Thông tin này không được để trống'),
     }),
     onSubmit: async (values) => {
-      // Lấy obj chứa thông tin của tỉnh/thành phố, quận/huyện, xã/phường từ listAddress
-      const selectedCity = listAddress.find((item) => item.Id === values.city);
-      const selectedDistrict = selectedCity?.Districts.find((item: any) => item.Id === values.district);
-      const selectedWard = selectedDistrict?.Wards.find((item: any) => item.Id === values.ward);
-
-      // Tạo obj mới chỉ chứa tên của tỉnh/thành phố, quận/huyện, xã/phường
-      const formattedValues = {
-        ...values,
-        city: selectedCity?.Name || '', // Lưu tên của tỉnh/thành phố
-        district: selectedDistrict?.Name || '', // Lưu tên của quận/huyện
-        ward: selectedWard?.Name || '', // Lưu tên của xã/phường
-      };
-
-      // Log hoặc gửi formattedValues đi
-      console.log(formattedValues);
-
-      try {
-        // Gửi yêu cầu POST đến API đăng ký
-        const response = await axios.post('http://localhost:8080/api/v1/user/rest/address/create', formattedValues);
-
-        if (response.status >= 200 && response.status < 300) {
-          toast.success('Đăng ký thành công');
-        } else {
-          toast.error(response.data.message);
-        }
-      } catch (error: any) {
-        // Xử lý lỗi nếu có
-        toast.error(error.message);
-        console.error('Lỗi khi đăng ký:', error.message);
-      }
+      console.log(values);
     },
   });
 
   useEffect(() => {
-    // gọi api lấy địa chỉ
+    const foundAddress = user.listAddress.find((address: any) => address.id === props.id);
+
+    const { city, district, ward } = foundAddress;
+
+    // Tìm id của thành phố từ listAddress dựa trên Name
+    const cityId = listAddress.find((item) => item.Name === city)?.Id;
+    // Tìm id của quận/huyện từ listDistrics dựa trên Name
+    const districtId = listDistrics.find((item) => item.Name === district)?.Id;
+    // Tìm id của xã/phường từ listWards dựa trên Name
+    const wardId = listWards.find((item) => item.Name === ward)?.Id;
+
+    console.log(`City ID: ${cityId}`);
+    console.log(`District ID: ${districtId}`);
+    console.log(`Ward ID: ${wardId}`);
+
+    formik.setValues({
+      ...formik.values,
+      firstname: foundAddress.firstname,
+      lastname: foundAddress.lastname,
+      phone: foundAddress.phone,
+      address: foundAddress.address,
+      isactive: foundAddress.isactive,
+    });
+  }, [props.id, user.listAddress, listAddress, listDistrics, listWards]);
+
+  useEffect(() => {
     axios
       .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
-      .then((res) => {
-        setListAddress(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then((res) => setListAddress(res.data))
+      .catch((error) => console.log(error));
   }, []);
 
   // hàm sẽ chạy khi chọn tỉnh thành
@@ -136,7 +129,7 @@ function Form(props: formProps) {
         <span className="text-[#2489F4] inline-block">Quay lại</span>
       </div>
       <div className="p-5 shadow-lg w-full">
-        <h1 className="uppercase text-[#c92127] font-bold text-lg">Thêm địa chỉ mới</h1>
+        <h1 className="uppercase text-[#c92127] font-bold text-lg">Cập nhật địa chỉ </h1>
         <form
           onSubmit={formik.handleSubmit}
           className="mt-5 "
@@ -234,7 +227,7 @@ function Form(props: formProps) {
                 <label className="mr-3 w-[120px] inline-block">Quận/Huyện*</label>
                 <select
                   value={formik.values.district}
-                  disabled={!formik.values.city} // Disable khi chưa chọn thành phố
+                  // disabled={!formik.values.city} // Disable khi chưa chọn thành phố
                   onChange={(e) => handleChangeDistrict(e)}
                   className="outline-none px-3 border-2 w-[250px]"
                   placeholder="Địa chỉ*"
@@ -260,7 +253,7 @@ function Form(props: formProps) {
                 <label className="mr-3 w-[120px] inline-block">Xã/Phường*</label>
                 <select
                   value={formik.values.ward}
-                  disabled={!formik.values.district} // Disable khi chưa chọn quận/huyện
+                  // disabled={!formik.values.district} // Disable khi chưa chọn quận/huyện
                   onChange={(e) => handleChangeWard(e)}
                   className="outline-none px-3 border-2 w-[250px]"
                   placeholder="Địa chỉ*"
@@ -311,4 +304,4 @@ function Form(props: formProps) {
   );
 }
 
-export default Form;
+export default EditAddress;

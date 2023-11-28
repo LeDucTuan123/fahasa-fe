@@ -16,7 +16,7 @@ function Address() {
   }
   return (
     <>
-      <div className="p-3 mb-3 shadow-md w-full">
+      {/* <div className="p-3 mb-3 shadow-md w-full">
         Bạn vui lòng cập nhật thông tin tài khoản{' '}
         <Link
           to="/profile"
@@ -24,7 +24,7 @@ function Address() {
         >
           Cập nhật thông tin
         </Link>
-      </div>
+      </div> */}
       {isChange ? <Form changeToList={changeToList} /> : <ListAddress changeToForm={changeToForm} />}
     </>
   );
