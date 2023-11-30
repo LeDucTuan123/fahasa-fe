@@ -11,6 +11,8 @@ import { getTools } from 'src/redux/slice/ToolSlice';
 import ProgressBar from './ProgressBar';
 import ModalReview from './ModalReview';
 import { ConvertToVietNamDong, formatDateToDDMMYYYY } from 'src/util/SupportFnc';
+import { increase } from 'src/redux/slice/countSlice';
+import { count } from 'console';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
@@ -165,6 +167,7 @@ export default function DetailProduct() {
   function handleBuyNow() {
     if (isLogin) {
       addProductToDB();
+      dispatch(increase());
     } else {
       handleAddProduct();
     }
@@ -256,6 +259,7 @@ export default function DetailProduct() {
               onClick={() => {
                 if (isLogin) {
                   addProductToDB();
+                  dispatch(increase());
                 } else {
                   handleAddProduct();
                 }

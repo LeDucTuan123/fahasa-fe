@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 import { setIsLogin } from 'src/redux/slice/authSlice';
 
@@ -16,6 +16,7 @@ import Search from './search';
 
 import { toast } from 'react-toastify';
 import { getUser } from 'src/redux/slice/userSlice';
+import { setCount } from 'src/redux/slice/countSlice';
 
 // là mảng chứa những category level 2
 let level2: any = null;
@@ -24,13 +25,34 @@ let level3: any = null;
 
 export default function Header() {
   // const user = useSelector((state: RootState) => state.user.userData);
+  const dispatch = useAppDispatch();
+  const dispatch1 = useDispatch();
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const user: any = useSelector((state: RootState) => state.user.userData);
-
+  const cartl = localStorage.getItem('cart');
+  const cartlocal = JSON.parse(cartl ? cartl : '[]');
   // Đây là đoạn code gọi api category -- start
   const [categoryLevel1, setCategoryLevel1] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
   const [currentCategory, setCurrentCategory] = useState<Number>();
+  const [countCart, setCountCart] = useState<number>(0);
+  const count = useSelector((state: RootState) => state.count.count);
+  const temp = useSelector((state: RootState) => state.count.temp);
+
+  useEffect(() => {
+    if (isLogin && user) {
+      fetch
+        .get(`/rest/order/cart/${user.id}`)
+        .then((res) => {
+          dispatch(setCount(res.data.orderdetails.length));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      setCountCart(cartlocal.length);
+    }
+  }, [cartlocal.length, temp, dispatch, isLogin, user]);
 
   // lấy dữ liệu category
   useEffect(() => {
@@ -137,8 +159,7 @@ export default function Header() {
     setOpenInfo(!openInfo);
   };
 
-  // Token
-  const dispatch = useAppDispatch();
+  // token
 
   const token = localStorage.getItem('token');
 
@@ -257,6 +278,7 @@ export default function Header() {
                   className="bx bx-bell text-2xl"
                 />
                 <span className="text-sm hidden lg:block">Giỏ hàng</span>
+                <span>{isLogin && user ? count : countCart}</span>
               </div>
             </Link>
             <div>

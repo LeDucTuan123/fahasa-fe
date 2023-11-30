@@ -5,6 +5,7 @@ import commonReducer from './slice/commonSlice';
 import toolReducer from './slice/ToolSlice';
 import authReducer from './slice/authSlice';
 import userReducer from './slice/userSlice';
+import countReducer from './slice/countSlice';
 // ...
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
     tool: toolReducer,
     auth: authReducer,
     user: userReducer,
+    count: countReducer,
   },
 });
 

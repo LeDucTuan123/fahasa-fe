@@ -41,9 +41,9 @@ export default function Cart() {
       const voucher = await fetch.get('/rest/voucher');
       setVouchers(voucher.data);
       if (isLogin) {
-        // lấy dữ liệu db đổ lên cart
         const myVoucher = await fetch.get(`${apiPaths.myvoucher}/success/${user.id}`);
         setMyVouchers(myVoucher.data);
+        // lấy dữ liệu db đổ lên cart
         const res = await fetch.get(`/rest/order/cart/${user.id}`);
         if (res.data) {
           let orderdetails = res.data.orderdetails;
