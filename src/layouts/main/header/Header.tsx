@@ -290,7 +290,7 @@ export default function Header() {
                                         icon="grommet-icons:user-admin"
                                         className="text-xl"
                                       />
-                                      <span className="px-2">Thông tin Tài Khoản</span>
+                                      <span className="px-2">Quản lý {'(Admin)'}</span>
                                     </div>
                                   </Link>
                                 </div>
