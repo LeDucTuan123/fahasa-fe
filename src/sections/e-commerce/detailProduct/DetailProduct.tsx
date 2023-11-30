@@ -178,7 +178,7 @@ export default function DetailProduct() {
   console.log(percent5Star);
   return (
     <div className="flex flex-col space-y-2 pt-4">
-      <div className="flex flex-row bg-white p-3">
+      <div className="flex flex-row bg-white p-3 rounded-md">
         <div className="flex flex-col w-[40%]">
           <div className="flex flex-row w-[400px] gap-2">
             <div className="hidden sm:block ">
@@ -260,21 +260,23 @@ export default function DetailProduct() {
                   handleAddProduct();
                 }
               }}
-              className="text-[#d32f2f] text-xl border-[2px] border-[#d32f2f] px-5 rounded-md py-2 flex sm:w-[55%] active:bg-red-300 active:text-white duration-100 hover:bg-[#d32f2f] hover:text-white"
+              className="text-[#1230b0] text-base font-medium border-[2px] uppercase border-[#1230b0] px-5 rounded-md py-2  active:bg-red-300 active:text-white duration-100 hover:bg-[#1230b0] hover:text-white"
             >
-              <Icon
-                icon="mdi:cart"
-                fontSize={24}
-              />
-              <span>Thêm vào giỏ hàng</span>
+              <div className="flex justify-center items-center">
+                <Icon
+                  icon="uil:cart"
+                  fontSize={25}
+                />
+                <span>Thêm vào giỏ hàng</span>
+              </div>
             </button>
             <button
               onClick={() => {
                 handleBuyNow();
               }}
-              className="bg-[#d32f2f] py-2 px-5 text-xl border-none rounded-md text-white sm:w-[40%] button-buy"
+              className="bg-[#1230b0] text-base font-medium uppercase border-none w-[] rounded-md text-white  button-buy"
             >
-              <span>Mua ngay</span>
+              <span className="px-[4rem] py-2 ">Mua ngay</span>
             </button>
           </div>
         </div>
@@ -286,8 +288,8 @@ export default function DetailProduct() {
               {/* <p className="text-sm">Nhà cung cấp: {data?.author}</p> */}
             {/* <p className="text-sm">TNhà xuất bản: {data?.author}</p> */}
             {/* </div> */}
-            <div className="w-[40%]">
-              <p className="text-sm">Tác giả: {data?.author}</p>
+            <div className="w-[40%] flex items-center">
+              <span className="text-sm pr-2 font-medium">Tác giả: </span> <p>{data?.author}</p>
               {/* <p className="text-sm">Hình thức bìa: {data?.description}</p> */}
             </div>
           </div>
@@ -304,7 +306,7 @@ export default function DetailProduct() {
 
           <div className="w-full flex flex-row">
             <div className="w-full pr-4">
-              <p className="text-xl">Miêu tả: </p>
+              <p className="text-xl font-medium">Miêu tả: </p>
               <p className="text-sm">{data?.description}</p>
             </div>
             {/* <div> */}
@@ -313,8 +315,8 @@ export default function DetailProduct() {
             {/* </div> */}
           </div>
 
-          <div className="flex flex-row items-center">
-            <p className="text-xl w-[200px]">SỐ LƯỢNG: </p>
+          <div className="flex flex-row items-center py-3">
+            <p className="text-xl font-semibold w-[200px]">Số lượng: </p>
 
             <div className="flex h-[35px] items-center border-[1px] border-solid border-[#3333] rounded-md px-2 justify-between">
               <Icon
@@ -360,7 +362,13 @@ export default function DetailProduct() {
             </div>
             <div>
               <div className="flex items-center">
-                <span className="me-3 text-[#333] text-[18px]">5 sao</span>
+                <div className="flex items-center px-3">
+                  <span className="w-3 mr-3 text-[#333] text-[18px]">5</span>
+                  <Icon
+                    icon="solar:star-bold"
+                    className="text-yellow-300"
+                  />
+                </div>
                 <ProgressBar
                   percent={percent5Star === undefined || isNaN(percent5Star) ? 0 : Math.round(percent5Star)}
                 />
@@ -369,7 +377,13 @@ export default function DetailProduct() {
                 </span>
               </div>
               <div className="flex items-center">
-                <span className="me-3 text-[rgb(51,51,51)] text-[18px]">4 sao</span>
+                <div className="flex items-center px-3">
+                  <span className="w-3 mr-3 text-[#333] text-[18px]">4</span>
+                  <Icon
+                    icon="solar:star-bold"
+                    className="text-yellow-300"
+                  />
+                </div>
                 <ProgressBar
                   percent={percent4Star === undefined || isNaN(percent4Star) ? 0 : Math.round(percent4Star)}
                 />
@@ -378,7 +392,13 @@ export default function DetailProduct() {
                 </span>
               </div>
               <div className="flex items-center">
-                <span className="me-3 text-[#333] text-[18px]">3 sao</span>
+                <div className="flex items-center px-3">
+                  <span className="w-3 mr-3 text-[#333] text-[18px]">3</span>
+                  <Icon
+                    icon="solar:star-bold"
+                    className="text-yellow-300"
+                  />
+                </div>
                 <ProgressBar
                   percent={percent3Star === undefined || isNaN(percent3Star) ? 0 : Math.round(percent3Star)}
                 />
@@ -388,7 +408,13 @@ export default function DetailProduct() {
                 </span>
               </div>
               <div className="flex items-center">
-                <span className="me-3 text-[#333] text-[18px]">2 sao</span>
+                <div className="flex items-center px-3">
+                  <span className="w-3 mr-3 text-[#333] text-[18px]">2</span>
+                  <Icon
+                    icon="solar:star-bold"
+                    className="text-yellow-300"
+                  />
+                </div>
                 <ProgressBar
                   percent={percent2Star === undefined || isNaN(percent2Star) ? 0 : Math.round(percent2Star)}
                 />
@@ -398,7 +424,13 @@ export default function DetailProduct() {
                 </span>
               </div>
               <div className="flex items-center">
-                <span className="me-3 text-[#333] text-[18px]">1 sao</span>
+                <div className="flex items-center px-3">
+                  <span className="w-3 mr-3 text-[#333] text-[18px]">1</span>
+                  <Icon
+                    icon="solar:star-bold"
+                    className="text-yellow-300"
+                  />
+                </div>
                 <ProgressBar
                   percent={percent1Star === undefined || isNaN(percent1Star) ? 0 : Math.round(percent1Star)}
                 />
@@ -412,13 +444,16 @@ export default function DetailProduct() {
           <div className="flex flex-1">
             <button
               onClick={() => setOpenModal(true)}
-              className="m-auto py-1 px-20 font-semibold text-[18px] text-[#C92127] border-[#C92127] border-2 rounded-lg flex items-center"
+              className="m-auto py-1 px-20 font-semibold text-[18px] text-white bg-[#1982f9] border-2 rounded-lg flex items-center"
             >
-              <Icon
-                icon="solar:pen-linear"
-                className="me-2"
-              />
-              Viết đánh giá
+              <div className="flex items-center py-2">
+                <Icon
+                  icon="tabler:pencil-star"
+                  fontSize={24}
+                  className="me-2"
+                />
+                <span>Gửi đánh giá của bạn</span>
+              </div>
             </button>
           </div>
         </div>

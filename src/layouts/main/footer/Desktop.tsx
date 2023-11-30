@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import LogoHome from '../../../assets/image/logo.png';
 
 export default function Desktop() {
   return (
@@ -8,7 +9,7 @@ export default function Desktop() {
           <div className="w-[30%] flex-row flex">
             <div className="flex flex-col border-r-[1px] border-gray-300">
               <img
-                src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo.png"
+                src={LogoHome}
                 alt="logoFahasa"
                 className="w-[300px] object-contain"
               />
@@ -19,26 +20,18 @@ export default function Desktop() {
               </p>
 
               <div className="flex flex-col w-full">
-                <div className="flex flex-row pt-5 justify-between">
+                <div className="flex flex-row pt-5 justify-around">
                   <Icon
-                    icon="ic:baseline-facebook"
-                    fontSize="39px"
+                    icon="logos:facebook"
+                    fontSize="30px"
                   />
                   <Icon
-                    icon="ri:instagram-fill"
-                    fontSize="39px"
+                    icon="skill-icons:instagram"
+                    fontSize="30px"
                   />
                   <Icon
-                    icon="icon-park-solid:youtobe"
-                    fontSize="39px"
-                  />
-                  <Icon
-                    icon="mdi:gmail"
-                    fontSize="39px"
-                  />
-                  <Icon
-                    icon="mdi:gmail"
-                    fontSize="39px"
+                    icon="logos:google-gmail"
+                    fontSize="30px"
                   />
                 </div>
 

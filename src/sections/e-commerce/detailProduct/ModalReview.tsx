@@ -162,7 +162,7 @@ function ModalReview({ openModal, CloseModal, data, fetchData }: ModalReviewProp
               Hủy
             </button>
             <Button
-              className="bg-[#C92127] hover:bg-[#C92127]"
+              className="bg-[#1982f9] hover:bg-[#C92127]"
               onClick={() => handleSendReview()}
             >
               Gửi nhận xét

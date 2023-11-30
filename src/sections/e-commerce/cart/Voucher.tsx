@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ProgressBar from './ProgressBar';
 import { Link } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 
 interface VoucherProps {
   vouchers: any;
@@ -42,23 +43,20 @@ function Voucher({
   return (
     <>
       {/* Cụm mã giảm giá */}
-      <div className="grid grid-rows-1 bg-gray-100 rounded-lg pt-2">
+      <div className="grid grid-rows-1 bg-white rounded-lg pt-2">
         {/* Khuyến mãi */}
         <div className="grid grid-cols-2  p-2 text-blue-600 border-b-2 h-12">
           <div className="cols-span-1 grid grid-cols-5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="2em"
-              viewBox="0 0 576 512"
-            >
-              <path d="M0 128C0 92.7 28.7 64 64 64H512c35.3 0 64 28.7 64 64v64c0 8.8-7.4 15.7-15.7 18.6C541.5 217.1 528 235 528 256s13.5 38.9 32.3 45.4c8.3 2.9 15.7 9.8 15.7 18.6v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V320c0-8.8 7.4-15.7 15.7-18.6C34.5 294.9 48 277 48 256s-13.5-38.9-32.3-45.4C7.4 207.7 0 200.8 0 192V128z" />
-            </svg>
-            <p className="col-span-4 ms-2 mt-1">Khuyến mãi</p>
+            <Icon
+              icon="heroicons-outline:ticket"
+              fontSize={30}
+            />
+            <p className="col-span-4 ms-2 mt-1 uppercase font-medium">Khuyến mãi</p>
           </div>
-          <div className="text-right col-span-1 grid grid-cols-5">
+          <div className="text-right col-span-1 grid grid-cols-5 ml-7">
             <p
               onClick={() => handleOpenModal()}
-              className="col-span-4 me-1 mt-1 hover:cursor-pointer"
+              className="col-span-4 me-1 mt-1 hover:cursor-pointer font-medium"
             >
               Xem thêm
             </p>

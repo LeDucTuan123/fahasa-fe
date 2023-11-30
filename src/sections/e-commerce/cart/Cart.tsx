@@ -268,10 +268,10 @@ export default function Cart() {
         <div className="text-left font-normal text-xl p-3">
           GIỎ HÀNG <span className="font-light text-lg">({product && product.length} sản phẩm)</span>
         </div>
-        <div className="grid grid-cols-12">
-          {/*cụm sản phẩm */}
-          <div className="bg-white col-span-8 m-1">
-            <div className="col-span-4 grid grid-cols-11 bg-gray-500 rounded-lg p-1">
+        {/* Check box */}
+        <div className="grid grid-cols-3">
+          <div className="bg-white col-span-2 m-1 rounded-lg">
+            <div className="col-span-4 grid grid-cols-11 rounded-lg p-1 font-medium">
               <div className="col-span-1 flex justify-center items-center">
                 <input
                   className="h-5 w-5"
@@ -285,6 +285,12 @@ export default function Cart() {
               <div className="col-span-2 flex justify-center items-center">Thành tiền</div>
               <div className="col-span-1"></div>
             </div>
+          </div>
+        </div>
+        {/* Giỏ */}
+        <div className="grid grid-cols-3">
+          {/*cụm sản phẩm */}
+          <div className="bg-white col-span-2 m-1 rounded-lg">
             {/* danh sách sản phẩm */}
             <div className="col-span-4 rounded-lg mt-1">
               {/* sản phẩm trong ds */}
@@ -293,7 +299,7 @@ export default function Cart() {
                   return (
                     <div
                       key={item.title}
-                      className="col-span-4 grid grid-cols-11 bg-gray-50 rounded-lg p-1 border-b-2"
+                      className="col-span-4 grid grid-cols-11 rounded-lg p-1 border-b-2"
                     >
                       <div className="col-span-1 flex justify-center items-center">
                         <input
@@ -412,7 +418,7 @@ export default function Cart() {
                 })}
             </div>
           </div>
-          <div className="col-span-4 grid grid-rows-2 ms-1 max-h-[700px]">
+          <div className=" grid grid-rows-2 ms-1 max-h-[700px]">
             <Voucher
               vouchers={vouchers}
               handleOpenModal={handleOpenModal}
@@ -424,7 +430,7 @@ export default function Cart() {
             />
 
             {/* thành tiền */}
-            <div className="bg-gray-100 mt-9 max-h-48 rounded-lg ">
+            <div className="bg-white mt-9 max-h-48 rounded-lg ">
               <div className="grid grid-cols-2 border-b-2 max-h-12">
                 <div className="text-left p-2">Thành tiền</div>
                 <div className="text-right p-2">
@@ -529,12 +535,12 @@ export default function Cart() {
                     onClick={() => {
                       handleNavigateToPayment();
                     }}
-                    className="bg-red-500 justify-center items-center w-full h-12 text-white font-bold text-2xl opacity-50 hover:bg-red-500 hover:opacity-100 hover:cursor-pointer"
+                    className="bg-red-600 rounded-lg justify-center items-center w-full h-12 text-white font-bold text-2xl  hover:bg-red-500 hover:opacity-100 hover:cursor-pointer"
                   >
                     Thanh toán
                   </button>
                 ) : (
-                  <button className="bg-gray-400 justify-center items-center w-full h-12 text-white font-bold text-2xl opacity-50 hover:cursor-no-drop">
+                  <button className="bg-gray-400 rounded-lg justify-center items-center w-full h-12 text-white font-bold text-2xl opacity-50 hover:cursor-no-drop">
                     Thanh toán
                   </button>
                 )}
