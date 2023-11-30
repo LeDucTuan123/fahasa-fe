@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import luahanthu from 'src/assets/image/luahanthu.jpg';
 import HeadlessTippy from '@tippyjs/react/headless';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -144,16 +145,26 @@ export default function Search() {
           >
             <Wrapper>
               <>
-                <div className="mb-2 w-fit h-full">
+                <div className="flex flex-row h-full justify-between items-center bg-[#fff2c3] mb-2 py-1 px-1">
+                  {/* <div className="mb-2 w-fit h-full flex items-center"> */}
                   <select
                     disabled={isShowSearch ? false : true}
                     id="countries"
-                    className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full h-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-fit h-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     onChange={handleOnchangeCategory}
                   >
                     <option value="book">Sách</option>
                     <option value="schooltool">Dụng cụ</option>
                   </select>
+                  {/* </div> */}
+
+                  <div>
+                    <img
+                      src={luahanthu}
+                      alt=""
+                      className="h-full object-cover"
+                    />
+                  </div>
                 </div>
                 <hr />
                 {debounceValue ? (
