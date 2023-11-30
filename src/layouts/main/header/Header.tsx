@@ -7,7 +7,7 @@ import { setIsLogin } from 'src/redux/slice/authSlice';
 
 import { RootState, useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios';
-import Logo from '../../../assets/image/logo.png';
+import LogoHome from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
 
 import { jwtDecode } from 'jwt-decode';
@@ -181,12 +181,12 @@ export default function Header() {
             {/* logo */}
             <Link
               to={'/'}
-              className="text-4xl font-mono w-52 hidden lg:block"
+              className="text-4xl font-mono w-52 h-[70px] hidden lg:block"
             >
               <img
-                src={Logo}
+                src={LogoHome}
                 alt=""
-                className="w-full"
+                className="h-[70px]"
               />
             </Link>
 
@@ -305,6 +305,18 @@ export default function Header() {
                                     className="text-xl"
                                   />
                                   <span className="px-2">Thông tin Tài Khoản</span>
+                                </div>
+                              </Link>
+                            </div>
+                            <hr className="border-gray-300 py-1" />
+                            <div className="p-1 hover:bg-gray-50">
+                              <Link to="/member/address">
+                                <div className="flex items-center w-full">
+                                  <Icon
+                                    icon="mdi:address-marker-outline"
+                                    className="text-xl"
+                                  />
+                                  <span className="px-2">Sổ địa chỉ</span>
                                 </div>
                               </Link>
                             </div>
