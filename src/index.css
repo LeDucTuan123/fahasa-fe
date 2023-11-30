@@ -15,10 +15,6 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* [type='checkbox']:focus {
-  --tw-ring-shadow: transparent;
-} */
-
 [type='text']:focus,
 [type='email']:focus,
 [type='url']:focus,
