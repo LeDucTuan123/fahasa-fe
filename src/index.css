@@ -15,6 +15,34 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* [type='checkbox']:focus {
+  --tw-ring-shadow: transparent;
+} */
+
+[type='text']:focus,
+[type='email']:focus,
+[type='url']:focus,
+[type='password']:focus,
+[type='number']:focus,
+[type='date']:focus,
+[type='datetime-local']:focus,
+[type='month']:focus,
+[type='search']:focus,
+[type='tel']:focus,
+[type='time']:focus,
+[type='week']:focus,
+[type='checkbox']:focus,
+[type='radio']:focus,
+[multiple]:focus {
+  --tw-ring-shadow: transparent !important;
+  border-color: currentColor;
+}
+
+select:focus {
+  --tw-ring-shadow: transparent !important;
+  border: 1px solid currentColor;
+}
+
 .active {
   color: white;
   background-color: #3333;
