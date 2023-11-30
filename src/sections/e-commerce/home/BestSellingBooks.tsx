@@ -56,15 +56,18 @@ export default function BestSellingBooks({ books }: props) {
   };
 
   return (
-    <div className="w-full pt-5 bg-white p-3 mt-4">
-      <div className="flex items-center py-5 gap-3 ">
+    <div className="w-full pt-5 bg-white p-3 mt-4 rounded-lg">
+      <div className="flex items-center pb-3 px-3 gap-3 ">
         <Icon
-          icon={'arcticons:best-before'}
+          icon={'ep:sell'}
           className="text-3xl font-extrabold text-red-400"
         />
-        <p className="text-xl font-semibold">Sách bán chạy</p>
+        <p className="text-xl font-bold uppercase">Sách bán chạy</p>
       </div>
-      <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4">
+      <div className="w-full px-3 pb-5">
+        <hr className="w-full border-gray-200" />
+      </div>
+      <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 px-3">
         {/* {category.map((pr, index) => (
           <div
             key={index}
@@ -99,17 +102,19 @@ export default function BestSellingBooks({ books }: props) {
           return (
             <div
               key={item.id}
-              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative bg-white"
+              className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative bg-white "
             >
               <Link to={`/detailproduct/${item.id}`}>
                 <img
                   src={item.images}
                   alt={'img'}
-                  className="w-full max-h-[190px] object-cover"
+                  className="w-full max-h-[190px] object-cover hover:scale-105 transition duration-700 ease-in-out"
                 />
               </Link>
               <div className="pt-2 ">
-                <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+                <Link to={`/detailproduct/${item.id}`}>
+                  <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
+                </Link>
                 <div className="flex flex-row justify-between items-center">
                   <div>
                     <p className="text-lg font-semibold text-[#C92127] mt-2">

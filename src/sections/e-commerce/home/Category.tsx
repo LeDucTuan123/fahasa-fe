@@ -23,19 +23,50 @@ export default function Category() {
     infinite: true,
     speed: 500,
     slidesToShow: 6,
-    slidesToScroll: 2,
+    slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 1000,
+    autoplaySpeed: 4000,
+    responsive: [
+      {
+        breakpoint: 800,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 2,
+          initialSlide: 2,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 2,
+          initialSlide: 2,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+    ],
   };
 
   return (
-    <div className="w-full mt-10 bg-white">
+    <div className="w-full mt-10 bg-white rounded-lg">
       <div className="flex w-full items-center px-5 gap-3 py-3 font-semibold">
         <Icon
-          icon={'iconamoon:category-thin'}
-          className="text-3xl text-red-400 font-bold"
+          icon={'iconamoon:category'}
+          className="text-3xl text-red-400"
         />
-        <p className="text-xl">Danh mục sản phẩm</p>
+        <p className="text-xl font-bold uppercase">Danh mục sản phẩm</p>
+      </div>
+      <div className="w-full px-5">
+        <hr className="w-full border-gray-200" />
       </div>
 
       {/* <div className="sm:flex hidden"> */}
