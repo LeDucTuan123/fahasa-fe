@@ -272,13 +272,13 @@ export default function Header() {
               </div>
             </Link>
             <Link to="/cart">
-              <div className="header-icon text-gray-header">
+              <div className="header-icon text-gray-header relative">
                 <Icon
                   icon="uil:cart"
                   className="bx bx-bell text-2xl"
                 />
                 <span className="text-sm hidden lg:block">Giỏ hàng</span>
-                <span>{isLogin && user ? count : countCart}</span>
+                <span className="cart_count">{isLogin && user ? count : countCart}</span>
               </div>
             </Link>
             <div>
