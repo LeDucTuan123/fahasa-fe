@@ -43,7 +43,7 @@ function Voucher({
   return (
     <>
       {/* Cụm mã giảm giá */}
-      <div className="grid grid-rows-1 bg-white rounded-lg pt-2">
+      <div className="grid grid-rows-1 bg-white rounded-lg">
         {/* Khuyến mãi */}
         <div className="grid grid-cols-2  p-2 text-blue-600 border-b-2 h-12">
           <div className="cols-span-1 grid grid-cols-5">

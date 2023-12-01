@@ -48,7 +48,7 @@ function Order() {
 
   return (
     <>
-      <div className="p-3 mb-3 shadow-md w-full rounded-lg">
+      {/* <div className="p-3 mb-3 shadow-md w-full rounded-lg">
         Bạn vui lòng cập nhật thông tin tài khoản{' '}
         <Link
           to="/profile"
@@ -56,7 +56,7 @@ function Order() {
         >
           Cập nhật thông tin
         </Link>
-      </div>
+      </div> */}
       {/* <div className="p-5 shadow-lg w-full">Bạn chưa có đơn hàng nào</div> */}
       {isChange ? (
         <Detail

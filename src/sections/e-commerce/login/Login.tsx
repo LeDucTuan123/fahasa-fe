@@ -70,7 +70,7 @@ export default function Login() {
           <div className="md:w-1/2 px-16">
             <h2 className="font-bold text-2xl text-[#002d74] ">Đăng nhập</h2>
             <p className="text-sm mt-4 text-[#002d74]">
-              Hãy bắt đầu với BOOK nào!{' '}
+              Hãy Happy Book nào!{' '}
               <span className="pl-3 hover:text-[#547acc] underline">
                 <Link
                   to="/"
@@ -125,7 +125,7 @@ export default function Login() {
               </button>
             </form>
 
-            <div className="mt-10 grid grid-cols-3 items-center text-gray-500">
+            {/* <div className="mt-10 grid grid-cols-3 items-center text-gray-500">
               <hr className="border-gray-500" />
               <p className="text-center text-sm">OR</p>
               <hr className="border-gray-500" />
@@ -138,7 +138,7 @@ export default function Login() {
                 className="mr-3"
               />
               Đăng nhập với Google
-            </button>
+            </button> */}
 
             <p
               onClick={() => {
