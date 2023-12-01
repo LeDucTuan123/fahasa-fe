@@ -189,7 +189,7 @@ export default function Search() {
             value={searchValue}
             className={`${
               isShowSearch ? '' : 'text-gray-400'
-            } pl-4 px-4 py-1 border-none outline-none w-full bg-transparent`}
+            } pl-4 px-4 py-1 border-none outline-none placeholder:text-slate-400 font-medium w-full bg-transparent`}
             onChange={onChangeSearchValue}
             onClick={() => dispatch(setIsShowSearch(true))}
             onKeyPress={handleOnKeyUp}

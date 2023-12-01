@@ -8,7 +8,7 @@ function Profilelayout() {
     <>
       <Header />
 
-      <main className="bg-[#f0f0f0] py-5 h-screen">
+      <main className="bg-[#f0f0f0] py-5 block h-screen">
         <div className="lg:container w-full mx-auto flex box-border ">
           <div className="min-w-[250px] shadow-lg border-[#e8e8e8] max-h-[300px] bg-white rounded-md">
             <h1 className="text-center text-xl font-bold uppercase text-[#C92127] py-5">Tài khoản</h1>
