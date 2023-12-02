@@ -8,6 +8,7 @@ import fetch from 'src/services/axios/Axios';
 import CountdownTimer from './CountDownTimer';
 import './style.css';
 import { toast } from 'react-toastify';
+import Spin from '../../../assets/image/spinlucky.jpg';
 
 export default function SpinLuckyVoucher() {
   const [currentRotate, setCurrentRotate] = useState(0);
@@ -192,7 +193,7 @@ export default function SpinLuckyVoucher() {
               Quay thưởng
             </button>
             <div className="flex flex-col">
-              <p className="text-2xl">Bạn có Lượt {countSpin} quay</p>
+              <p className="text-2xl text-white font-bold">Bạn có Lượt {countSpin} quay</p>
             </div>
             <CountdownTimer
               initialTime={10}
