@@ -110,7 +110,7 @@ select:focus {
 }
 
 .bg-lucky {
-  background-image: url('https://cdn.vectorstock.com/i/preview-1x/13/60/wheel-fortune-spinning-lucky-vector-37561360.jpg');
+  background-image: url('/src/assets/image/spinlucky.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
