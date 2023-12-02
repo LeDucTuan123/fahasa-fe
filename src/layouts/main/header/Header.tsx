@@ -41,18 +41,21 @@ export default function Header() {
 
   useEffect(() => {
     if (isLogin && user) {
-      fetch
-        .get(`/rest/order/cart/${user.id}`)
-        .then((res) => {
-          dispatch(setCount(res.data.orderdetails.length));
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      setTimeout(() => {
+        fetch
+          .get(`/rest/order/cart/${user.id}`)
+          .then((res) => {
+            dispatch(setCount(res.data.orderdetails.length));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }, 100);
     } else {
+      console.log('hello');
       setCountCart(cartlocal.length);
     }
-  }, [cartlocal.length, temp, dispatch, isLogin, user]);
+  }, [temp, dispatch, isLogin, user, cartlocal]);
 
   // lấy dữ liệu category
   useEffect(() => {

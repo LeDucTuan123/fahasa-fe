@@ -12,7 +12,6 @@ import ProgressBar from './ProgressBar';
 import ModalReview from './ModalReview';
 import { ConvertToVietNamDong, formatDateToDDMMYYYY } from 'src/util/SupportFnc';
 import { increase } from 'src/redux/slice/countSlice';
-import { count } from 'console';
 
 export default function DetailProduct() {
   const [counter, setCounter] = useState(1);
@@ -125,11 +124,13 @@ export default function DetailProduct() {
         // nếu không thì thêm mới
       } else {
         cart.push(obj);
+        dispatch(increase());
         localStorage.setItem('cart', JSON.stringify(cart));
       }
       // khi trong storage chưa có gì hết
     } else {
       cart.push(obj);
+      dispatch(increase());
       localStorage.setItem('cart', JSON.stringify(cart));
     }
   }
@@ -177,8 +178,6 @@ export default function DetailProduct() {
   function closeModal() {
     setOpenModal(false);
   }
-
-  console.log(percent5Star);
   return (
     <div className="flex flex-col space-y-2 pt-4">
       <div className="flex flex-row bg-white p-3 rounded-md">

@@ -5,13 +5,14 @@ import ModalVoucher from './ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 import Voucher from './Voucher';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { RootState, useAppDispatch } from 'src/redux/store';
 import { BookType } from 'src/types/book';
 import { ToolType } from 'src/types/tool';
 import { useNavigate } from 'react-router-dom';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 import { apiPaths } from 'src/services/api/path-api';
 import ModalMyVoucher from './ModalMyVoucher';
+import { increase } from 'src/redux/slice/countSlice';
 
 export default function Cart() {
   // const IsmUp = useResponsive('up', 'md');
@@ -35,7 +36,7 @@ export default function Cart() {
   const books = useSelector((state: RootState) => state.book.books);
   const tools = useSelector((state: RootState) => state.tool.tools);
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     async function test() {
       const voucher = await fetch.get('/rest/voucher');
@@ -126,6 +127,7 @@ export default function Cart() {
     } else {
       // khi không đăng nhập
       const cartProduct = localStorage.getItem('cart');
+      dispatch(increase());
       if (cartProduct) {
         let cart: Array<any> = JSON.parse(cartProduct);
         cart = cart.filter((item: any) => {
