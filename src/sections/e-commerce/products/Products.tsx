@@ -243,6 +243,7 @@ export default function Products() {
     if (scrollToTopRef.current) {
       scrollToTopRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+    // window.location.reload();
   };
 
   return (

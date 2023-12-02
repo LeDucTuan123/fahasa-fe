@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
@@ -24,7 +24,13 @@ export default function DetailProduct() {
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const u = localStorage.getItem('user');
   const user = u && JSON.parse(u);
+  const scrollToTopRef = useRef<any>(null);
 
+  const scrollToTop = () => {
+    if (scrollToTopRef.current) {
+      scrollToTopRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   const percent5Star =
     data &&
     (data?.reviews?.reduce((accum: any, item: any) => {
@@ -183,7 +189,10 @@ export default function DetailProduct() {
 
   console.log(percent5Star);
   return (
-    <div className="flex flex-col space-y-2 pt-4">
+    <div
+      className="flex flex-col space-y-2 pt-4"
+      ref={scrollToTopRef}
+    >
       <div className="flex flex-row bg-white p-3 rounded-md">
         <div className="flex flex-col w-[40%]">
           <div className="flex flex-row w-[400px] gap-2">
@@ -518,7 +527,10 @@ export default function DetailProduct() {
         </div>
       </div>
 
-      <LatestBooks books={books} />
+      <LatestBooks
+        onScrollToTop={scrollToTop}
+        books={books}
+      />
       <ModalReview
         openModal={openModal}
         CloseModal={closeModal}

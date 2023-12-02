@@ -65,6 +65,7 @@ export default function HomeView() {
     if (scrollToTopRef.current) {
       scrollToTopRef.current.scrollIntoView({ behavior: 'smooth' });
     }
+    // window.location.reload();
   };
 
   return (
