@@ -111,7 +111,7 @@ export default function Cart() {
   //xóa sản phẩm khỏi giỏ hàng
   function handleDeleteProduct(title: string, id: number) {
     if (isLogin) {
-      console.log(id);
+      console.log(typeof id, id);
       fetch
         .delete(`/rest/orderdetail/delete/${id}`)
         .then((res) => {

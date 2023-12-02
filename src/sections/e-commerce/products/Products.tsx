@@ -109,7 +109,7 @@ export default function Products() {
 
   useEffect(() => {
     fetchApiSearch();
-  }, [fetchApiSearch, filteredResults]);
+  }, [fetchApiSearch]);
 
   useEffect(() => {
     // Move the fetching logic inside the useEffect with proper dependencies
@@ -169,7 +169,7 @@ export default function Products() {
     const newLastPostIndex = currentPage * postsPerPage;
     const newFirstPostIndex = newLastPostIndex - postsPerPage;
     setSearchResult(sortedCategoryResult.slice(newFirstPostIndex, newLastPostIndex));
-  }, [sortCriteria, postsPerPage, categoryResult]);
+  }, [sortCriteria, postsPerPage, categoryResult, filteredResults]);
   // }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
 
   const pages = Math.ceil(filteredResults.length / postsPerPage);
