@@ -31,8 +31,32 @@ export default function Products() {
 
   const [categoryResult, setCategoryResult] = useState<BookType[]>([]);
 
+  // là mảng chứa những category level 2
+  let level2: any = null;
+  console.log(level2);
+  // Đây là đoạn code gọi api category -- start
+  const [categoryId, setCategoryId] = useState<number>();
+  const [subCategory, setSubCategory] = useState([]);
+
+  // lấy dữ liệu category
+  useEffect(() => {
+    fetch
+      .get('/rest/category')
+      .then((res) => {
+        return setSubCategory(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  // Đây là đoạn code gọi api category -- end
+
   const handlePriceFilter = (priceRange: string) => {
     setSelectedPriceRange(priceRange);
+  };
+
+  const handleCateFilter = (cateId: number) => {
+    setCategoryId(cateId);
   };
 
   const emptyCartImageUrl = 'http://www.muctamloc.com/assets/images/empty_cart.png';
@@ -73,10 +97,6 @@ export default function Products() {
     }
   }, [cate, searchInputText]);
 
-  useEffect(() => {
-    fetchApiSearch();
-  }, [fetchApiSearch, selectedPriceRange]);
-
   // Lọc kết quả tìm kiếm dựa trên phạm vi giá được chọn
   const filteredResults = selectedPriceRange
     ? categoryResult.filter((item) => {
@@ -85,6 +105,10 @@ export default function Products() {
         return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
       })
     : categoryResult;
+
+  useEffect(() => {
+    fetchApiSearch();
+  }, [fetchApiSearch, filteredResults]);
 
   useEffect(() => {
     // Move the fetching logic inside the useEffect with proper dependencies
@@ -122,6 +146,13 @@ export default function Products() {
     setCurrentPage(page);
   };
 
+  // useEffect(() => {
+  //   const sortCateId = searchResult.filter(
+  //     (item) => item.cats?.filter((id: any) => id.id === categoryId) === categoryId,
+  //   );
+  //   setSearchResult(sortCateId);
+  // }, [categoryId]);
+
   useEffect(() => {
     const sortedCategoryResult = [...filteredResults];
     if (sortCriteria === 'high-to-low') {
@@ -137,7 +168,7 @@ export default function Products() {
     const newLastPostIndex = currentPage * postsPerPage;
     const newFirstPostIndex = newLastPostIndex - postsPerPage;
     setSearchResult(sortedCategoryResult.slice(newFirstPostIndex, newLastPostIndex));
-  }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
+  }, [sortCriteria, postsPerPage, categoryResult]);
   // }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
 
   const pages = Math.ceil(filteredResults.length / postsPerPage);
@@ -151,7 +182,7 @@ export default function Products() {
 
     // Nếu muốn reset trang mỗi khi totalPosts thay đổi
     // resetPagination(); // Chuyển resetPagination vào đây nếu muốn gọi reset mỗi khi totalPosts thay đổi
-  }, [filteredResults.length, currentPage, pages, setCurrentPage, resetPagination]);
+  }, [filteredResults.length, currentPage, pages, setCurrentPage]);
 
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
@@ -214,6 +245,9 @@ export default function Products() {
         <Filter
           handlePriceFilter={handlePriceFilter}
           selectedPriceRange={selectedPriceRange}
+          subCategory={subCategory}
+          onHandleOnchangeCate={handleCateFilter}
+          // currentCategory={currentCategory}
         />
       </div>
 
@@ -341,94 +375,3 @@ export default function Products() {
     </div>
   );
 }
-// {searchResult.length === 0 ? (
-//   <div className="text-center">
-//     <img
-//       src={emptyCartImageUrl}
-//       alt="Empty Cart"
-//     />
-//     <p className="m-1">Không có sản phẩm</p>
-//   </div>
-// ) : (
-
-//   currentPosts.map((item) => {
-//     let isFavorite = false;
-//     const favoritepr = localStorage.getItem('favoriteItems');
-//     if (favoritepr) {
-//       let fv: any = JSON.parse(favoritepr);
-//       fv.filter((i: any) => {
-//         if (i.title === item.title) {
-//           isFavorite = true;
-//         }
-//       });
-//     }
-//     return (
-//       <div
-//         key={item.id}
-//         className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
-//       >
-//         <Link to={`/detailproduct/${item.id}`}>
-//           <img
-//             src={item.images}
-//             alt={'img'}
-//             className="w-full max-h-[190px] object-cover"
-//           />
-//         </Link>
-//         <div className="pt-2 ">
-//           <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
-//           <div className="flex flex-row justify-between items-center">
-//             <div>
-//               <p className="text-lg font-semibold text-[#C92127] mt-2">
-//                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-//                   item.price - (item.price * item.discount) / 100,
-//                 )}
-//               </p>
-//               <p className="text-sm text-[#888888] line-through">
-//                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
-//               </p>
-//               <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
-//                 {item.discount}%
-//               </span>
-//             </div>
-//             <Icon
-//               onClick={() => {
-//                 cate === 'book' ? handleAddFavoriteBook(item) : handleAddFavoriteTool(item);
-//               }}
-//               icon={'ic:round-favorite'}
-//               className={`hover:text-red-500 text-3xl  cursor-pointer ${
-//                 isFavorite ? 'text-red-500' : 'text-slate-300'
-//               }`}
-//             />
-//           </div>
-//         </div>
-// ):(
-//   searchResult.map((item: BookType) => (
-//     <div
-//       key={item.id}
-//       className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
-//     >
-//       <Link to={`/detailproduct/${item.id}`}>
-//         <img
-//           src={item.images}
-//           alt={'img'}
-//           className="w-full max-h-[190px] object-cover"
-//         />
-//       </Link>
-//       <div className="pt-2 ">
-//         <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
-//         <p className="text-lg font-semibold text-[#C92127] mt-2">
-//           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-//             item.price - (item.price * item.discount) / 100,
-//           )}
-//         </p>
-//         <p className="text-sm text-[#888888] line-through">
-//           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price)}
-//         </p>
-//         <span className="absolute right-1 top-2 first-letter bg-[#F7941E] text-white font-semibold px-1 py-2 rounded-full">
-//           {item.discount}%
-//         </span>
-
-//       </div>
-//     );
-//   })
-// }
