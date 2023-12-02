@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Trang chủ</title>
+        <title>Home</title>
       </Helmet>
 
       <HomeView />

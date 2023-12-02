@@ -255,23 +255,25 @@ export default function Products() {
         <div>
           <div className="columns-2">
             <img
+              className="rounded-lg"
               alt=""
               src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/SaiGonbookT1023_Social_1080x1080.png"
             />
             <img
+              className="rounded-lg"
               alt=""
               src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/NCC1980BooksT1023_Gold_BannerSocial_1080x1080.png"
             />
           </div>
         </div>
 
-        <div className="w-full bg-white mt-4 p-3">
-          <div className="grid grid-cols-2 pb-5">
-            <div>Sắp xếp theo: </div>
-            <div className="flex justify-end">
+        <div className="w-full bg-white mt-4 p-3 rounded-lg">
+          <div className="flex justify-start pb-5">
+            <div className="font-medium">Sắp xếp theo: </div>
+            <div className="px-4">
               <select
                 name="sort"
-                className="w-64 ps-2 rounded-sm"
+                className=" ps-2 rounded-lg"
                 value={sortCriteria}
                 onChange={handleSortChange}
               >
@@ -283,7 +285,7 @@ export default function Products() {
               </select>
               <select
                 name="display-quantity" // Thêm một tên cho phần tử select
-                className="w-64 ms-3 ps-2 rounded-sm"
+                className=" ms-3 ps-2 rounded-lg"
                 value={postsPerPage} // Đặt giá trị đã chọn
                 onChange={handleDisplayChange} // Xử lý sự kiện thay đổi
               >

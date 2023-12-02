@@ -6,7 +6,8 @@ import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 import ModalVoucher from '../cart/ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { RootState, useAppDispatch } from 'src/redux/store';
+import { setIsLogin } from 'src/redux/slice/authSlice';
 
 import ModalMyVoucher from '../cart/ModalMyVoucher';
 import { apiPaths } from 'src/services/api/path-api';
@@ -15,6 +16,8 @@ import ListAddress from './ListAddress';
 
 export default function Payment() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openForm, setOpenForm] = useState<boolean>(false);
@@ -386,6 +389,14 @@ export default function Payment() {
   function changeAddress(e: React.ChangeEvent<HTMLInputElement>) {
     setAddressId(Number(e.target.value));
   }
+
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate('/');
+    }
+  }, [dispatch, isLogin, user]);
 
   return (
     <>
