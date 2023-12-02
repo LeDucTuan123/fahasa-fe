@@ -1,8 +1,11 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { RootState } from 'src/redux/store';
+import ChangeEmail from './ChangeEmail';
+import { RootState, useAppDispatch } from 'src/redux/store';
+import { getUser } from 'src/redux/slice/userSlice';
+import { setIsLogin } from 'src/redux/slice/authSlice';
 interface formProps {
   changeToPass: () => void;
 }
@@ -12,7 +15,10 @@ function FormProfile(props: formProps) {
     props.changeToPass();
   }
 
+  const dispatch = useAppDispatch();
+
   const userData: any = useSelector((state: RootState) => state.user.userData);
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
 
   type UserProfile = {
     firstname: string;
@@ -61,6 +67,19 @@ function FormProfile(props: formProps) {
       });
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (token) {
+      dispatch(setIsLogin(true));
+    }
+    if (isLogin === true || token) {
+      dispatch(getUser());
+    }
+  }, [dispatch]);
+
   return (
     <>
       <div className="p-5 shadow-lg w-full rounded-lg">
@@ -90,23 +109,33 @@ function FormProfile(props: formProps) {
             <label className="mr-5 w-[180px] inline-block font-medium">Số điện thoại:</label>
             <input
               disabled
-              className="w-3/4 border p-2 pl-3 font-bold text-sm text-[#495057] outline-blue-500 rounded-md disabled:bg-gray-300"
+              className="w-3/4 border p-2 pl-3 font-bold text-sm text-[#495057] outline-blue-500 rounded-md disabled:bg-slate-300"
               type="text"
               placeholder="Chưa có số điện thoại"
               value={profile.phone}
               onChange={(e) => handleInputChange(e, 'phone')}
             />
           </div>
-          <div className="py-3">
+          <div className="py-3 flex">
             <label className="mr-5 w-[180px] inline-block font-medium">Email:</label>
-            <input
-              disabled
-              className="w-3/4 border p-2 pl-3 font-bold text-sm text-[#495057] outline-blue-500 rounded-md disabled:bg-gray-300"
-              type="email"
-              placeholder="Chưa có email"
-              value={profile.email}
-              onChange={(e) => handleInputChange(e, 'email')}
-            />
+            <div className="relative w-3/4">
+              <input
+                disabled
+                className="w-full border p-2 pl-3 font-bold text-sm text-[#495057] outline-blue-500 rounded-md disabled:bg-slate-300"
+                type="email"
+                placeholder="Chưa có email"
+                value={profile.email}
+                onChange={(e) => handleInputChange(e, 'email')}
+              />
+              <span
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+                className="absolute cursor-pointer top-1/2 text-indigo-500 text-sm font-bold -translate-y-1/2 right-3"
+              >
+                Thay đổi
+              </span>
+            </div>
           </div>
           <div className="py-3">
             <label className="mr-5 w-[180px] inline-block font-medium">Giới tính:</label>
@@ -168,6 +197,7 @@ function FormProfile(props: formProps) {
           </div>
         </form>
       </div>
+      {openModal && <ChangeEmail onClose={() => setOpenModal(false)} />}
     </>
   );
 }

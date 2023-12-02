@@ -83,7 +83,7 @@ const MegaMenu = ({
                         }
                       >
                         <Link
-                          to={updatedUrl}
+                          to={`/category/${updatedUrl}`}
                           className="w-full px-2"
                         >
                           <span
@@ -108,7 +108,7 @@ const MegaMenu = ({
 
               return (
                 <div className="xl:w-[200px] lg:w-[150px] mt-5">
-                  <Link to={`${updatedUrl1}/${updatedUrl}`}>
+                  <Link to={`/category/${updatedUrl1}/${updatedUrl}`}>
                     <span
                       onClick={() => handelOnClickCate2(item)}
                       className="text-[13px] font-bold text-[#333333] uppercase"
@@ -127,7 +127,7 @@ const MegaMenu = ({
                           return (
                             <li className="">
                               <Link
-                                to={`${updatedUrl2}/${updatedUrl1}/${updatedUrl}`}
+                                to={`/category/${updatedUrl2}/${updatedUrl1}/${updatedUrl}`}
                                 className=" hover:text-[#bf9a61]"
                               >
                                 <p

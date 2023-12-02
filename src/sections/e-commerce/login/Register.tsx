@@ -137,9 +137,9 @@ export default function Register() {
               </button>
             </form>
 
-            <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
+            {/* <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
               Quên mật khẩu?
-            </p>
+            </p> */}
 
             <div className="mt-3 text-xs flex justify-between items-center">
               <p>Bạn đã có tài khoản?</p>

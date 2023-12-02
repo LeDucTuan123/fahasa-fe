@@ -29,9 +29,9 @@ export default function AdminLayout() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (user && user.authorities && user.authorities[0].authority === 'USER') {
+    if (!isLogin || (user && user.authorities && user.authorities[0].authority === 'USER')) {
       navigate('/');
-      toast.warning('Cút');
+      toast.warning('Bạn không có quyền truy cập');
     }
   }, [user]);
 
