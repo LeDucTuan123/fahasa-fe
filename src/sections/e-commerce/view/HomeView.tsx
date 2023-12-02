@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Banner, BestSellingBooks, Category, LatestBooks } from '../home';
 import { BookType } from 'src/types/book';
 import { useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ export default function HomeView() {
   const user: any = useSelector((state: RootState) => state.user.userData);
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const dispatch = useAppDispatch();
+  const scrollToTopRef = useRef<any>(null);
 
   // đẩy dữ liệu từ local lên db khi đăng nhập thành công và xóa cart trong localstorage
   function pushCartFromLocalToDB() {
@@ -60,15 +61,28 @@ export default function HomeView() {
     }
   }, []);
 
+  const scrollToTop = () => {
+    if (scrollToTopRef.current) {
+      scrollToTopRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    // window.location.reload();
+  };
+
   return (
     <>
-      <Banner />
+      <Banner scrollToTopRef={scrollToTopRef} />
 
       <Category />
 
-      <BestSellingBooks books={books} />
+      <BestSellingBooks
+        onScrollToTop={scrollToTop}
+        books={books}
+      />
 
-      <LatestBooks books={books} />
+      <LatestBooks
+        onScrollToTop={scrollToTop}
+        books={books}
+      />
     </>
   );
 }

@@ -1,6 +1,10 @@
 import Slider from 'react-slick';
 
-export default function Banner() {
+interface Props {
+  scrollToTopRef: any;
+}
+
+export default function Banner({ scrollToTopRef }: Props) {
   const settings = {
     dots: true,
     infinite: true,
@@ -12,7 +16,10 @@ export default function Banner() {
     arrows: true,
   };
   return (
-    <div className="flex flex-row pt-2 h-[316px]">
+    <div
+      ref={scrollToTopRef}
+      className="flex flex-row pt-2 h-[316px]"
+    >
       <div className="w-[70%] rounded-lg">
         <Slider
           {...settings}

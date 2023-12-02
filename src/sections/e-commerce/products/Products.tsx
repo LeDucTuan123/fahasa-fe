@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 
@@ -21,6 +21,7 @@ export default function Products() {
   const [selectedPriceRange, setSelectedPriceRange] = useState('0-150000000');
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(9999); // Tổng số sản phẩm cần hiển thị
+  const scrollToTopRef = useRef<any>(null);
 
   const dispatch = useAppDispatch();
   const cate = useSelector((state: RootState) => state.common.category);
@@ -238,6 +239,13 @@ export default function Products() {
     );
   };
 
+  const scrollToTop = () => {
+    if (scrollToTopRef.current) {
+      scrollToTopRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+    // window.location.reload();
+  };
+
   return (
     <div className="grid grid-cols-4">
       <div>
@@ -252,7 +260,7 @@ export default function Products() {
       </div>
 
       <div className="col-span-3">
-        <div>
+        <div ref={scrollToTopRef}>
           <div className="columns-2">
             <img
               className="rounded-lg"
@@ -324,7 +332,10 @@ export default function Products() {
                     key={item.id}
                     className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative"
                   >
-                    <Link to={`/detailproduct/${item.id}`}>
+                    <Link
+                      to={`/detailproduct/${item.id}`}
+                      onClick={scrollToTop}
+                    >
                       <img
                         src={item.images}
                         alt={'img'}
