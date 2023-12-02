@@ -15,13 +15,16 @@ import { increase } from 'src/redux/slice/countSlice';
 import { count } from 'console';
 
 export default function DetailProduct() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [counter, setCounter] = useState(1);
   const [data, setData] = useState<BookType>();
-  const navigate = useNavigate();
+
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const u = localStorage.getItem('user');
   const user = u && JSON.parse(u);
-  const dispatch = useAppDispatch();
+
   const percent5Star =
     data &&
     (data?.reviews?.reduce((accum: any, item: any) => {

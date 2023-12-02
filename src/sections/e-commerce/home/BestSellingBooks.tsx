@@ -19,9 +19,10 @@ import { BookType } from 'src/types/book';
 
 interface props {
   books: Array<BookType>;
+  onScrollToTop?: () => void;
 }
 
-export default function BestSellingBooks({ books }: props) {
+export default function BestSellingBooks({ books, onScrollToTop }: props) {
   const itemsPerPage = 10;
   const [displayedItems, setDisplayedItems] = useState(itemsPerPage);
   const totalItems = books.length;
@@ -104,7 +105,10 @@ export default function BestSellingBooks({ books }: props) {
               key={item.id}
               className="p-5 border-[1px] border-gray-300 shadow-md rounded-md relative bg-white "
             >
-              <Link to={`/detailproduct/${item.id}`}>
+              <Link
+                to={`/detailproduct/${item.id}`}
+                onClick={() => onScrollToTop}
+              >
                 <img
                   src={item.images}
                   alt={'img'}
@@ -112,7 +116,10 @@ export default function BestSellingBooks({ books }: props) {
                 />
               </Link>
               <div className="pt-2 ">
-                <Link to={`/detailproduct/${item.id}`}>
+                <Link
+                  to={`/detailproduct/${item.id}`}
+                  onClick={() => onScrollToTop}
+                >
                   <p className="text-sm line-clamp-2 h-[40px]">{item.title}</p>
                 </Link>
                 <div className="flex flex-row justify-between items-center">
