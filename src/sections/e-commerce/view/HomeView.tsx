@@ -58,7 +58,7 @@ export default function HomeView() {
     if (user && user.id && isLogin) {
       pushCartFromLocalToDB();
     }
-  }, []);
+  }, [isLogin, user]);
 
   return (
     <>

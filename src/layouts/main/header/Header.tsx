@@ -52,7 +52,6 @@ export default function Header() {
           });
       }, 100);
     } else {
-      console.log('hello');
       setCountCart(cartlocal.length);
     }
   }, [temp, dispatch, isLogin, user, cartlocal]);
