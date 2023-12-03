@@ -115,6 +115,7 @@ export default function Cart() {
       fetch
         .delete(`/rest/orderdetail/delete/${id}`)
         .then((res) => {
+          dispatch(increase());
           setProduct((prev: any[]) => {
             return prev.filter((item: any) => {
               return item.odid !== id;
