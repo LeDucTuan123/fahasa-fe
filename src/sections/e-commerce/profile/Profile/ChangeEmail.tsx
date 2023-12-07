@@ -90,6 +90,7 @@ export default function ChangeEmail({ onClose }: { onClose: any }) {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     dispatch(setIsLogin(false));
+    window.location.href = '/';
   };
 
   const handleChangeEmail = () => {

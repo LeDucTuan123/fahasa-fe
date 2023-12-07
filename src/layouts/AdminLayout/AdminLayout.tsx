@@ -38,7 +38,7 @@ export default function AdminLayout() {
   return (
     <div className="p-0 m-0 w-full h-screen">
       <div className="flex flex-row">
-        <div className={`${isShowSidebar ? 'w-[250px]' : 'w-[80px]'} duration-300 transform h-screen bg-slate-900 `}>
+        <div className={`${isShowSidebar ? 'w-[250px]' : 'w-[80px]'} duration-300 transform h-screen bg-[#233044] `}>
           <Sidebar
             isShowSidebar={isShowSidebar}
             onHandleShowSidebar={handleShowSidebar}

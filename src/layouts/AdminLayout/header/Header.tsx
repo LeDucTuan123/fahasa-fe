@@ -33,7 +33,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="bg-slate-900 p-4 px-8 flex items-center space-x-5 text-gray-200">
+      <div className="bg-[#233044] p-4 px-8 flex items-center space-x-5 text-gray-200">
         <Icon
           icon="teenyicons:home-outline"
           fontSize={32}
