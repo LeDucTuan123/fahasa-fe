@@ -6,6 +6,7 @@ import { setIsLogin } from 'src/redux/slice/authSlice';
 import { getUser } from 'src/redux/slice/userSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -31,6 +32,14 @@ export default function Header() {
       <Navigate to={'/'} />;
     }
   });
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    dispatch(setIsLogin(false));
+    toast.success('Đăng xuất thành công');
+    window.location.href = '/';
+  };
 
   return (
     <>
@@ -75,11 +84,11 @@ export default function Header() {
               onClick={() => setIshow(!isShow)}
             >
               <div className="flex justify-center items-center gap-2">
-                <div>
-                  <span>
+                <div className="w-[150px]">
+                  <div className="text-end px-2 font-semibold truncate">
                     {user.firstname} {user.lastname}
-                  </span>
-                  <span className="font-medium truncate">{user.email}</span>
+                  </div>
+                  <div className="font-medium truncate">{user.email}</div>
                 </div>
                 <div className="w-[40px]">
                   <img
@@ -117,7 +126,10 @@ export default function Header() {
                   </li>
                 </ul>
                 <div className="py-2">
-                  <button className="flex items-center gap-3 text-start w-full px-4 py-2 text-sm text-gray-700 bg-hover_primary hover:text-white">
+                  <button
+                    onClick={logout}
+                    className="flex items-center gap-3 text-start w-full px-4 py-2 text-sm text-gray-700 bg-hover_primary hover:text-white"
+                  >
                     <Icon icon="lets-icons:on-button" /> <span>Đăng xuất</span>
                   </button>
                 </div>

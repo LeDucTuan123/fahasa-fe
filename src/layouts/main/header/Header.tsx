@@ -179,7 +179,7 @@ export default function Header() {
     localStorage.removeItem('user');
     dispatch(setIsLogin(false));
     toast.success('Đăng xuất thành công');
-    window.location.reload();
+    window.location.href = '/';
   };
 
   const storedToken: any = token;
