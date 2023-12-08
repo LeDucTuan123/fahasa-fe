@@ -16,17 +16,32 @@ body {
 }
 
 .cart_count {
-  background-color: red;
+  background-color: #7367f0;
   color: white;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 0;
+  top: -3px;
   right: 17px;
   padding: 1px 6px;
   font-size: 10px;
+}
+
+.bg_btnAdmin {
+  background: -webkit-linear-gradient(332deg, #7367f0, rgba(115, 103, 240, 0.7));
+  background: linear-gradient(118deg, #7367f0, rgba(115, 103, 240, 0.7));
+  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);
+  color: #ffffff;
+}
+
+.bg-primary {
+  background-color: #7367f0 !important;
+}
+
+.bg-hover_primary:hover {
+  background-color: #7367f0 !important;
 }
 
 [type='text']:focus,
