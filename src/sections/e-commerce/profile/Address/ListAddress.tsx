@@ -128,47 +128,49 @@ function ListAddress(props: ListAddressProps) {
             ))}
 
             {/* Địa chỉ khác */}
-            {otherAddresses.map((address: any, index: number) => (
-              <div className="bg-[#f8f8fc] shadow-md rounded-lg mt-4">
-                <div className="flex justify-between items-center py-4 px-3">
-                  {/* Address */}
-                  <div key={address.id}>
-                    <div className="font-bold">
-                      {address.lastname} {address.firstname}
+            <div className="overflow-y-scroll h-[500px] my-4">
+              {otherAddresses.map((address: any, index: number) => (
+                <div className="bg-[#f8f8fc] shadow-md rounded-lg mb-4">
+                  <div className="flex justify-between items-center py-4 px-3">
+                    {/* Address */}
+                    <div key={address.id}>
+                      <div className="font-bold">
+                        {address.lastname} {address.firstname}
+                      </div>
+                      <div className="mt-3 flex">
+                        <div className="font-medium">Địa chỉ:</div>
+                        <span className="px-1 text-gray-600">
+                          {address.address}, {address.ward}, {address.district}, {address.city}
+                        </span>
+                      </div>
+                      <div className="mt-2 flex">
+                        <div className="font-medium">Số điện thoại: </div>
+                        <span className="px-1 text-gray-600">{address.phone}</span>
+                      </div>
                     </div>
-                    <div className="mt-3 flex">
-                      <div className="font-medium">Địa chỉ:</div>
-                      <span className="px-1 text-gray-600">
-                        {address.address}, {address.ward}, {address.district}, {address.city}
-                      </span>
-                    </div>
-                    <div className="mt-2 flex">
-                      <div className="font-medium">Số điện thoại: </div>
-                      <span className="px-1 text-gray-600">{address.phone}</span>
-                    </div>
-                  </div>
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <div>
-                      <button
-                        onClick={() => editAddress(address.id)}
-                        className="border-2 border-red-500 rounded-lg px-5 py-1"
-                      >
-                        <span className="text-red-600 text-lg font-medium">Chỉnh sửa</span>
-                      </button>
-                    </div>
-                    <div>
-                      <button
-                        onClick={() => deleteAdress(address.id)}
-                        className="border-2 border-gray-300 rounded-lg px-5 py-1"
-                      >
-                        <span className="text-lg font-medium">Xóa</span>
-                      </button>
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <div>
+                        <button
+                          onClick={() => editAddress(address.id)}
+                          className="border-2 border-red-500 rounded-lg px-5 py-1"
+                        >
+                          <span className="text-red-600 text-lg font-medium">Chỉnh sửa</span>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          onClick={() => deleteAdress(address.id)}
+                          className="border-2 border-gray-300 rounded-lg px-5 py-1"
+                        >
+                          <span className="text-lg font-medium">Xóa</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </>
       )}

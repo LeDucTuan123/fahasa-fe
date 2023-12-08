@@ -77,7 +77,7 @@ export default function Sidebar({ isShowSidebar, onHandleShowSidebar }: Props) {
                 <Icon
                   icon={'line-md:close-to-menu-transition'} // line-md:close-to-menu-alt-transition
                   fontSize={40}
-                  className="text-gray-200"
+                  className="text-gray-200 cursor-pointer"
                   onClick={() => onHandleShowSidebar()}
                 />
               </div>
@@ -97,7 +97,7 @@ export default function Sidebar({ isShowSidebar, onHandleShowSidebar }: Props) {
             <Icon
               icon={'line-md:menu-to-close-transition'} // line-md:menu-to-close-alt-transition
               fontSize={40}
-              className="text-gray-200 "
+              className="text-gray-200 cursor-pointer"
               onClick={() => onHandleShowSidebar()}
             />
           </div>

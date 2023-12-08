@@ -35,8 +35,8 @@ export default function Dashboard() {
   const [totalRevenue, setTotalRevenue] = useState<number>(0);
   const [orderData, setOrderData] = useState<OrderDataType | undefined>({
     labels: [],
-    datasets: [{ label: "", data: [] }],
-  })
+    datasets: [{ label: '', data: [] }],
+  });
   useEffect(() => {
     fetch
       .get(apiPaths.order)
@@ -55,42 +55,42 @@ export default function Dashboard() {
       .then((res: any) => settools(res.data))
       .catch((err: any) => console.log(err.message));
   }, []);
-  
+
   useEffect(() => {
     loadUsers();
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get(
-      "http://localhost:8080/api/v1/admin/users",
-      {
-        validateStatus: () => {
-          return true;
-        },
-      }
-    );
+    const result = await axios.get('http://localhost:8080/api/v1/admin/users', {
+      validateStatus: () => {
+        return true;
+      },
+    });
     if (result.status === 302) {
-      setUsers(result.data)
+      setUsers(result.data);
     }
   };
   useEffect(() => {
     if (fetchDataOrder.length > 0) {
-      const filteredData = fetchDataOrder.filter(data => data.statuss.id !== 1 && data.statuss.id !== 3);
+      const filteredData = fetchDataOrder.filter((data) => data.statuss.id !== 1 && data.statuss.id !== 3);
 
-      const mergedData = filteredData.reduce((acc, data) => {
-        const existingIndex = acc.labels.indexOf(data.orderdate);
+      const mergedData = filteredData.reduce(
+        (acc, data) => {
+          const existingIndex = acc.labels.indexOf(data.orderdate);
 
-        if (existingIndex !== -1) {
-          // If the date already exists, update the totalamount
-          acc.datasets[0].data[existingIndex] += data.totalamount;
-        } else {
-          // If the date doesn't exist, add it to labels and add totalamount to data
-          acc.labels.push(data.orderdate);
-          acc.datasets[0].data.push(data.totalamount);
-        }
+          if (existingIndex !== -1) {
+            // If the date already exists, update the totalamount
+            acc.datasets[0].data[existingIndex] += data.totalamount;
+          } else {
+            // If the date doesn't exist, add it to labels and add totalamount to data
+            acc.labels.push(data.orderdate);
+            acc.datasets[0].data.push(data.totalamount);
+          }
 
-        return acc;
-      }, { labels: [], datasets: [{ label: "doanh thu", data: [] }] });
+          return acc;
+        },
+        { labels: [], datasets: [{ label: 'doanh thu', data: [] }] },
+      );
 
       setOrderData(mergedData);
 
@@ -103,11 +103,11 @@ export default function Dashboard() {
     const totalProductCount = books.length + tools.length;
     setTotalProducts(totalProductCount);
     // Calculate total number of users
-    const totalUsersCount = users.filter(user => user.role === 'USER').length; // Assuming you have the users data somewhere
+    const totalUsersCount = users.filter((user) => user.role === 'USER').length; // Assuming you have the users data somewhere
     // Update the state
     setTotalUsers(totalUsersCount);
   }, [fetchDataOrder, users, books, tools]);
-  console.log()
+  console.log();
   return (
     <>
       <div className="space-y-4 h-screen">
@@ -210,7 +210,11 @@ export default function Dashboard() {
           </div>
         </div> */}
         {/* {fetchDataOrder.length > 0 && <LineChart chartData={orderData}/>} */}
-        {orderData && <LineChart chartData={orderData} />}
+        {orderData && (
+          <div className="w-full">
+            <LineChart chartData={orderData} />
+          </div>
+        )}
       </div>
     </>
   );
