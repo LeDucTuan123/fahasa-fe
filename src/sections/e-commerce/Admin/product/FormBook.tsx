@@ -338,7 +338,7 @@ export default function FormBook() {
                   ></textarea>
                 </div>
 
-                <div className="relative z-0 w-full mb-6 group">
+                <div className="relative z-0 w-[100px] mb-6 group">
                   <div {...getRootProps()}>
                     <input
                       // type="file"

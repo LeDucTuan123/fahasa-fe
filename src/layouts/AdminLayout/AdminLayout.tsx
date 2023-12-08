@@ -28,17 +28,17 @@ export default function AdminLayout() {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!isLogin || (user && user.authorities && user.authorities[0].authority === 'USER')) {
-      navigate('/');
-      toast.warning('Bạn không có quyền truy cập');
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (!isLogin || (user && user.authorities && user.authorities[0].authority === 'USER')) {
+  //     navigate('/');
+  //     toast.warning('Bạn không có quyền truy cập');
+  //   }
+  // }, [user]);
 
   return (
     <div className="p-0 m-0 w-full h-screen">
       <div className="flex flex-row">
-        <div className={`${isShowSidebar ? 'w-[250px]' : 'w-[80px]'} duration-300 transform h-screen bg-[#233044] `}>
+        <div className={`${isShowSidebar ? 'w-[250px]' : 'w-[80px]'} duration-300 transform h-screen bg-[#10163a] `}>
           <Sidebar
             isShowSidebar={isShowSidebar}
             onHandleShowSidebar={handleShowSidebar}

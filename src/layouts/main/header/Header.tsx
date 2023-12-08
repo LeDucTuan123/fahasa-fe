@@ -277,7 +277,7 @@ export default function Header() {
             <Link to="/cart">
               <div className="header-icon text-gray-header relative">
                 <Icon
-                  icon="uil:cart"
+                  icon="mynaui:cart"
                   className="bx bx-bell text-2xl"
                 />
                 <span className="text-sm hidden lg:block">Giỏ hàng</span>
