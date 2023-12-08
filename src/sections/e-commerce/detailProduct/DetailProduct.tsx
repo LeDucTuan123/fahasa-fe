@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
+import { ToolType } from 'src/types/tool';
 import { LatestBooks } from '../home';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from 'src/redux/store';
@@ -14,13 +15,14 @@ import { ConvertToVietNamDong, formatDateToDDMMYYYY } from 'src/util/SupportFnc'
 import { increase } from 'src/redux/slice/countSlice';
 import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { CategoryType } from 'src/types';
 
 export default function DetailProduct() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [counter, setCounter] = useState(1);
-  const [data, setData] = useState<BookType>();
+  const [data, setData] = useState<BookType | any>();
 
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const u = localStorage.getItem('user');
@@ -196,6 +198,62 @@ export default function DetailProduct() {
   // Tạo mảng các phần tử breadcrumbs từ URL
   const pathnames = location.pathname.split('/').filter((x) => x);
 
+  // lấy category để load ra detail product ////////////////////////////////////////////////////////////////
+  const [getAllCateId, setGetAllCateId] = useState<[]>();
+  const [getCateId, setGetCateId] = useState<any>();
+  const [getCate, setGetCate] = useState<CategoryType[]>();
+  const [getCateName, setGetCateName] = useState<string>();
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch.get('/rest/category').then((res: any) => {
+      if (isMounted) {
+        setGetCate(res.data);
+      }
+    });
+
+    const fetchApiGetAllCateGory = async () => {
+      const res = await fetch.get('/rest/cat/all');
+
+      setGetAllCateId(res.data);
+      if (cate === 'book') {
+        data?.cats?.map((cate: any) => {
+          let i = cate.id;
+          getAllCateId?.map((item: any) => {
+            if (i === item[0]) {
+              setGetCateId(item[1]);
+              // setGetCateId(item[1]);
+            }
+          });
+        });
+        getCate?.map((cate) => {
+          if (getCateId === cate.id) {
+            return setGetCateName(cate.categoryname);
+          }
+        });
+      } else {
+        getCate?.map((cate: any | CategoryType[]) => {
+          cate.schooltools.map((tool: any) => {
+            if (data?.id === tool.id) {
+              setGetCateName(cate.categoryname);
+            }
+          });
+        });
+      }
+      // console.log('cate name: ', getCateName);
+      // console.log('id cate: ', getCateId);
+    };
+
+    fetchApiGetAllCateGory();
+
+    return () => {
+      isMounted = false; // Sẽ chạy khi component unmount
+    };
+    // console.log('dât: ', data);
+  }, [data, cate, getCate]);
+
+  // ////////////////////////////////////////////////////////////////////////////////////////////////
+
   return (
     <>
       <div>
@@ -348,7 +406,12 @@ export default function DetailProduct() {
               {/* <p className="text-sm">TNhà xuất bản: {data?.author}</p> */}
               {/* </div> */}
               <div className="w-[40%] flex items-center">
-                <span className="text-sm pr-2 font-medium">Tác giả: </span> <p>{data?.author}</p>
+                <span className="text-sm pr-2 font-medium">{data?.author ? 'Tác giả: ' : 'Thương hiệu: '} </span>{' '}
+                <p>{data?.author ? data?.author : data?.brand}</p>
+                {/* <p className="text-sm">Hình thức bìa: {data?.description}</p> */}
+              </div>
+              <div className="w-[40%] flex items-center">
+                <span className="text-sm pr-2 font-medium">Thể loại: </span> <p>{getCateName}</p>
                 {/* <p className="text-sm">Hình thức bìa: {data?.description}</p> */}
               </div>
             </div>
