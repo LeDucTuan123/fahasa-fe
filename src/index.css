@@ -44,6 +44,43 @@ body {
   background-color: #7367f0 !important;
 }
 
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #cbd5e1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #0052d4;
+    background: -webkit-linear-gradient(to bottom, #6fb1fc, #4364f7, #0052d4);
+    background: linear-gradient(to bottom, #6fb1fc, #4364f7, #0052d4);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    border-radius: 10px;
+    background: #1488cc;
+    background: -webkit-linear-gradient(to top, #2b32b2, #1488cc);
+    background: linear-gradient(to top, #2b32b2, #1488cc);
+  }
+}
+
+/* div */
+.scrollbar_div::-webkit-scrollbar-thumb {
+  background: #0052d4;
+  background: -webkit-linear-gradient(to right, #6fb1fc, #4364f7, #0052d4);
+  background: linear-gradient(to right, #6fb1fc, #4364f7, #0052d4);
+}
+
+.scrollbar_div::-webkit-scrollbar-thumb:hover {
+  background: #1488cc;
+  background: -webkit-linear-gradient(to right, #2b32b2, #1488cc);
+  background: linear-gradient(to right, #2b32b2, #1488cc);
+}
+
 [type='text']:focus,
 [type='email']:focus,
 [type='url']:focus,

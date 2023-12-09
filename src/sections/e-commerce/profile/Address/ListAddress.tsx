@@ -92,9 +92,12 @@ function ListAddress(props: ListAddressProps) {
             {/* Địa chỉ Mặc định */}
             {defaultAddresses.map((address: any) => (
               <div className="bg-[#f8f8fc] shadow-md rounded-lg mt-4">
-                <div className="flex justify-between items-center py-4 px-3">
+                <div className="grid grid-cols-4 items-center py-4 px-3">
                   {/* Address */}
-                  <div key={address.id}>
+                  <div
+                    className="w-full col-span-3"
+                    key={address.id}
+                  >
                     <div className="flex">
                       <div className="font-bold">
                         {address.lastname} {address.firstname}
@@ -104,10 +107,14 @@ function ListAddress(props: ListAddressProps) {
                       </div>
                     </div>
                     <div className="mt-3 flex">
-                      <div className="font-medium">Địa chỉ:</div>
-                      <span className="px-1 text-gray-600">
-                        {address.address}, {address.ward}, {address.district}, {address.city}
-                      </span>
+                      <div className="font-medium max-w-full">
+                        <span className="">Địa chỉ:</span>
+                      </div>
+                      <div className="w-[550px]">
+                        <p className="ml-1 text-gray-600 ">
+                          {address.address}, {address.ward}, {address.district}, {address.city}
+                        </p>
+                      </div>
                     </div>
                     <div className="mt-2 flex">
                       <div className="font-medium">Số điện thoại: </div>
@@ -115,7 +122,7 @@ function ListAddress(props: ListAddressProps) {
                     </div>
                   </div>
                   {/* Actions */}
-                  <div>
+                  <div className="flex justify-end">
                     <button
                       onClick={() => editAddress(address.id)}
                       className="border-2 border-red-500 rounded-lg px-5 py-1"
@@ -128,20 +135,27 @@ function ListAddress(props: ListAddressProps) {
             ))}
 
             {/* Địa chỉ khác */}
-            <div className="overflow-y-scroll h-[500px] my-4">
+            <div className="overflow-y-auto h-[500px] my-4 scrollbar-thin scrollbar-thumb-rounded-lg scrollbar_div scrollbar-track-slate-300">
               {otherAddresses.map((address: any, index: number) => (
                 <div className="bg-[#f8f8fc] shadow-md rounded-lg mb-4">
-                  <div className="flex justify-between items-center py-4 px-3">
+                  <div className="grid grid-cols-4 items-center py-4 px-3">
                     {/* Address */}
-                    <div key={address.id}>
+                    <div
+                      className="w-full col-span-3"
+                      key={address.id}
+                    >
                       <div className="font-bold">
                         {address.lastname} {address.firstname}
                       </div>
                       <div className="mt-3 flex">
-                        <div className="font-medium">Địa chỉ:</div>
-                        <span className="px-1 text-gray-600">
-                          {address.address}, {address.ward}, {address.district}, {address.city}
-                        </span>
+                        <div className="font-medium max-w-full">
+                          <span className="">Địa chỉ:</span>
+                        </div>
+                        <div className="w-[550px]">
+                          <p className="ml-1 text-gray-600 ">
+                            {address.address}, {address.ward}, {address.district}, {address.city}
+                          </p>
+                        </div>
                       </div>
                       <div className="mt-2 flex">
                         <div className="font-medium">Số điện thoại: </div>
@@ -149,7 +163,7 @@ function ListAddress(props: ListAddressProps) {
                       </div>
                     </div>
                     {/* Actions */}
-                    <div className="flex gap-2">
+                    <div className="flex justify-end gap-2 ">
                       <div>
                         <button
                           onClick={() => editAddress(address.id)}
