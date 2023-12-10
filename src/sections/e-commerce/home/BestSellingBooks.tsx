@@ -2,9 +2,8 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { addToFavoriteTool, addToFavoriteBook, setFavorite } from 'src/redux/slice/commonSlice';
+import { addToFavoriteBook } from 'src/redux/slice/commonSlice';
 import { RootState, useAppDispatch } from 'src/redux/store';
-import fetch from 'src/services/axios/Axios';
 import { BookType } from 'src/types/book';
 
 // const Item = styled(Paper)(({ theme }) => ({
