@@ -185,7 +185,9 @@ export default function DetailProduct() {
     } else {
       handleAddProduct();
     }
-    navigate('/cart');
+    setTimeout(() => {
+      navigate('/cart');
+    }, 500);
   }
 
   function closeModal() {

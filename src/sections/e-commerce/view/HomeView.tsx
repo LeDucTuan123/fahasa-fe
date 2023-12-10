@@ -7,6 +7,7 @@ import fetch from 'src/services/axios/Axios';
 import { ToolType } from 'src/types/tool';
 import { getBook } from 'src/redux/slice/bookSlice';
 import { getTools } from 'src/redux/slice/ToolSlice';
+import { SkeletonProduct, SkeletonCategory } from 'src/components/skeleton';
 
 export default function HomeView() {
   const cartProduct = localStorage.getItem('cart');
@@ -14,9 +15,12 @@ export default function HomeView() {
   const tools: ToolType[] = useSelector((state: RootState) => state.tool.tools);
   const user: any = useSelector((state: RootState) => state.user.userData);
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+  //loading
+  const skeletonProducts = Array.from({ length: 10 }, (_, index) => <SkeletonProduct key={index} />);
+  const skeletonCategorys = Array.from({ length: 6 }, (_, index) => <SkeletonCategory key={index} />);
+
   const dispatch = useAppDispatch();
   const scrollToTopRef = useRef<any>(null);
-
   // đẩy dữ liệu từ local lên db khi đăng nhập thành công và xóa cart trong localstorage
   function pushCartFromLocalToDB() {
     if (cartProduct) {
@@ -72,16 +76,18 @@ export default function HomeView() {
     <>
       <Banner scrollToTopRef={scrollToTopRef} />
 
-      <Category />
+      <Category skeletonCategorys={skeletonCategorys} />
 
       <BestSellingBooks
         onScrollToTop={scrollToTop}
         books={books}
+        skeletonProducts={skeletonProducts}
       />
 
       <LatestBooks
         onScrollToTop={scrollToTop}
         books={books}
+        skeletonProducts={skeletonProducts}
       />
     </>
   );
