@@ -110,13 +110,14 @@ export default function Dashboard() {
   console.log();
   return (
     <>
-      <div className="space-y-4 h-screen">
+      <div className="h-screen ">
         <div className="grid grid-cols-4 gap-4 h-24">
           <div className="flex flex-row items-center gap-4 border-[1px] border-solid border-gray-300 rounded-md shadow-md">
-            <span className="w-14 h-14 flex items-center justify-center bg-orange-300 rounded-[50%] ml-4">
+            <span className="w-14 h-14 flex items-center justify-center bg-[#eae8fd] rounded-[50%] ml-4">
               <Icon
-                icon="mdi:user"
+                icon="lucide:users"
                 fontSize={32}
+                className="text-[#786df1]"
               />
             </span>
             <div>
@@ -139,12 +140,13 @@ export default function Dashboard() {
           </div>
 
           <div className="flex flex-row items-center gap-4 border-[1px] border-solid border-gray-300 rounded-md shadow-md">
-            <span className="relative w-14 h-14 flex items-center justify-center bg-rose-300 rounded-[50%] ml-4">
+            <span className="w-14 h-14 flex items-center justify-center bg-[#fff1e3] rounded-[50%] ml-4">
               <Icon
-                icon="clarity:user-line"
+                icon="lucide:package"
                 fontSize={32}
+                className="text-[#ff9f43]"
               />
-              <span className="absolute w-[12px] h-[12px] bg-green-300 border-[2px] border-solid border-amber-300 rounded-[50%] top-[53%] left-[60%]"></span>
+              {/* <span className="absolute w-[12px] h-[12px] bg-green-300 border-[2px] border-solid border-amber-300 rounded-[50%] top-[53%] left-[60%]"></span> */}
             </span>
             <div>
               <p className="text-gray-500 text-xl">Tổng đơn hàng</p>

@@ -203,6 +203,9 @@ export default function DetailProduct() {
   const [getCateId, setGetCateId] = useState<any>();
   const [getCate, setGetCate] = useState<CategoryType[]>();
   const [getCateName, setGetCateName] = useState<string>();
+  const [getCateNameLevel1, setGetCateNameLevel1] = useState<string>();
+  const [getCateNameLevel2, setGetCateNameLevel2] = useState<string>();
+  const [getCateNameLevel3, setGetCateNameLevel3] = useState<string>();
 
   useEffect(() => {
     let isMounted = true;
@@ -228,14 +231,18 @@ export default function DetailProduct() {
         });
         getCate?.map((cate) => {
           if (getCateId === cate.id) {
-            return setGetCateName(cate.categoryname);
+            if (cate.parent && cate.parent.parent) {
+              setGetCateNameLevel1(cate.parent.parent.categoryname); // Level 1
+              setGetCateNameLevel2(cate.parent.categoryname); // Level 2
+              setGetCateNameLevel3(cate.categoryname); // Level 3
+            }
           }
         });
       } else {
         getCate?.map((cate: any | CategoryType[]) => {
           cate.schooltools.map((tool: any) => {
             if (data?.id === tool.id) {
-              setGetCateName(cate.categoryname);
+              setGetCateNameLevel3(cate.categoryname);
             }
           });
         });
@@ -268,26 +275,19 @@ export default function DetailProduct() {
           >
             Trang chủ
           </Link>
-          {pathnames.map((name, index) => {
-            const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
-            const isLast = index === pathnames.length - 1;
-            return isLast ? (
-              <Typography
-                key={name}
-                color="text.primary"
-              >
-                {name}
-              </Typography>
-            ) : (
-              <Link
-                key={name}
-                component={RouterLink}
-                to={routeTo}
-              >
-                {name}
-              </Link>
-            );
-          })}
+          <Link
+            component={RouterLink}
+            to={`/${getCateNameLevel1}`}
+          >
+            {getCateNameLevel1}
+          </Link>
+          <Link
+            component={RouterLink}
+            to={`/${getCateNameLevel1}/${getCateNameLevel2}`}
+          >
+            {getCateNameLevel2}
+          </Link>
+          <Typography color="text.primary">{getCateNameLevel3}</Typography>
         </Breadcrumbs>
       </div>
       <div
@@ -398,7 +398,7 @@ export default function DetailProduct() {
             </div>
           </div>
           <div className="w-[60%] space-y-2">
-            <p className="text-2xl pb-4">{data?.title}</p>
+            <p className="text-2xl font-medium pb-4">{data?.title}</p>
 
             <div className="w-full flex flex-row">
               {/* <div className="w-[60%]">
@@ -411,7 +411,7 @@ export default function DetailProduct() {
                 {/* <p className="text-sm">Hình thức bìa: {data?.description}</p> */}
               </div>
               <div className="w-[40%] flex items-center">
-                <span className="text-sm pr-2 font-medium">Thể loại: </span> <p>{getCateName}</p>
+                <span className="text-sm pr-2 font-medium">Thể loại: </span> <p>{getCateNameLevel3}</p>
                 {/* <p className="text-sm">Hình thức bìa: {data?.description}</p> */}
               </div>
             </div>
