@@ -265,6 +265,8 @@ export default function Cart() {
     }
   }
 
+  console.log('product: ', product);
+
   return (
     <>
       <div>

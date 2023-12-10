@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import fetch from 'src/services/axios/Axios';
 
-export default function Category() {
+interface Props {
+  skeletonCategorys: JSX.Element[];
+}
+
+export default function Category({ skeletonCategorys }: Props) {
   const [categoryWithImage, setCategoryWithImage] = useState([]);
   useEffect(() => {
     fetch('/rest/category')
@@ -73,25 +77,27 @@ export default function Category() {
       {/* grid lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-4 */}
       <div className=" w-full">
         <Slider {...settings}>
-          {categoryWithImage.map((item: any) => (
-            <div
-              key={item.id}
-              className="p-5 text-center"
-            >
-              <div className="flex">
-                <img
-                  src={item.images}
-                  alt={item.categoryname}
-                  className="w-[100px] h-[100px] object-cover m-auto"
-                />
-              </div>
+          {categoryWithImage.length > 0 &&
+            categoryWithImage.map((item: any) => (
+              <div
+                key={item.id}
+                className="p-5 text-center"
+              >
+                <div className="flex">
+                  <img
+                    src={item.images}
+                    alt={item.categoryname}
+                    className="w-[100px] h-[100px] object-cover m-auto"
+                  />
+                </div>
 
-              <div className="pt-2 h-[40px]">
-                <p className="text-sm">{item.categoryname}</p>
+                <div className="pt-2 h-[40px]">
+                  <p className="text-sm">{item.categoryname}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </Slider>
+        {categoryWithImage.length === 0 && <div className="flex justify-around">{skeletonCategorys}</div>}
       </div>
 
       {/* mobile */}
