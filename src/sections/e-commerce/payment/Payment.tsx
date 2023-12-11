@@ -6,7 +6,8 @@ import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 import ModalVoucher from '../cart/ModalVoucher';
 import fetch from 'src/services/axios/Axios';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { RootState, useAppDispatch } from 'src/redux/store';
+import { setIsLogin } from 'src/redux/slice/authSlice';
 
 import ModalMyVoucher from '../cart/ModalMyVoucher';
 import { apiPaths } from 'src/services/api/path-api';
@@ -15,6 +16,8 @@ import ListAddress from './ListAddress';
 
 export default function Payment() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const [paymentMedthod, setPaymentMedthod] = useState<string>('money');
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openForm, setOpenForm] = useState<boolean>(false);
@@ -217,7 +220,7 @@ export default function Payment() {
 
     /////
     // Return a default value or handle other cases as needed
-    return sum;
+    return sum >= 0 ? sum : 0;
   }
 
   console.log('user id: ', applyMyVoucher?.id);
@@ -229,7 +232,7 @@ export default function Payment() {
           orderdate: new Date(),
 
           totalamount: calculateTotalAmount(),
-          receiver: information.fullname,
+          receiver: information.lastname + information.firstname,
           ship: information.city && information.city === 'Thành phố Hồ Chí Minh' ? 0 : 31000,
           user: {
             id: user.id,
@@ -239,8 +242,10 @@ export default function Payment() {
           },
           voucher: voucher && voucher.id ? { id: voucher.id } : null,
           myvoucher:
-            (applyMyVoucher && applyMyVoucher.length === 0 && { id: applyMyVoucher.id }) ||
-            (applyMyVoucher && applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length === 0 && { id: applyMyVoucher.id, quantity: applyMyVoucher.quantity }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id, quantity: applyMyVoucher.quantity }) ||
             (!applyMyVoucher && null),
 
           address: {
@@ -310,10 +315,12 @@ export default function Payment() {
           statuss: {
             id: 3,
           },
-          voucher: voucher ? { id: voucher.id } : null,
+          voucher: voucher ? { id: voucher.id, quantity: voucher.quantity } : null,
           myvoucher:
-            (applyMyVoucher && applyMyVoucher.length === 0 && { id: applyMyVoucher.id }) ||
-            (applyMyVoucher && applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length === 0 && { id: applyMyVoucher.id, quantity: applyMyVoucher.quantity }) ||
+            (applyMyVoucher &&
+              applyMyVoucher.length > 0 && { id: applyMyVoucher[0].id, quantity: applyMyVoucher.quantity }) ||
             (!applyMyVoucher && null),
           orderdetails: cart.map((item: any) => {
             return {
@@ -382,6 +389,14 @@ export default function Payment() {
   function changeAddress(e: React.ChangeEvent<HTMLInputElement>) {
     setAddressId(Number(e.target.value));
   }
+
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate('/');
+    }
+  }, [dispatch, isLogin, user]);
 
   return (
     <>

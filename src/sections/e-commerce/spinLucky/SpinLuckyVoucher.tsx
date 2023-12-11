@@ -7,6 +7,8 @@ import { RootState } from 'src/redux/store';
 import fetch from 'src/services/axios/Axios';
 import CountdownTimer from './CountDownTimer';
 import './style.css';
+import { toast } from 'react-toastify';
+import Spin from '../../../assets/image/spinlucky.jpg';
 
 export default function SpinLuckyVoucher() {
   const [currentRotate, setCurrentRotate] = useState(0);
@@ -17,6 +19,7 @@ export default function SpinLuckyVoucher() {
   const [countSpin, setCountSpin] = useState(0);
 
   const user: any = useSelector((state: RootState) => state.user.userData);
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
 
   const listGift = [
     { id: 1, title: 'Chúc bạn may mắn lần sau', percent: 15 / 100 },
@@ -180,16 +183,32 @@ export default function SpinLuckyVoucher() {
             ))}
           </ul>
         </span>
-        <button
-          className="btn--wheel button"
-          onClick={() => !isRotating && start()}
-          disabled={countSpin === 0 ? true : false}
-        >
-          Quay thưởng
-        </button>
-        <div className="flex flex-col">
-          <p className="text-2xl">Bạn có Lượt {countSpin} quay</p>
-        </div>
+        {isLogin ? (
+          <>
+            <button
+              className="btn--wheel button"
+              onClick={() => !isRotating && start()}
+              disabled={countSpin === 0 ? true : false}
+            >
+              Quay thưởng
+            </button>
+            <div className="flex flex-col">
+              <p className="text-2xl text-white font-bold">Bạn có Lượt {countSpin} quay</p>
+            </div>
+            <CountdownTimer
+              initialTime={10}
+              onFinish={handleFinish}
+              countSpin={countSpin}
+            />
+          </>
+        ) : (
+          <button
+            className="btn--wheel button"
+            disabled={false}
+          >
+            Vui lòng đăng nhập...
+          </button>
+        )}
         <Modal
           dismissible
           show={showModal}
@@ -258,11 +277,6 @@ export default function SpinLuckyVoucher() {
             )}
           </Modal.Body>
         </Modal>
-        <CountdownTimer
-          initialTime={10}
-          onFinish={handleFinish}
-          countSpin={countSpin}
-        />
       </section>
     </main>
   );

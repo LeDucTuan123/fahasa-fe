@@ -34,8 +34,8 @@ export default function FormBook() {
   useEffect(() => {
     fetch
       .get(apiPaths.book)
-      .then((res) => setfetchDataBook(res.data))
-      .catch((err) => console.log(err.message));
+      .then((res: any) => setfetchDataBook(res.data))
+      .catch((err: any) => console.log(err.message));
   }, []);
 
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -338,7 +338,7 @@ export default function FormBook() {
                   ></textarea>
                 </div>
 
-                <div className="relative z-0 w-full mb-6 group">
+                <div className="relative z-0 w-[100px] mb-6 group">
                   <div {...getRootProps()}>
                     <input
                       // type="file"

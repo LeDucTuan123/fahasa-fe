@@ -11,7 +11,6 @@ import SpinLucky from './spinlucky';
 
 import { SupportEngine } from 'src/sections/e-commerce/BoxChat/supportEngine';
 
-
 export default function MainLayout() {
   const dispatch = useAppDispatch();
 
@@ -26,7 +25,7 @@ export default function MainLayout() {
         <div className="h-full overflow-y-scroll">
           <Header />
 
-          <main className="bg-[#f0f0f0] pb-5 ">
+          <main className="bg-[#f0f0f0] pb-5 min-h-screen">
             <div className=" lg:container w-full ml-auto mr-auto block box-border ">
               <Outlet />
             </div>
@@ -34,7 +33,6 @@ export default function MainLayout() {
 
           <Footer />
         </div>
-
 
         <SpinLucky />
 

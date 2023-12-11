@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import { DetailProduct } from '../detailProduct';
 
 export default function DetailProductView() {
-
   return (
     <>
       <Helmet>

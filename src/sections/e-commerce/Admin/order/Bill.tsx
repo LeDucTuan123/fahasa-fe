@@ -99,16 +99,16 @@ export default function Feedback() {
             changeToTable={changeToTable}
             order={order}
             products={products}
+            setOrders={setOrders}
 
-            phone={user?.phone} // Thêm dòng này để truyền giá trị số điện thoại
+
           />
         ) : (
           <Table
             changeToDetail={changeToDetail}
             orders={orders}
             onStatusChange={handleStatusChange}
-            showPhone={true} // Thêm dòng này để hiển thị cột số điện thoại
-            user={user}
+
 
           />
         )}

@@ -23,10 +23,7 @@ export default function Register() {
       phone: Yup.string()
         .required('Số điện thoại không được bỏ trống')
         .matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, 'Vui lòng nhập số điện thoại'),
-      password: Yup.string()
-        .required('Mật khẩu không được bỏ trống')
-        .min(4, 'Tối thiểu là 4 ký tự')
-        .matches(/^[a-zA-Z0-9]*$/, 'Chỉ nhập số và chữ'),
+      password: Yup.string().required('Mật khẩu không được bỏ trống').min(4, 'Tối thiểu là 4 ký tự'),
       confirmPassword: Yup.string()
         .required('Vui lòng nhập lại mật khẩu')
         .oneOf([Yup.ref('password')], 'Mật khẩu xác nhận phải giống mật khẩu')
@@ -140,9 +137,9 @@ export default function Register() {
               </button>
             </form>
 
-            <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
+            {/* <p className="mt-5 text-sm border-b border-gray-400 py-4 cursor-pointer hover:text-[#547acc] duration-300">
               Quên mật khẩu?
-            </p>
+            </p> */}
 
             <div className="mt-3 text-xs flex justify-between items-center">
               <p>Bạn đã có tài khoản?</p>

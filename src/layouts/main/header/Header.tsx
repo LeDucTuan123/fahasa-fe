@@ -1,21 +1,22 @@
 import { Icon } from '@iconify/react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 import { setIsLogin } from 'src/redux/slice/authSlice';
 
 import { RootState, useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios';
-import Logo from '../../../assets/image/logo.png';
+import LogoHome from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
 
-import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 import Search from './search';
 
 import { toast } from 'react-toastify';
 import { getUser } from 'src/redux/slice/userSlice';
+import { setCount } from 'src/redux/slice/countSlice';
 
 // là mảng chứa những category level 2
 let level2: any = null;
@@ -24,12 +25,36 @@ let level3: any = null;
 
 export default function Header() {
   // const user = useSelector((state: RootState) => state.user.userData);
+  const dispatch = useAppDispatch();
+  const dispatch1 = useDispatch();
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
-
+  const user: any = useSelector((state: RootState) => state.user.userData);
+  const cartl = localStorage.getItem('cart');
+  const cartlocal = JSON.parse(cartl ? cartl : '[]');
   // Đây là đoạn code gọi api category -- start
   const [categoryLevel1, setCategoryLevel1] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
   const [currentCategory, setCurrentCategory] = useState<Number>();
+  const [countCart, setCountCart] = useState<number>(0);
+  const count = useSelector((state: RootState) => state.count.count);
+  const temp = useSelector((state: RootState) => state.count.temp);
+
+  useEffect(() => {
+    if (isLogin && user) {
+      setTimeout(() => {
+        fetch
+          .get(`/rest/order/cart/${user.id}`)
+          .then((res) => {
+            dispatch(setCount(res.data.orderdetails.length));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }, 100);
+    } else {
+      setCountCart(cartlocal.length);
+    }
+  }, [temp, dispatch, isLogin, user, cartlocal]);
 
   // lấy dữ liệu category
   useEffect(() => {
@@ -136,8 +161,7 @@ export default function Header() {
     setOpenInfo(!openInfo);
   };
 
-  // Token
-  const dispatch = useAppDispatch();
+  // token
 
   const token = localStorage.getItem('token');
 
@@ -155,12 +179,12 @@ export default function Header() {
     localStorage.removeItem('user');
     dispatch(setIsLogin(false));
     toast.success('Đăng xuất thành công');
+    window.location.href = '/';
   };
 
   const storedToken: any = token;
   if (storedToken) {
     const decoded: any = jwtDecode(storedToken);
-    console.log(decoded);
 
     // Kiểm tra thông tin thời gian hết hạn
     if (decoded.exp * 1000 < Date.now()) {
@@ -181,12 +205,12 @@ export default function Header() {
             {/* logo */}
             <Link
               to={'/'}
-              className="text-4xl font-mono w-52 hidden lg:block"
+              className="text-4xl font-mono w-52 h-[70px] hidden lg:block"
             >
               <img
-                src={Logo}
+                src={LogoHome}
                 alt=""
-                className="w-full"
+                className="h-[70px]"
               />
             </Link>
 
@@ -251,12 +275,13 @@ export default function Header() {
               </div>
             </Link>
             <Link to="/cart">
-              <div className="header-icon text-gray-header">
+              <div className="header-icon text-gray-header relative">
                 <Icon
-                  icon="uil:cart"
+                  icon="mynaui:cart"
                   className="bx bx-bell text-2xl"
                 />
                 <span className="text-sm hidden lg:block">Giỏ hàng</span>
+                <span className="cart_count">{isLogin && user ? count : countCart}</span>
               </div>
             </Link>
             <div>
@@ -281,11 +306,42 @@ export default function Header() {
                       {isLogin && (
                         <div className="w-[250px] top-[65px] z-10 right-0 absolute bg-slate-200 rounded-lg border shadow items-center">
                           <div className="px-2 py-2">
+                            {user && user.authorities[0] && user.authorities[0].authority === 'ADMIN' && (
+                              <>
+                                <div className="p-1 hover:bg-gray-50">
+                                  <Link to="/admin/dashboard">
+                                    <div className="flex items-center w-full">
+                                      <Icon
+                                        icon="grommet-icons:user-admin"
+                                        className="text-xl"
+                                      />
+                                      <span className="px-2">Quản lý {'(Admin)'}</span>
+                                    </div>
+                                  </Link>
+                                </div>
+                                <hr className="border-gray-300 py-1" />
+                              </>
+                            )}
                             <div className="p-1 hover:bg-gray-50">
                               <Link to="/member/profile">
                                 <div className="flex items-center w-full">
-                                  <Icon icon="ri:user-settings-line" />
+                                  <Icon
+                                    icon="ri:user-settings-line"
+                                    className="text-xl"
+                                  />
                                   <span className="px-2">Thông tin Tài Khoản</span>
+                                </div>
+                              </Link>
+                            </div>
+                            <hr className="border-gray-300 py-1" />
+                            <div className="p-1 hover:bg-gray-50">
+                              <Link to="/member/address">
+                                <div className="flex items-center w-full">
+                                  <Icon
+                                    icon="mdi:address-marker-outline"
+                                    className="text-xl"
+                                  />
+                                  <span className="px-2">Sổ địa chỉ</span>
                                 </div>
                               </Link>
                             </div>
@@ -293,7 +349,10 @@ export default function Header() {
                             <div className="p-1 hover:bg-gray-50">
                               <Link to="/member/order">
                                 <div className="flex items-center w-full">
-                                  <Icon icon="icon-park-outline:transaction-order" />
+                                  <Icon
+                                    icon="icon-park-outline:transaction-order"
+                                    className="text-xl"
+                                  />
                                   <span className="px-2">Đơn hàng của tôi</span>
                                 </div>
                               </Link>
@@ -302,7 +361,10 @@ export default function Header() {
                             <div className="p-1 hover:bg-gray-50">
                               <div onClick={logout}>
                                 <div className="flex items-center">
-                                  <Icon icon="heroicons-outline:logout" />
+                                  <Icon
+                                    icon="heroicons-outline:logout"
+                                    className="text-xl"
+                                  />
                                   <span className="px-2">Đăng xuất</span>
                                 </div>
                               </div>

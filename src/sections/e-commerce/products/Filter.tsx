@@ -1,10 +1,19 @@
+import { CategoryType } from 'src/types';
 
 interface FilterProps {
   handlePriceFilter: (priceRange: string) => void;
   selectedPriceRange: string; // Thêm prop này
+  subCategory: CategoryType[];
+  // currentCategory: number | undefined;
+  onHandleOnchangeCate: (id: number) => void;
 }
 
-export default function Filter({ handlePriceFilter, selectedPriceRange }: FilterProps) {
+export default function Filter({
+  handlePriceFilter,
+  selectedPriceRange,
+  subCategory,
+  onHandleOnchangeCate,
+}: FilterProps) {
   const handlePriceChange = (priceRange: string) => {
     handlePriceFilter(priceRange);
   };
@@ -108,163 +117,22 @@ export default function Filter({ handlePriceFilter, selectedPriceRange }: Filter
         <div className="font-medium m-2">
           Danh mục
           <ol className="ml-2 mt-1 text-slate-400">
-            <li>
-              <label htmlFor="">
-                <input type="radio" name="filtercate " /> Văn học
-              </label>
-            </li>
-            <li>
-              <label htmlFor="">
-                <input type="radio" name="filtercate " /> Văn học
-              </label>
-            </li>
-            <li>
-              <label htmlFor="">
-                <input type="radio" name="filtercate " /> Văn học
-              </label>
-            </li>
-            <li>
-              <label htmlFor="">
-                <input type="radio" name="filtercate " /> Văn học
-              </label>
-            </li>
-            <li>
-              <label htmlFor="">
-                <input type="radio" name="filtercate " /> Văn học
-              </label>
-            </li>
-            <li>
-              <label htmlFor="">
-                <input type="radio" name="filtercate " /> Văn học
-              </label>
-            </li>
-            <li>
-              <label htmlFor="">
-                <input type="radio" name="filtercate " /> Văn học
-              </label>
-            </li>
-          </ol>
-        </div>
-        <div className="font-medium m-2">
-          ĐỘ TUỔI
-          <ol className="ml-2 mt-1 text-slate-400">
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                0 - 6
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                15 - 18
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                1 - 6
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                15+
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                17+
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                3+
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                18+
-              </a>
-            </li>
-          </ol>
-        </div>
-        <div className="font-medium m-2">
-          NGÔN NGỮ
-          <ol className="ml-2 mt-1 text-slate-400">
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Tiếng Việt
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Song Ngữ Anh - Việt
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Tiếng Anh
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Tiếng Nhật
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Tiếng Trung
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Tiếng Đức
-              </a>
-            </li>
-            <li>
-              <a
-                href=""
-                className="bg-[url('https://cdn0.fahasa.com/skin/frontend/base/default/images/manapro_filtercheckboxes/ico_uncheck.png')] bg-no-repeat pl-5"
-              >
-                Tiếng Hàn
-              </a>
-            </li>
+            {subCategory
+              .filter((item) => item.level === 2)
+              .map((cate) => (
+                <li>
+                  <label htmlFor={cate.categoryname}>
+                    <input
+                      type="radio"
+                      id={cate.categoryname}
+                      name="filtercate "
+                      value={cate.id}
+                      onChange={() => onHandleOnchangeCate(cate.id)}
+                    />{' '}
+                    {cate.categoryname}
+                  </label>
+                </li>
+              ))}
           </ol>
         </div>
       </div>

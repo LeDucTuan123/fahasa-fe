@@ -1,13 +1,132 @@
 import { Icon } from '@iconify/react';
-
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 interface formProps {
   changeToList: () => void;
 }
 
 function Form(props: formProps) {
+  // các state để lưu địa chỉ
+  const [listAddress, setListAddress] = useState<Array<any>>([]);
+  const [listDistrics, setListDistrics] = useState<Array<any>>([]);
+  const [listWards, setListWards] = useState<Array<any>>([]);
+  const user: any = useSelector((state: RootState) => state.user.userData);
+
+  const formik = useFormik({
+    initialValues: {
+      user: {
+        id: user.id,
+      },
+      firstname: '',
+      lastname: '',
+      phone: '',
+      city: '',
+      district: '',
+      ward: '',
+      address: '',
+      isactive: false,
+    },
+    validationSchema: Yup.object({
+      firstname: Yup.string().required('Họ không được để trống'),
+      lastname: Yup.string().required('Tên không được để trống'),
+      phone: Yup.string()
+        .required('Số điện thoại không được để trống')
+        .matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, 'Số điện thoại không đúng định dạng'),
+      city: Yup.string().required('Tỉnh/Thành phố là bắt buộc'),
+      district: Yup.string().required('Quận/Huyện là bắt buộc'),
+      ward: Yup.string().required('Xã/Phường là bắt buộc'),
+      address: Yup.string().required('Địa chỉ không được để trống'),
+    }),
+    onSubmit: async (values) => {
+      // Lấy obj chứa thông tin của tỉnh/thành phố, quận/huyện, xã/phường từ listAddress
+      const selectedCity = listAddress.find((item) => item.Id === values.city);
+      const selectedDistrict = selectedCity?.Districts.find((item: any) => item.Id === values.district);
+      const selectedWard = selectedDistrict?.Wards.find((item: any) => item.Id === values.ward);
+
+      // Tạo obj mới chỉ chứa tên của tỉnh/thành phố, quận/huyện, xã/phường
+      const formattedValues = {
+        ...values,
+        city: selectedCity?.Name || '', // Lưu tên của tỉnh/thành phố
+        district: selectedDistrict?.Name || '', // Lưu tên của quận/huyện
+        ward: selectedWard?.Name || '', // Lưu tên của xã/phường
+      };
+
+      // Log hoặc gửi formattedValues đi
+      console.log(formattedValues);
+
+      try {
+        // Gửi yêu cầu POST đến API đăng ký
+        const response = await axios.post('http://localhost:8080/api/v1/user/rest/address/create', formattedValues);
+
+        if (response.status >= 200 && response.status < 300) {
+          toast.success('Thêm địa chỉ thành công');
+          window.location.reload();
+        } else {
+          toast.error(response.data.message);
+        }
+      } catch (error: any) {
+        // Xử lý lỗi nếu có
+        toast.error(error.message);
+        console.error('Lỗi:', error.message);
+      }
+    },
+  });
+
+  useEffect(() => {
+    // gọi api lấy địa chỉ
+    axios
+      .get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
+      .then((res) => {
+        setListAddress(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  // hàm sẽ chạy khi chọn tỉnh thành
+  function handleChangeCity(e: React.ChangeEvent<HTMLSelectElement>) {
+    const c = listAddress.find((item) => {
+      return item.Id === e.target.value;
+    });
+
+    if (c) {
+      setListDistrics(c.Districts);
+    } else {
+      setListDistrics([]);
+    }
+    setListWards([]);
+    formik.setFieldValue('city', e.target.value);
+  }
+
+  // hàm sẽ chạy khi chọn phường
+  function handleChangeDistrict(e: React.ChangeEvent<HTMLSelectElement>) {
+    const d = listDistrics.find((item) => {
+      return item.Id === e.target.value;
+    });
+    if (d) {
+      setListWards(d.Wards);
+    } else {
+      setListWards([]);
+    }
+    formik.setFieldValue('district', e.target.value);
+  }
+  // hàm sẽ chạy khi chọn xã
+  function handleChangeWard(e: React.ChangeEvent<HTMLSelectElement>) {
+    const w = listWards.find((item) => {
+      return item.Id === e.target.value;
+    });
+    formik.setFieldValue('ward', e.target.value);
+  }
+
   return (
     <>
-      <div
+      {/* <div
         className="inline-flex items-center hover:cursor-pointer hover:font-bold"
         onClick={() => props.changeToList()}
       >
@@ -16,86 +135,214 @@ function Form(props: formProps) {
           className="text-[#2489F4]"
         />
         <span className="text-[#2489F4] inline-block">Quay lại</span>
-      </div>
-      <div className="p-5 shadow-lg w-full">
+      </div> */}
+      <div className="p-5 shadow-lg w-full rounded-md">
         <h1 className="uppercase text-[#c92127] font-bold text-lg">Thêm địa chỉ mới</h1>
-        <form className="mt-5 ">
-          <div className="grid grid-cols-2 gap-8">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="mt-5 "
+        >
+          <div className="grid grid-cols-2 gap-7">
             <div className="">
-              <h3 className="text-lg">Thông tin liên hệ</h3>
-              <div className="mt-7">
-                <input
-                  className="outline-none border-b-2 w-full"
-                  type="text"
-                  placeholder="Tên*"
-                />
-                <p className="text-[#c92127]">Thông tin này quan trọng. Vui lòng không để trống</p>
+              <h3 className="text-lg font-semibold mb-6">Thông tin người nhận hàng</h3>
+              <div className="grid grid-cols-2 gap-3 justify-center items-center">
+                <div className="">
+                  <div className="mb-2">
+                    <span className="font-medium">Tên</span> <span className="text-red-500">*</span>
+                  </div>
+                  <input
+                    className="outline-none block rounded-md text-sm font-medium placeholder:text-slate-400 w-full"
+                    type="text"
+                    name="lastname"
+                    placeholder="Vui lòng nhập tên"
+                    value={formik.values.lastname}
+                    onChange={formik.handleChange}
+                  />
+                  <div className="h-[23px] px-1">
+                    {/* Kiểm tra nếu đã có giá trị firstname thì không hiển thị lỗi */}
+                    {formik.touched.lastname && typeof formik.errors.lastname === 'string' ? (
+                      <p className="text-red-500 text-sm">{formik.errors.lastname}</p>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="">
+                  <div className="mb-2">
+                    <span className="font-medium">Họ</span> <span className="text-red-500">*</span>
+                  </div>
+                  <input
+                    className="outline-none rounded-md text-sm font-medium placeholder:text-slate-400 w-full"
+                    type="text"
+                    name="firstname"
+                    placeholder="Vui lòng nhập họ"
+                    value={formik.values.firstname}
+                    onChange={formik.handleChange}
+                  />
+                  <div className="h-[23px] px-1">
+                    {formik.touched.firstname && typeof formik.errors.firstname === 'string' ? (
+                      <p className="text-red-500 text-sm">{formik.errors.firstname}</p>
+                    ) : null}
+                  </div>
+                </div>
               </div>
-              <div className="mt-7">
+              <div className="mt-3">
+                <div className="mb-2">
+                  <span className="font-medium">Số điện thoại</span> <span className="text-red-500">*</span>
+                </div>
                 <input
-                  className="outline-none border-b-2 w-full"
+                  className="outline-none rounded-md text-sm font-medium placeholder:text-slate-400 w-full"
                   type="text"
-                  placeholder="Họ*"
+                  name="phone"
+                  placeholder="Nhập số điện thoại"
+                  maxLength={10}
+                  value={formik.values.phone}
+                  onChange={formik.handleChange}
                 />
-              </div>
-              <div className="mt-7">
-                <input
-                  className="outline-none border-b-2 w-full"
-                  type="text"
-                  placeholder="Số điện thoại*"
-                />
+                <div className="h-[23px] px-1">
+                  {formik.errors.phone && <p className="text-red-500 text-sm">{formik.errors.phone}</p>}
+                </div>
               </div>
             </div>
+            {/*  */}
             <div>
-              <h3 className="text-lg">Địa chỉ</h3>
-              <div className="mt-5">
-                <input
-                  className="outline-none border-b-2 w-full"
-                  type="text"
-                  placeholder="Địa chỉ*"
-                />
-              </div>
-              <div className="mt-5">
-                <label className="mr-3 w-[120px] inline-block">Tỉnh/Thành phố*</label>
-                <select
-                  className="outline-none px-3 border-2 w-[250px]"
-                  placeholder="Địa chỉ*"
-                >
-                  <option value="">Vui lòng chọn</option>
-                </select>
-              </div>
-              <div className="mt-5">
-                <label className="mr-3 w-[120px] inline-block">Quận/Huyện*</label>
-                <select
-                  className="outline-none px-3 border-2 w-[250px]"
-                  placeholder="Địa chỉ*"
-                >
-                  <option value="">Vui lòng chọn</option>
-                </select>
-              </div>
-              <div className="mt-5">
-                <label className="mr-3 w-[120px] inline-block">Xã/Phường*</label>
-                <select
-                  className="outline-none px-3 border-2 w-[250px]"
-                  placeholder="Địa chỉ*"
-                >
-                  <option value="">Vui lòng chọn</option>
-                </select>
-              </div>
-              <div className="mt-5">
-                <label>
+              <h3 className="text-lg font-semibold mb-6">Địa chỉ nhận hàng</h3>
+              <div className="grid grid-cols-2 gap-3 justify-center items-center">
+                <div className="">
+                  <div className="mb-2">
+                    <span className="font-medium">Địa chỉ</span> <span className="text-red-500">*</span>
+                  </div>
                   <input
-                    className=" border-b-2 mr-3"
-                    type="checkbox"
+                    className="outline-none rounded-md text-sm font-medium placeholder:text-slate-400 w-full"
+                    type="text"
+                    name="address"
+                    placeholder="Số nhà, tên đường.."
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
                   />
-                  Sử dụng như Địa chỉ thanh toán mặc định của tôi
+                  <div className="h-[23px] px-1">
+                    {formik.errors.address && <p className="text-red-500 text-sm">{formik.errors.address}</p>}
+                  </div>
+                </div>
+                <div className="">
+                  <div className="mb-2">
+                    <span className="font-medium">Tỉnh/Thành phố</span> <span className="text-red-500">*</span>
+                  </div>
+                  <select
+                    value={formik.values.city}
+                    onChange={(e) => handleChangeCity(e)}
+                    className="outline-none w-full rounded-md text-sm font-medium placeholder:text-slate-400"
+                    placeholder="Địa chỉ*"
+                  >
+                    <option value="">Vui lòng chọn</option>
+                    {listAddress &&
+                      listAddress.map((item) => {
+                        return (
+                          <option
+                            key={item.Id}
+                            value={item.Id}
+                          >
+                            {item.Name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                  <div className="h-[23px] px-1 text-sm">
+                    {formik.touched.city && formik.errors.city ? (
+                      <div className="text-red-500">{formik.errors.city}</div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-3 justify-center items-center">
+                <div className="">
+                  <div className="mb-2">
+                    <span className="font-medium">Quận/Huyện</span> <span className="text-red-500">*</span>
+                  </div>
+                  <select
+                    value={formik.values.district}
+                    disabled={!formik.values.city} // Disable khi chưa chọn thành phố
+                    onChange={(e) => handleChangeDistrict(e)}
+                    className="outline-none w-full rounded-md text-sm font-medium placeholder:text-slate-400"
+                    placeholder="Địa chỉ*"
+                  >
+                    <option value="">Vui lòng chọn</option>
+                    {listDistrics &&
+                      listDistrics.map((item) => {
+                        return (
+                          <option
+                            key={item.Id}
+                            value={item.Id}
+                          >
+                            {item.Name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                  <div className="h-[23px] px-1 text-sm">
+                    {formik.touched.district && formik.errors.district ? (
+                      <div className="text-red-500">{formik.errors.district}</div>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="">
+                  <div className="mb-2">
+                    <span className="font-medium">Xã/Phường</span> <span className="text-red-500">*</span>
+                  </div>
+                  <select
+                    value={formik.values.ward}
+                    disabled={!formik.values.district} // Disable khi chưa chọn quận/huyện
+                    onChange={(e) => handleChangeWard(e)}
+                    className="outline-none w-full rounded-md text-sm font-medium placeholder:text-slate-400"
+                    placeholder="Địa chỉ*"
+                  >
+                    <option value="">Vui lòng chọn</option>
+                    {listWards &&
+                      listWards.map((item) => {
+                        return (
+                          <option
+                            key={item.Id}
+                            value={item.Id}
+                          >
+                            {item.Name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                  <div className="h-[23px] px-1 text-sm">
+                    {formik.touched.ward && formik.errors.ward ? (
+                      <div className="text-red-500">{formik.errors.ward}</div>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 grid grid-cols-2">
+                <div></div>
+                <label className="flex justify-end items-center font-medium cursor-pointer">
+                  <input
+                    className="mx-3 cursor-pointer"
+                    type="checkbox"
+                    name="isactive"
+                    checked={formik.values.isactive}
+                    onChange={(e) => formik.setFieldValue('isactive', e.target.checked)}
+                  />
+                  Đặt làm mặc định
                 </label>
               </div>
             </div>
           </div>
 
-          <div className="text-center mt-8">
-            <button className="border py-2 px-14 bg-[#c92127] text-white font-bold rounded-lg">Lưu địa chỉ</button>
+          <div className="flex justify-end gap-3 mt-8">
+            <button
+              onClick={() => props.changeToList()}
+              className="border py-2 px-8 border-[#1230b0] text-[#1230b0] font-bold rounded-md"
+            >
+              Hủy bỏ
+            </button>
+            <button
+              type="submit"
+              className="border py-2 px-10 bg-[#1230b0] text-white font-bold rounded-md"
+            >
+              Lưu địa chỉ
+            </button>
           </div>
         </form>
       </div>

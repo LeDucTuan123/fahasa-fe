@@ -15,6 +15,96 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+.cart_count {
+  background-color: #7367f0;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: -3px;
+  right: 17px;
+  padding: 1px 6px;
+  font-size: 10px;
+}
+
+.bg_btnAdmin {
+  background: -webkit-linear-gradient(332deg, #7367f0, rgba(115, 103, 240, 0.7));
+  background: linear-gradient(118deg, #7367f0, rgba(115, 103, 240, 0.7));
+  box-shadow: 0 0 10px 1px rgba(115, 103, 240, 0.7);
+  color: #ffffff;
+}
+
+.bg-primary {
+  background-color: #7367f0 !important;
+}
+
+.bg-hover_primary:hover {
+  background-color: #7367f0 !important;
+}
+
+@media (min-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #cbd5e1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #0052d4;
+    background: -webkit-linear-gradient(to bottom, #6fb1fc, #4364f7, #0052d4);
+    background: linear-gradient(to bottom, #6fb1fc, #4364f7, #0052d4);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    border-radius: 10px;
+    background: #1488cc;
+    background: -webkit-linear-gradient(to top, #2b32b2, #1488cc);
+    background: linear-gradient(to top, #2b32b2, #1488cc);
+  }
+}
+
+/* div */
+.scrollbar_div::-webkit-scrollbar-thumb {
+  background: #0052d4;
+  background: -webkit-linear-gradient(to right, #6fb1fc, #4364f7, #0052d4);
+  background: linear-gradient(to right, #6fb1fc, #4364f7, #0052d4);
+}
+
+.scrollbar_div::-webkit-scrollbar-thumb:hover {
+  background: #1488cc;
+  background: -webkit-linear-gradient(to right, #2b32b2, #1488cc);
+  background: linear-gradient(to right, #2b32b2, #1488cc);
+}
+
+[type='text']:focus,
+[type='email']:focus,
+[type='url']:focus,
+[type='password']:focus,
+[type='number']:focus,
+[type='date']:focus,
+[type='datetime-local']:focus,
+[type='month']:focus,
+[type='search']:focus,
+[type='tel']:focus,
+[type='time']:focus,
+[type='week']:focus,
+[type='checkbox']:focus,
+[type='radio']:focus,
+[multiple]:focus {
+  --tw-ring-shadow: transparent !important;
+  /* border-color: currentColor; */
+}
+
+select:focus {
+  --tw-ring-shadow: transparent !important;
+  border: 1px solid currentColor;
+}
+
 .active {
   color: white;
   background-color: #3333;
@@ -61,18 +151,18 @@ body {
   color: azure;
 }
 .button-buy:hover {
-  border: 2px solid #d32f2f;
+  border: 2px solid #1230b0;
   background-color: white;
-  color: #d32f2f;
+  color: #1230b0;
   transition-duration: 200ms;
 }
 .button-buy:active {
-  background-color: #d32f2f;
+  background-color: #1230b0;
   color: white;
 }
 
 .bg-lucky {
-  background-image: url('https://cdn.vectorstock.com/i/preview-1x/13/60/wheel-fortune-spinning-lucky-vector-37561360.jpg');
+  background-image: url('/src/assets/image/spinlucky.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }

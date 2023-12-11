@@ -54,12 +54,7 @@ function Table(props: TableProps, details: DetailProps) {
               >
                 Ngày mua
               </th>
-              <th
-                scope="col"
-                className="px-6 py-3"
-              >
-                Phone
-              </th>
+
 
               <th
                 scope="col"
@@ -91,11 +86,7 @@ function Table(props: TableProps, details: DetailProps) {
                     <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">{ConvertToVietNamDong(item.totalamount)}</td>
                     <td className="px-6 py-4 max-w-[140px] overflow-hidden overflow-ellipsis">{item.receiver}</td>
                     <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">{formatDateToDDMMYYYY(item.orderdate)}</td>
-                    {props.showPhone && (
-                      <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">
-                        {props.user ? props.user.phone : 'N/A'}
-                      </td>
-                    )}
+
                     <td
                       className="text-[#C92127] hover:cursor-pointer hover:font-semibold text-left px-6 py-4 max-w-[140px]"
                       onClick={() => props.changeToDetail(item.id)}

@@ -1,4 +1,6 @@
 import { Icon } from '@iconify/react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
 
 interface DetailProps {
@@ -6,11 +8,25 @@ interface DetailProps {
     order: any;
     products: any[];
     user: any;
-    voucher?: any; // Thêm dòng này
-    phone?: any; // Thêm dòng này
+    setOrders: React.Dispatch<React.SetStateAction<any[]>>;
+    voucher?: any;
+    phone?: any;
 }
 
+
+
 function Detail(props: DetailProps) {
+
+    const user: any = useSelector((state: RootState) => state.user.userData);
+    const address: any =
+        user.listAddress &&
+        user.listAddress.find((item: any) => {
+            return item.orders.some((item: any) => {
+                return item.id === props.order.id;
+            });
+        });
+
+
     return (
         <>
             <div
@@ -62,7 +78,10 @@ function Detail(props: DetailProps) {
                                 Người nhận: <span className="font-bold">{props.order.receiver}</span>
                             </li>
                             <li className="mt-3">
-                                Địa chỉ: <span className="font-bold">Địa chỉ</span>
+                                Địa chỉ:{' '}
+                                <span className="font-bold">
+                                    {address && address.address + ', ' + address.ward + ', ' + address.district + ', ' + address.city}
+                                </span>
                             </li>
                             <li className="mt-3">
                                 Số điện thoại: <span className="font-bold">{props.user.phone}</span>

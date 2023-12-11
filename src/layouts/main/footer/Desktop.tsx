@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react';
+import LogoHome from '../../../assets/image/logo.png';
 
 export default function Desktop() {
   return (
@@ -8,37 +9,28 @@ export default function Desktop() {
           <div className="w-[30%] flex-row flex">
             <div className="flex flex-col border-r-[1px] border-gray-300">
               <img
-                src="https://cdn0.fahasa.com/skin/frontend/ma_vanese/fahasa/images/logo.png"
+                src={LogoHome}
                 alt="logoFahasa"
                 className="w-[300px] object-contain"
               />
               <p className="text-md pt-8">
-                Lầu 5, 387-389 Hai Bà Trưng Quận 3 TP HCMCông Ty Cổ Phần Phát Hành Sách TP HCM - FAHASA60 - 62 Lê Lợi,
-                Quận 1, TP. HCM, Việt NamFahasa.com nhận đặt hàng trực tuyến và giao hàng tận nơi. KHÔNG hỗ trợ đặt mua
-                và nhận hàng trực tiếp tại văn phòng cũng như tất cả Hệ Thống Fahasa trên toàn quốc.
+                Lầu 5, 387-389 Hai Bà Trưng Quận 3 TP HCMCông Ty Cổ Phần Phát Hành Sách TP HCM - Happy Book 60 - 62 Lê
+                Lợi, Quận 1, TP. HCM, Việt Nam.
               </p>
 
               <div className="flex flex-col w-full">
-                <div className="flex flex-row pt-5 justify-between">
+                <div className="flex flex-row pt-5 justify-around">
                   <Icon
-                    icon="ic:baseline-facebook"
-                    fontSize="39px"
+                    icon="logos:facebook"
+                    fontSize="30px"
                   />
                   <Icon
-                    icon="ri:instagram-fill"
-                    fontSize="39px"
+                    icon="skill-icons:instagram"
+                    fontSize="30px"
                   />
                   <Icon
-                    icon="icon-park-solid:youtobe"
-                    fontSize="39px"
-                  />
-                  <Icon
-                    icon="mdi:gmail"
-                    fontSize="39px"
-                  />
-                  <Icon
-                    icon="mdi:gmail"
-                    fontSize="39px"
+                    icon="logos:google-gmail"
+                    fontSize="30px"
                   />
                 </div>
 
@@ -66,7 +58,7 @@ export default function Desktop() {
                   <li>Điều khoản sử dụng</li>
                   <li>Chính sách bảo mật thông tin cá nhân</li>
                   <li>Chính sách bảo mật thanh toán</li>
-                  <li>Giới thiệu Fahasa</li>
+                  <li>Giới thiệu Happy Book</li>
                   <li>Hệ thống trung tâm - nhà sách</li>
                 </ul>
               </div>
@@ -112,7 +104,7 @@ export default function Desktop() {
                       icon="material-symbols:mail"
                       fontSize={24}
                     />
-                    <span className="pl-2">cskh@fahasa.com.vn</span>
+                    <span className="pl-2">cskh@happybook.com.vn</span>
                   </div>
 
                   <div className="flex items-center">
@@ -136,63 +128,6 @@ export default function Desktop() {
                 <div className="flex flex-row ">
                   <div className="w-[20%]">
                     <img
-                      src="https://cdn0.fahasa.com/media/wysiwyg/Logo-NCC/vnpost1.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
-                  <div className="w-[20%]">
-                    <img
-                      src="https://cdn0.fahasa.com/media/wysiwyg/Logo-NCC/ahamove_logo3.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
-                  <div className="w-[20%]">
-                    <img
-                      src="https://cdn0.fahasa.com/media/wysiwyg/Logo-NCC/icon_giao_hang_nhanh1.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
-                  <div className="w-[20%]">
-                    <img
-                      src="https://cdn0.fahasa.com/media/wysiwyg/Logo-NCC/icon_snappy1.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
-                  <div className="w-[20%]">
-                    <img
-                      src="https://cdn0.fahasa.com/media/wysiwyg/Logo-NCC/Logo_ninjavan.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-row ">
-                  <div className="w-[20%]">
-                    <img
                       src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/vnpay_logo.png"
                       alt="lo1"
                       style={{
@@ -202,42 +137,10 @@ export default function Desktop() {
                       }}
                     />
                   </div>
-                  <div className="w-[20%]">
-                    <img
-                      src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/ZaloPay-logo-130x83.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
+
                   <div className="w-[20%]">
                     <img
                       src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/momopay.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
-                  <div className="w-[20%]">
-                    <img
-                      src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/shopeepay_logo.png"
-                      alt="lo1"
-                      style={{
-                        width: '100%',
-                        height: '100px',
-                        objectFit: 'contain',
-                      }}
-                    />
-                  </div>
-                  <div className="w-[20%]">
-                    <img
-                      src="https://cdn0.fahasa.com/media//wysiwyg/Logo-NCC/logo_moca_120.jpg"
                       alt="lo1"
                       style={{
                         width: '100%',

@@ -36,9 +36,9 @@ const MegaMenu = ({
   };
 
   const handelOnClickCate2 = (e: CategoryType) => {
-    if (e.id === 1 || e.id === 2) {
+    if (e.parent.id === 1 || e.parent.id === 2) {
       dispatch(setCategory('book'));
-    } else if (e.id === 3) {
+    } else if (e.parent.id === 3) {
       dispatch(setCategory('schooltool'));
     }
     dispatch(setCatelvId(e.level));
@@ -47,9 +47,9 @@ const MegaMenu = ({
   };
 
   const handelOnClickCate3 = (e: CategoryType) => {
-    if (e.id === 1 || e.id === 2) {
+    if (e.parent.parent.id === 1 || e.parent.parent.id === 2) {
       dispatch(setCategory('book'));
-    } else if (e.id === 3) {
+    } else if (e.parent.parent.id === 3) {
       dispatch(setCategory('schooltool'));
     }
     dispatch(setCatelvId(e.level));
@@ -83,7 +83,7 @@ const MegaMenu = ({
                         }
                       >
                         <Link
-                          to={updatedUrl}
+                          to={`/category/${updatedUrl}`}
                           className="w-full px-2"
                         >
                           <span
@@ -108,7 +108,7 @@ const MegaMenu = ({
 
               return (
                 <div className="xl:w-[200px] lg:w-[150px] mt-5">
-                  <Link to={`${updatedUrl1}/${updatedUrl}`}>
+                  <Link to={`/category/${updatedUrl1}/${updatedUrl}`}>
                     <span
                       onClick={() => handelOnClickCate2(item)}
                       className="text-[13px] font-bold text-[#333333] uppercase"
@@ -127,7 +127,7 @@ const MegaMenu = ({
                           return (
                             <li className="">
                               <Link
-                                to={`${updatedUrl2}/${updatedUrl1}/${updatedUrl}`}
+                                to={`/category/${updatedUrl2}/${updatedUrl1}/${updatedUrl}`}
                                 className=" hover:text-[#bf9a61]"
                               >
                                 <p
