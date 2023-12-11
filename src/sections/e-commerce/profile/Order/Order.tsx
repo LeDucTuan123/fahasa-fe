@@ -12,7 +12,6 @@ function Order() {
   const [products, setProducts] = useState<any[]>([]);
   const [order, setOrder] = useState<any>();
   const user: any = useSelector((state: RootState) => state.user.userData);
-
   useEffect(() => {
     fetch
       .get(`/rest/order/ordersuccess/${user.id}`)
