@@ -24,7 +24,7 @@ export default function Myvoucher() {
   return (
     <div className="flex w-full gap-3 pl-4 flex-col">
       <div className="flex w-full h-20 items-center  border-b-2 border-solid border-gray-300">
-        <p className="text-2xl">Ví voucher</p>
+        <p className="text-lg uppercase font-bold">Ví voucher</p>
       </div>
       <p className="text-xl">Voucher sở hữu: {dataVoucher.length}</p>
 

@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useState, useEffect } from 'react';
 import LineChart from './chart/LineChart';
+import BarChart from './chart/BarChart';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
 import { number } from 'yup';
@@ -110,60 +111,64 @@ export default function Dashboard() {
   console.log();
   return (
     <>
-      <div className="h-screen ">
-        <div className="grid grid-cols-4 gap-4 h-24">
-          <div className="flex flex-row items-center gap-4 border-[1px] border-solid border-gray-300 rounded-md shadow-md">
+      <div className="h-screen">
+        <div className="grid grid-cols-4 gap-8 h-24 mb-8">
+          <div className="flex flex-row items-center gap-4 bg-white border-solid border-gray-300 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] capitalize">
             <span className="w-14 h-14 flex items-center justify-center bg-[#eae8fd] rounded-[50%] ml-4">
               <Icon
                 icon="lucide:users"
                 fontSize={32}
-                className="text-[#786df1]"
+                className="text-[#786df1]" // #786df1 {totalUsers}
               />
             </span>
             <div>
-              <p className="text-gray-500 text-xl">Tổng tài khoản</p>
-              <span>{totalUsers}</span>
+              <p className="text-[#786df1] font-medium text-xl">tài khoản</p>
+              <span className="font-semibold text-lg">{totalUsers}</span>
             </div>
           </div>
 
-          <div className="flex flex-row items-center gap-4 border-[1px] border-solid border-gray-300 rounded-md shadow-md">
-            <span className="w-14 h-14 flex items-center justify-center bg-yellow-400 rounded-[50%] ml-4">
+          <div className="flex flex-row items-center gap-4  bg-white border-solid border-gray-300 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] capitalize">
+            <span className="w-14 h-14 flex items-center justify-center bg-[#ffe6ea] rounded-[50%] ml-4">
               <Icon
-                icon="noto-v1:books"
+                icon="ph:books"
                 fontSize={32}
+                className="text-[#fd4085]"
               />
             </span>
             <div>
-              <p className="text-gray-500 text-xl">Tổng sản phẩm</p>
-              <span>{totalProducts}</span>
+              <p className="text-[#fd4085] font-medium text-xl">sản phẩm</p>
+              <span className="font-semibold text-lg">{totalProducts}</span>
             </div>
           </div>
 
-          <div className="flex flex-row items-center gap-4 border-[1px] border-solid border-gray-300 rounded-md shadow-md">
+          <div className="flex flex-row items-center gap-4  bg-white border-solid border-gray-300 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] capitalize">
             <span className="w-14 h-14 flex items-center justify-center bg-[#fff1e3] rounded-[50%] ml-4">
               <Icon
                 icon="lucide:package"
                 fontSize={32}
-                className="text-[#ff9f43]"
+                className="text-[#ff9f43]" // #ff9f43
               />
               {/* <span className="absolute w-[12px] h-[12px] bg-green-300 border-[2px] border-solid border-amber-300 rounded-[50%] top-[53%] left-[60%]"></span> */}
             </span>
             <div>
-              <p className="text-gray-500 text-xl">Tổng đơn hàng</p>
-              <span>{totalOrder}</span>
+              <p className="text-[#ff9f43] font-medium text-xl">đơn hàng</p>
+              <span className="font-semibold text-lg">{totalOrder}</span>
             </div>
           </div>
 
-          <div className="flex flex-row items-center gap-4 border-[1px] border-solid border-gray-300 rounded-md shadow-md">
-            <span className="w-14 h-14 flex items-center justify-center bg-green-400 rounded-[50%] ml-4">
+          <div className="flex flex-row items-center gap-4  bg-white border-solid border-gray-300 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] capitalize">
+            <span className="w-14 h-14 flex items-center justify-center bg-[#d6ffed] rounded-[50%] ml-4">
               <Icon
-                icon="nimbus:money"
+                icon="ic:round-attach-money"
                 fontSize={32}
+                className="text-[#0dbb9d]"
               />
             </span>
             <div className="relative">
-              <p className="text-gray-500 text-xl">Tổng doanh thu</p>
-              <span>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}</span>
+              <p className="text-[#0dbb9d] font-medium text-xl">doanh thu</p>
+              <span className="font-semibold text-lg">
+                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalRevenue)}
+              </span>
               {/* <span className="text-green-400 text-sm absolute top-6 pl-1">+300$</span> */}
             </div>
           </div>
@@ -213,8 +218,31 @@ export default function Dashboard() {
         </div> */}
         {/* {fetchDataOrder.length > 0 && <LineChart chartData={orderData}/>} */}
         {orderData && (
-          <div className="w-full">
-            <LineChart chartData={orderData} />
+          <div className="flex w-full gap-6">
+            <div className="w-1/2 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white">
+              <div className="px-3 py-3 font-semibold text-xl rounded-md flex items-center gap-3 bg-[#f8f9fc] border-b">
+                <Icon
+                  className="text-[#4e73df]"
+                  icon="fa6-solid:chart-line"
+                />
+                <span className="text-[#4e73df]">Tổng Doanh Thu</span>
+              </div>
+              <div className="px-3 py-3">
+                <LineChart chartData={orderData} />
+              </div>
+            </div>
+            <div className="w-1/2 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white">
+              <div className="px-3 py-3 font-semibold text-xl rounded-md flex items-center gap-3 bg-[#f8f9fc] border-b">
+                <Icon
+                  className="text-[#4e73df]"
+                  icon="fa-solid:chart-bar"
+                />
+                <span className="text-[#4e73df]">Tổng Đơn Hàng</span>
+              </div>
+              <div className="px-3 py-3">
+                <BarChart chartData={orderData} />
+              </div>
+            </div>
           </div>
         )}
       </div>
