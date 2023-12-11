@@ -15,9 +15,14 @@ import ModalMyVoucher from './ModalMyVoucher';
 import { increase } from 'src/redux/slice/countSlice';
 import { SkeletonCart } from 'src/components/skeleton';
 
-export default function Cart() {
+interface Props {
+  product: any;
+  setProduct: any;
+}
+
+export default function Cart({ product, setProduct }: Props) {
   // const IsmUp = useResponsive('up', 'md');
-  const [product, setProduct] = useState<Array<any>>([]);
+
   const [productPay, setProductPay] = useState<Array<any>>([]);
   const [checkAll, setCheckAll] = useState(false);
   const [openModal, setOpenModal] = useState(false);
