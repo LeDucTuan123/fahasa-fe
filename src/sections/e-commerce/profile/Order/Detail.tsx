@@ -14,10 +14,6 @@ interface DetailProps {
 }
 
 function Detail(props: DetailProps) {
-
-  console.log('orther: ', props.order);
-  console.log('product: ', props.products);
-
   const user: any = useSelector((state: RootState) => state.user.userData);
   const address: any =
     user.listAddress &&
@@ -29,12 +25,15 @@ function Detail(props: DetailProps) {
 
   function handleDeleteOrder() {
     fetch
-      .delete(`/rest/order/delete/${props.order.id}`)
+      .patch(`/rest/order/delete/${props.order.id}`)
       .then((res) => {
         props.changeToTable();
-        props.setOrders((prev: any[]) => {
-          return prev.filter((item: any) => {
-            return item.id !== props.order.id;
+        props.setOrders((prev) => {
+          return prev.map((item) => {
+            if (item.id === res.data.id) {
+              return res.data;
+            }
+            return item;
           });
         });
       })
