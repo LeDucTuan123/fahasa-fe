@@ -38,6 +38,10 @@ export default function Dashboard() {
     labels: [],
     datasets: [{ label: '', data: [] }],
   });
+  const [orderData1, setOrderData1] = useState<OrderDataType | undefined>({
+    labels: [],
+    datasets: [{ label: '', data: [] }],
+  });
   useEffect(() => {
     fetch
       .get(apiPaths.order)
@@ -92,15 +96,34 @@ export default function Dashboard() {
         },
         { labels: [], datasets: [{ label: 'doanh thu', data: [] }] },
       );
+      const mergedData1 = filteredData.reduce(
+        (acc, data) => {
+          const existingIndex = acc.labels.indexOf(data.orderdate);
+
+          if (existingIndex !== -1) {
+            // If the date already exists, update the totalamount
+            acc.datasets[0].data[existingIndex] += 1;
+          } else {
+            // If the date doesn't exist, add it to labels and add totalamount to data
+            acc.labels.push(data.orderdate);
+            acc.datasets[0].data.push(1);
+          }
+
+          return acc;
+        },
+        { labels: [], datasets: [{ label: 'đơn hàng', data: [] }] },
+      );
 
       setOrderData(mergedData);
-
+      setOrderData1(mergedData1);
       // Calculate total revenue
       const total = mergedData.datasets[0].data.reduce((sum: number, amount: number) => sum + amount, 0);
       setTotalRevenue(total);
+
+      const totalOrderCount = filteredData.length;
+      setTotalOrder(totalOrderCount);
     }
-    const totalOrderCount = fetchDataOrder.length;
-    setTotalOrder(totalOrderCount);
+    
     const totalProductCount = books.length + tools.length;
     setTotalProducts(totalProductCount);
     // Calculate total number of users
@@ -240,7 +263,7 @@ export default function Dashboard() {
                 <span className="text-[#4e73df]">Tổng Đơn Hàng</span>
               </div>
               <div className="px-3 py-3">
-                <BarChart chartData={orderData} />
+                <BarChart chartData={orderData1} />
               </div>
             </div>
           </div>
