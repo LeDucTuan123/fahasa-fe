@@ -61,7 +61,7 @@ export default function Category({ skeletonCategorys }: Props) {
   };
 
   return (
-    <div className="w-full mt-10 bg-white rounded-lg">
+    <div className="w-full mt-8 bg-white rounded-lg">
       <div className="flex w-full items-center px-5 gap-3 py-3 font-semibold">
         <Icon
           icon={'iconamoon:category'}
