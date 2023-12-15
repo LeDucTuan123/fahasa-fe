@@ -46,7 +46,9 @@ export default function FormVoucher() {
             quantity: dataVoucher.quantity,
           }),
         }).then(() => {});
-        toast.success('Thêm sản phẩm thành công');
+
+        toast.success('Thêm thành công');
+
         setVoucherLoading(false);
         return setFetchDataVoucher((prev) => [
           //khi thêm thành công thì upexpdate lại state khỏi cần load lại page
@@ -64,7 +66,7 @@ export default function FormVoucher() {
       }, 2000);
       setDataVoucher(formVoucher);
     } catch (error) {
-      toast.success('Thêm voucher thất bại');
+      toast.error('Thêm voucher thất bại');
     }
   };
 
@@ -194,9 +196,12 @@ export default function FormVoucher() {
                   value={dataVoucher.code}
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, code: e.target.value }))}
                 />
+
+
                 {validateFormError && validateFormError.code.length === 0 && (
                   <div className="text-red-500 pt-3">Vui lòng thêm mã voucher</div>
                 )}
+
                 <label
                   htmlFor="floating_name"
                   className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -215,9 +220,12 @@ export default function FormVoucher() {
                   value={dataVoucher.expdate}
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, expdate: e.target.value }))}
                 />
+
+
                 {validateFormError && validateFormError.expdate.length === 0 && (
                   <div className="text-red-500 pt-3">Vui lòng thêm ngày hết hạn voucher</div>
                 )}
+
                 <label
                   htmlFor="floating_author"
                   className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -239,9 +247,12 @@ export default function FormVoucher() {
                   value={dataVoucher.valuev}
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, valuev: e.target.value }))}
                 />
+
+
                 {validateFormError && validateFormError.valuev === 0 && (
                   <div className="text-red-500 pt-3">Giá trị voucher phải lớn hơn 0</div>
                 )}
+
                 <label
                   htmlFor="floating_discount"
                   className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -260,9 +271,12 @@ export default function FormVoucher() {
                   value={dataVoucher.quantity}
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, quantity: e.target.value }))}
                 />
+
+
                 {validateFormError && validateFormError.quantity === 0 && (
                   <div className="text-red-500 pt-3">số lượng voucher phải lớn hơn 0</div>
                 )}
+
                 <label
                   htmlFor="floating_discount"
                   className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -304,9 +318,12 @@ export default function FormVoucher() {
                 value={dataVoucher.condition}
                 onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, condition: e.target.value }))}
               ></textarea>
+
+
               {validateFormError && validateFormError.condition === 0 && (
                 <div className="text-red-500 pt-3">Điều kiện voucher phải lớn hơn 0</div>
               )}
+
             </div>
             {/* <div className="relative z-0 w-full mb-6 group">
             <label

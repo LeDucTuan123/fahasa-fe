@@ -36,7 +36,7 @@ const List_Item_Sidebar: itemType[] = [
   },
   {
     id: 4,
-    title: 'Hóa đơn',
+    title: 'Đơn hàng',
     icon: 'ph:package', // icon-park-outline:transaction-order
     path: '/admin/bill',
   },
@@ -54,12 +54,18 @@ const List_Item_Sidebar: itemType[] = [
   },
   {
     id: 7,
+    title: 'Thông báo',
+    icon: 'heroicons-outline:bell',
+    path: '/admin/notification',
+  },
+  {
+    id: 8,
     title: 'Hỗ trợ',
     icon: 'fluent:person-support-24-regular',
     path: '/admin/support',
   },
   {
-    id: 8,
+    id: 9,
     title: 'Khác',
     icon: 'fluent:more-circle-16-regular',
     path: '/admin/orther',
