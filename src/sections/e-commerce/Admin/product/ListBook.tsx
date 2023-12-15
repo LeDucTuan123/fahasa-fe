@@ -41,19 +41,15 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
   };
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setSearchTerm(event.target.value);
-      setCurrentPage(1);
-    },[]
-  );
+  const handleSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1);
+  }, []);
 
-  const filteredBooks = fetchDataBook.filter((book) =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredBooks = fetchDataBook.filter((book) => book.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const itemsPerPage = 3;
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
 
   const totalItems = filteredBooks.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -62,24 +58,24 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
   const endIndex = startIndex + itemsPerPage;
 
   const visibleItem = filteredBooks.slice(startIndex, endIndex);
-  
+
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
   return (
     <>
-      <div className='flex justify-between'>
-        <p className="text-2xl">Danh sách sách</p>
+      <div className="flex justify-between">
+        <p className="text-2xl font-bold ">Danh sách</p>
         <div className="flex items-center justify-end">
-        <input
-          type="text"
-          placeholder="Search by book name"
-          className="border p-2"
-          value={searchTerm}
-          onChange={handleSearch}
-        />
+          <input
+            type="text"
+            placeholder="Search by book name"
+            className="border p-2"
+            value={searchTerm}
+            onChange={handleSearch}
+          />
         </div>
-      </div>      
+      </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg border-[1px] rounded-xl">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -199,7 +195,7 @@ export default function ListBook({ onHandleEditBook, fetchDataBook, setFetchData
         >
           Next
         </button>
-      </div>      
+      </div>
     </>
   );
 }

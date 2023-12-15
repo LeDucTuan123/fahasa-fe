@@ -33,5 +33,6 @@ export const AdminUser = Loadable(lazy(() => import('../pages/AdminUserPage')));
 export const AdminBill = Loadable(lazy(() => import('../pages/AdminBillPage')));
 export const AdminOrther = Loadable(lazy(() => import('../pages/AdminOrtherPage')));
 export const AdminVoucher = Loadable(lazy(() => import('../pages/AdminVoucherPage')));
+export const AdminNotification = Loadable(lazy(() => import('../pages/AdminNotificationPage')));
 export const AdminCategory = Loadable(lazy(() => import('../pages/AdminCategoryPage')));
 export const AdminSupport = Loadable(lazy(() => import('../pages/AdminSupport')));

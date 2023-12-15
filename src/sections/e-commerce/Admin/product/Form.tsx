@@ -11,7 +11,7 @@ export default function Form() {
 
   return (
     <>
-      <div className="w-full h-auto shadow-xl border-[1px] p-5 mb-5">
+      <div className="w-full h-auto shadow-md border-[1px] p-5 mb-5 rounded-xl">
         <div className="flex pb-5">
           <button
             id="states-button"

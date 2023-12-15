@@ -108,7 +108,7 @@ export default function Category() {
   console.log(selectedCategory2);
   return (
     <div className="space-y-4">
-      <div className="w-full h-auto shadow-xl p-5 border-[1px] rounded-xl">
+      <div className="w-full h-auto shadow-md p-5 border-[1px] rounded-xl">
         <div className="flex relative pb-5">
           <div className="w-full">
             <div className="grid md:grid-cols-2 md:gap-6">
