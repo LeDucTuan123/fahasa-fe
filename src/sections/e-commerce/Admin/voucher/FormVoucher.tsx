@@ -174,7 +174,7 @@ export default function FormVoucher() {
 
   return (
     <>
-      <div className="w-full h-auto shadow-xl p-5 border-[1px] rounded-xl">
+      <div className="w-full h-auto shadow-md p-5 border-[1px] rounded-xl">
         <div className="flex relative pb-5">
           <form className="w-full">
             <div className="grid md:grid-cols-2 md:gap-6">
@@ -196,7 +196,6 @@ export default function FormVoucher() {
                   value={dataVoucher.code}
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, code: e.target.value }))}
                 />
-
 
                 {validateFormError && validateFormError.code.length === 0 && (
                   <div className="text-red-500 pt-3">Vui lòng thêm mã voucher</div>
@@ -220,7 +219,6 @@ export default function FormVoucher() {
                   value={dataVoucher.expdate}
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, expdate: e.target.value }))}
                 />
-
 
                 {validateFormError && validateFormError.expdate.length === 0 && (
                   <div className="text-red-500 pt-3">Vui lòng thêm ngày hết hạn voucher</div>
@@ -248,7 +246,6 @@ export default function FormVoucher() {
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, valuev: e.target.value }))}
                 />
 
-
                 {validateFormError && validateFormError.valuev === 0 && (
                   <div className="text-red-500 pt-3">Giá trị voucher phải lớn hơn 0</div>
                 )}
@@ -271,7 +268,6 @@ export default function FormVoucher() {
                   value={dataVoucher.quantity}
                   onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, quantity: e.target.value }))}
                 />
-
 
                 {validateFormError && validateFormError.quantity === 0 && (
                   <div className="text-red-500 pt-3">số lượng voucher phải lớn hơn 0</div>
@@ -319,11 +315,9 @@ export default function FormVoucher() {
                 onChange={(e: any) => setDataVoucher((prev) => ({ ...prev, condition: e.target.value }))}
               ></textarea>
 
-
               {validateFormError && validateFormError.condition === 0 && (
                 <div className="text-red-500 pt-3">Điều kiện voucher phải lớn hơn 0</div>
               )}
-
             </div>
             {/* <div className="relative z-0 w-full mb-6 group">
             <label

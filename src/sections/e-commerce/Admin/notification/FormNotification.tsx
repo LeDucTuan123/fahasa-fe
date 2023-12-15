@@ -208,8 +208,9 @@ export default function FormNotification() {
                 </label>
               </div>
 
-              <div className="relative z-0 w-full mb-6 group">
+              <div className="w-full mb-6 group">
                 <select
+                  className="w-full rounded-lg bg-gray-50 border border-gray-300 text-gray-900 text-base"
                   value={dataNotification.idUsers}
                   onChange={(e) => setDataNotification((prev) => ({ ...prev, idUsers: e.target.value }))}
                 >

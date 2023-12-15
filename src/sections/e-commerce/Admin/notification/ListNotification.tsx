@@ -154,7 +154,7 @@ export default function ListNotification({
           </tbody>
         </table>
 
-        <div className="flex justify-center items-center gap-4 mt-4">
+        <div className="flex justify-center items-center gap-4 my-4">
           <button
             onClick={handlePrevPage}
             disabled={currentPage === 1}

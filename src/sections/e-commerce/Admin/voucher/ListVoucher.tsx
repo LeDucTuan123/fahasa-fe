@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { toast } from 'react-toastify';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
@@ -10,7 +10,7 @@ interface Props {
   setFetchDataVoucher: React.Dispatch<React.SetStateAction<VoucherType[]>>;
 }
 
-export default function ListVoucher({onHandleEditVoucher, fetchDataVoucher, setFetchDataVoucher}: Props) {
+export default function ListVoucher({ onHandleEditVoucher, fetchDataVoucher, setFetchDataVoucher }: Props) {
   const handleDeleteVoucher = async (item: VoucherType) => {
     try {
       await fetch.delete(`${apiPaths.voucher}/${item.id}`);
@@ -25,7 +25,7 @@ export default function ListVoucher({onHandleEditVoucher, fetchDataVoucher, setF
   };
   return (
     <>
-      <p className="text-2xl">Danh sách sách</p>
+      <p className="text-2xl font-bold py-4">Danh sách</p>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg border-[1px] rounded-xl">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -97,7 +97,7 @@ export default function ListVoucher({onHandleEditVoucher, fetchDataVoucher, setF
                   <td className="px-6 py-4 max-w-[170px] overflow-hidden text-ellipsis line-clamp-5">{item.expdate}</td>
                   <td className="px-6 py-4 max-w-[170px]">{item.valuev}</td>
                   <td className="px-6 py-4 max-w-[170px]">{item.quantity}</td>
-                  <td className="px-6 py-4 max-w-[170px]">{item.active === true ? 'true':'false'}</td>
+                  <td className="px-6 py-4 max-w-[170px]">{item.active === true ? 'true' : 'false'}</td>
                   <td className="px-6 py-4 max-w-[170px] overflow-hidden text-ellipsis line-clamp-5">
                     {item.condition}
                   </td>
@@ -124,5 +124,5 @@ export default function ListVoucher({onHandleEditVoucher, fetchDataVoucher, setF
         </table>
       </div>
     </>
-  );  
+  );
 }
