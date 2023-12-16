@@ -234,9 +234,9 @@ export default function DetailProduct() {
         getCate?.map((cate) => {
           if (getCateId === cate.id) {
             if (cate.parent && cate.parent.parent) {
-              setGetCateNameLevel1(cate.parent.parent.categoryname); // Level 1
-              setGetCateNameLevel2(cate.parent.categoryname); // Level 2
-              setGetCateNameLevel3(cate.categoryname); // Level 3
+              setGetCateNameLevel1(cate.parent.parent.categoryname.replace(/\s/g, '-')); // Level 1
+              setGetCateNameLevel2(cate.parent.categoryname.replace(/\s/g, '-')); // Level 2
+              setGetCateNameLevel3(cate.categoryname.replace(/\s/g, '-')); // Level 3
             }
           }
         });
@@ -244,7 +244,9 @@ export default function DetailProduct() {
         getCate?.map((cate: any | CategoryType[]) => {
           cate.schooltools.map((tool: any) => {
             if (data?.id === tool.id) {
-              setGetCateNameLevel3(cate.categoryname);
+              setGetCateNameLevel1(cate.parent.parent.categoryname.replace(/\s/g, '-')); // Level 1
+              setGetCateNameLevel2(cate.parent.categoryname.replace(/\s/g, '-')); // Level 2
+              setGetCateNameLevel3(cate.categoryname.replace(/\s/g, '-'));
             }
           });
         });
@@ -279,13 +281,13 @@ export default function DetailProduct() {
           </Link>
           <Link
             component={RouterLink}
-            to={`/${getCateNameLevel1}`}
+            to={`/category/${getCateNameLevel1}`}
           >
             {getCateNameLevel1}
           </Link>
           <Link
             component={RouterLink}
-            to={`/${getCateNameLevel1}/${getCateNameLevel2}`}
+            to={`/category/${getCateNameLevel1}/${getCateNameLevel2}`}
           >
             {getCateNameLevel2}
           </Link>

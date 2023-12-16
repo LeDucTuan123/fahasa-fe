@@ -29,7 +29,8 @@ export default function AdminLayout() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!isLogin || (user && user.authorities && user.authorities[0].authority === 'USER')) {
+    const isAdmin = localStorage.getItem('authority');
+    if (!isAdmin) {
       navigate('/error');
     }
   }, [user]);
