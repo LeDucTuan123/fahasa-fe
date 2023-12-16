@@ -127,12 +127,12 @@ export default function User() {
               >
                 Giới tính
               </th>
-              <th
+              {/* <th
                 scope="col"
                 className="px-6 py-3"
               >
                 Mật khẩu
-              </th>
+              </th> */}
               <th
                 scope="col"
                 className="px-6 py-3"
@@ -178,7 +178,7 @@ export default function User() {
                 <td className="px-6 py-4 max-w-[170px]">{user.firstname}</td>
                 <td className="px-6 py-4 max-w-[130px]">{user.birthday}</td>
                 <td className="px-6 py-4 max-w-[50px]">{user.gender}</td>
-                <td className="px-6 py-4 max-w-[145px]">
+                {/* <td className="px-6 py-4 max-w-[145px]">
                   <input
                     disabled
                     className="rounded-2xl w-24"
@@ -187,7 +187,7 @@ export default function User() {
                     onChange={(e) => handlePasswordChange(index, e.target.value)}
                     maxLength={15}
                   />
-                </td>
+                </td> */}
                 <td className="px-6 py-4 max-w-[220px]">
                   {user.email.length > 25 ? `${user.email.slice(0, 25)}...` : user.email}
                 </td>

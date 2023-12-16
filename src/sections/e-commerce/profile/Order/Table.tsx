@@ -247,11 +247,17 @@ function Table(props: TableProps) {
                   <tr>
                     <td colSpan={6}>
                       <div className="pagination flex justify-end items-center gap-4 py-4">
-                        <div className="border-2 text-sm font-medium border-blue-600 rounded-full hover:bg-blue-600 hover:text-white">
+                        <div
+                          className={
+                            currentPage === 1
+                              ? 'border-2 text-sm font-medium border-slate-300 rounded-full'
+                              : 'border-2 text-sm font-medium border-blue-600 rounded-full hover:bg-blue-600 hover:text-white'
+                          }
+                        >
                           <button
                             onClick={() => setCurrentPage(currentPage - 1)}
                             disabled={currentPage === 1}
-                            className="flex items-center px-4 py-1"
+                            className="flex items-center px-4 py-1 disabled:bg-slate-300 disabled:text-slate-500 rounded-full"
                           >
                             <Icon
                               icon="ic:round-navigate-before"
@@ -263,11 +269,17 @@ function Table(props: TableProps) {
                         <div className="text-sm font-medium">
                           Trang {currentPage}/{totalPages}
                         </div>
-                        <div className="border-2 text-sm font-medium border-blue-600 rounded-full hover:bg-blue-600 hover:text-white">
+                        <div
+                          className={
+                            indexOfLastItem >= filteredOrders.length
+                              ? 'border-2 text-sm font-medium border-slate-300 rounded-full'
+                              : 'border-2 text-sm font-medium border-blue-600 rounded-full hover:bg-blue-600 hover:text-white'
+                          }
+                        >
                           <button
                             onClick={() => setCurrentPage(currentPage + 1)}
                             disabled={indexOfLastItem >= filteredOrders.length}
-                            className="flex items-center px-4 py-1"
+                            className="flex items-center px-4 py-1 disabled:bg-slate-300 disabled:text-slate-500 rounded-full"
                           >
                             <span>Trang tiếp </span>
                             <Icon

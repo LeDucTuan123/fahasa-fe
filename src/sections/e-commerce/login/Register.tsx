@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 export default function Register() {
@@ -42,8 +42,18 @@ export default function Register() {
         }
       } catch (error: any) {
         // Xử lý lỗi nếu có
-        toast.error(error.message);
-        console.error('Lỗi khi đăng ký:', error.message);
+        if (axios.isAxiosError(error)) {
+          // Kiểm tra nếu là AxiosError, truy cập thông tin từ response
+          const axiosError: AxiosError<any> = error;
+          if (axiosError.response) {
+            toast.error(axiosError.response.data.message);
+            console.error('Lỗi khi đăng ký:', axiosError.response.data.message);
+          }
+        } else {
+          // Xử lý lỗi khác nếu không phải là AxiosError
+          toast.error(error.message);
+          console.error('Lỗi khi đăng ký:', error.message);
+        }
       }
     },
   });
