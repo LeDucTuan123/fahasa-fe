@@ -31,7 +31,7 @@ export default function ListNotification({
     return new Date(b.notificationDate).getTime() - new Date(a.notificationDate).getTime();
   });
 
-  const filteredData = sortedData.filter((item) => item.typeNotify?.type === 'noti');
+  const filteredData = sortedData && sortedData.filter((item) => item.typeNotify?.type === 'noti');
 
   console.log(sortedData);
 

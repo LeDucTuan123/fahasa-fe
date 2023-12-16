@@ -226,15 +226,7 @@ export default function Payment() {
 
   console.log('user id: ', applyMyVoucher?.id);
   function handlePayment() {
-    if (
-      information.firstname.length === 0 ||
-      information.lastname.length === 0 ||
-      information.phone.length === 0 ||
-      information.address.length === 0 ||
-      information.city.length === 0 ||
-      information.district.length === 0 ||
-      information.ward.length === 0
-    ) {
+    if (!openForm && !addressId) {
       return toast.warning('Vui lòng thêm đầy đủ thông tin');
     }
     if (valid() && openForm) {
