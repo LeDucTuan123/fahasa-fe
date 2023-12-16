@@ -3,7 +3,7 @@ import { Button } from 'flowbite-react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
 import fetch from 'src/services/axios/Axios';
-import { ConvertToVietNamDong } from 'src/util/SupportFnc';
+import { ConvertToVietNamDong, formatDateTime } from 'src/util/SupportFnc';
 
 interface DetailProps {
   changeToTable: () => void;
@@ -110,6 +110,9 @@ function Detail(props: DetailProps) {
               </li>
               <li className="mt-3">
                 Số điện thoại: <span className="font-bold">{props.user.phone}</span>
+              </li>
+              <li className="mt-3">
+                Ngày mua: <span className="font-bold">{formatDateTime(props.order.orderdate)}</span>
               </li>
             </ul>
           </div>

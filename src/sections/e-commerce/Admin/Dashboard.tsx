@@ -4,7 +4,6 @@ import LineChart from './chart/LineChart';
 import BarChart from './chart/BarChart';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
-import { number } from 'yup';
 import axios from 'axios';
 import { BookType } from 'src/types/book';
 import { ToolType } from 'src/types/tool';
@@ -123,7 +122,7 @@ export default function Dashboard() {
       const totalOrderCount = filteredData.length;
       setTotalOrder(totalOrderCount);
     }
-    
+
     const totalProductCount = books.length + tools.length;
     setTotalProducts(totalProductCount);
     // Calculate total number of users
@@ -132,6 +131,21 @@ export default function Dashboard() {
     setTotalUsers(totalUsersCount);
   }, [fetchDataOrder, users, books, tools]);
   console.log();
+
+  const options = {
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          unit: 'day',
+          displayFormats: {
+            day: 'DD/MM/YYYY',
+          },
+        },
+      },
+    },
+  };
+
   return (
     <>
       <div className="h-screen">
@@ -251,7 +265,10 @@ export default function Dashboard() {
                 <span className="text-[#4e73df]">Tổng Doanh Thu</span>
               </div>
               <div className="px-3 py-3">
-                <LineChart chartData={orderData} />
+                <LineChart
+                  chartData={orderData}
+                  chartOptions={options}
+                />
               </div>
             </div>
             <div className="w-1/2 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white">
@@ -263,7 +280,10 @@ export default function Dashboard() {
                 <span className="text-[#4e73df]">Tổng Đơn Hàng</span>
               </div>
               <div className="px-3 py-3">
-                <BarChart chartData={orderData1} />
+                <BarChart
+                  chartData={orderData1}
+                  chartOptions={options}
+                />
               </div>
             </div>
           </div>

@@ -28,7 +28,7 @@ export default function FormNotification() {
       .get('http://localhost:8080/api/v1/notifications')
       .then((res) => setFetchDataNotification(res.data))
       .catch((err) => console.log(err.message));
-  }, [fetchDataNotification.length]);
+  }, [fetchDataNotification.length, notificationEdit]);
 
   const addNotification = () => {
     try {
@@ -178,17 +178,6 @@ export default function FormNotification() {
         setNotificationLoading(false);
         setNotificationEdit(false);
         toast.success('Update thành công');
-        setFetchDataNotification((prev) =>
-          prev.map((item) =>
-            item.id === dataNotification.id
-              ? {
-                  ...item,
-                  title: dataNotification.title,
-                  content: dataNotification.content,
-                }
-              : item,
-          ),
-        );
       } catch (error) {
         toast.error('Update thất bại');
       }
