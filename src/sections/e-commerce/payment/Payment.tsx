@@ -13,6 +13,7 @@ import ModalMyVoucher from '../cart/ModalMyVoucher';
 import { apiPaths } from 'src/services/api/path-api';
 
 import ListAddress from './ListAddress';
+import { toast } from 'react-toastify';
 
 export default function Payment() {
   const navigate = useNavigate();
@@ -224,8 +225,18 @@ export default function Payment() {
   }
 
   console.log('user id: ', applyMyVoucher?.id);
-
   function handlePayment() {
+    if (
+      information.firstname.length === 0 ||
+      information.lastname.length === 0 ||
+      information.phone.length === 0 ||
+      information.address.length === 0 ||
+      information.city.length === 0 ||
+      information.district.length === 0 ||
+      information.ward.length === 0
+    ) {
+      return toast.warning('Vui lòng thêm đầy đủ thông tin');
+    }
     if (valid() && openForm) {
       fetch
         .post('/rest/order/payment', {

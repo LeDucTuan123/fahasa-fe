@@ -38,7 +38,7 @@ export default function FormBook() {
       .get(apiPaths.book)
       .then((res: any) => setfetchDataBook(res.data))
       .catch((err: any) => console.log(err.message));
-  }, []);
+  }, [fetchDataBook.length]);
 
   const onDrop = useCallback((acceptedFiles: any) => {
     if (acceptedFiles[0]) {
