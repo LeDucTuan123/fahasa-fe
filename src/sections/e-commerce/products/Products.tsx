@@ -34,7 +34,7 @@ export default function Products() {
 
   // là mảng chứa những category level 2
   let level2: any = null;
-  console.log(level2);
+  // console.log(level2);
   // Đây là đoạn code gọi api category -- start
   const [categoryId, setCategoryId] = useState<number>();
   const [subCategory, setSubCategory] = useState([]);

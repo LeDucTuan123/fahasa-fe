@@ -10,7 +10,7 @@ interface NotifyType {
   notificationDate: string;
   userEmail: string;
   idUsers: string;
-  typeNotify?: [];
+  typeNotify: any;
 }
 
 interface Props {
@@ -31,14 +31,18 @@ export default function ListNotification({
     return new Date(b.notificationDate).getTime() - new Date(a.notificationDate).getTime();
   });
 
+  const filteredData = sortedData.filter((item) => item.typeNotify?.type === 'noti');
+
+  console.log(sortedData);
+
   const ITEMS_PER_PAGE = 5; // Số item/trang
   const [currentPage, setCurrentPage] = useState(1);
 
   // Tính số lượng trang
-  const totalPages = Math.ceil(sortedData.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
 
   // Chia dữ liệu đã sắp xếp thành các trang
-  const paginatedData = sortedData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const paginatedData = filteredData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
   // Hàm xử lý chuyển trang
   const handleNextPage = () => {

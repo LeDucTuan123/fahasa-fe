@@ -17,15 +17,18 @@ export default function FormNotification() {
   const [notificationEdit, setNotificationEdit] = useState(false);
   const [dataNotification, setDataNotification] = useState(formNotification);
   const [fetchDataNotification, setFetchDataNotification] = useState<any[]>([]);
-
-  console.log(dataNotification.idUsers);
+  const [notificationErrors, setNotificationErrors] = useState({
+    title: '',
+    idUsers: '',
+    content: '',
+  });
 
   useEffect(() => {
     axios
       .get('http://localhost:8080/api/v1/notifications')
       .then((res) => setFetchDataNotification(res.data))
       .catch((err) => console.log(err.message));
-  }, []);
+  }, [fetchDataNotification.length]);
 
   const addNotification = () => {
     try {
@@ -81,7 +84,7 @@ export default function FormNotification() {
             },
           },
         )
-        .then(() => {
+        .then((res) => {
           toast.success('Thêm thành công');
           setNotificationLoading(false);
           setFetchDataNotification((prev) => [
@@ -92,9 +95,9 @@ export default function FormNotification() {
               content: dataNotification.content,
               notificationDate: dataNotification.notificationDate,
               userEmail: dataNotification.userEmail,
-              idUsers: dataNotification.idUsers,
             },
           ]);
+          console.log(res);
         })
         .catch(() => {
           toast.error('Thêm thất bại');
@@ -108,13 +111,38 @@ export default function FormNotification() {
 
   const handleAddNotification = async (e: any) => {
     e.preventDefault();
-    setNotificationLoading(true);
-    // Kiểm tra giá trị select là 'all' hay không
-    if (dataNotification.idUsers === 'all') {
-      addNotification();
+
+    // Validate dữ liệu trước khi thêm thông báo
+    let errors = {
+      title: '',
+      idUsers: '',
+      content: '',
+    };
+
+    if (!dataNotification.title) {
+      errors.title = 'Tiêu đề không được để trống';
+    }
+
+    if (!dataNotification.idUsers) {
+      errors.idUsers = 'Chọn người dùng';
+    }
+
+    if (!dataNotification.content) {
+      errors.content = 'Nội dung không được để trống';
+    }
+
+    setNotificationErrors(errors);
+
+    // Nếu không có lỗi, tiến hành thêm thông báo
+    if (!errors.title && !errors.idUsers && !errors.content) {
+      if (dataNotification.idUsers === 'all') {
+        addNotification();
+        setNotificationLoading(true);
+      } else {
+        addNotificationUser(dataNotification.idUsers);
+      }
     } else {
-      // Ngược lại, nếu giá trị select không phải 'all', gọi hàm addNotificationUser với giá trị idUsers tương ứng
-      addNotificationUser(dataNotification.idUsers);
+      toast.error('Vui lòng điền đầy đủ thông tin');
     }
   };
 
@@ -206,6 +234,7 @@ export default function FormNotification() {
                 >
                   Tiêu đề
                 </label>
+                {notificationErrors.title && <p className="text-red-500 text-xs mt-1">{notificationErrors.title}</p>}
               </div>
 
               <div className="w-full mb-6 group">
@@ -235,6 +264,9 @@ export default function FormNotification() {
                       </option>
                     ))}
                 </select>
+                {notificationErrors.idUsers && (
+                  <p className="text-red-500 text-xs mt-1">{notificationErrors.idUsers}</p>
+                )}
               </div>
             </div>
 
@@ -253,6 +285,7 @@ export default function FormNotification() {
                 value={dataNotification.content}
                 onChange={(e: any) => setDataNotification((prev) => ({ ...prev, content: e.target.value }))}
               ></textarea>
+              {notificationErrors.content && <p className="text-red-500 text-xs mt-1">{notificationErrors.content}</p>}
             </div>
 
             <div className="flex gap-2">

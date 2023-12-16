@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
 import { apiPaths } from 'src/services/api/path-api';
 import fetch from 'src/services/axios/Axios';
+import { formatDateToDDMMYYYY } from 'src/util/SupportFnc';
 
 export default function Myvoucher() {
   const [dataVoucher, setDataVoucher] = useState([]);
@@ -44,9 +45,15 @@ export default function Myvoucher() {
             </div>
             <div className="h-full flex items-center relative w-full">
               <ul>
-                <li className="text-ellipsis line-clamp-1">Tên: {item[0].title}</li>
-                <li>Mã: {item[0].code}</li>
-                <li>Ngày hết hạn: {item[0].expdate}</li>
+                <li className="text-ellipsis line-clamp-1">
+                  <span className="font-semibold">Tên:</span> {item[0].title}
+                </li>
+                <li>
+                  <span className="font-semibold">Mã:</span> {item[0].code}
+                </li>
+                <li>
+                  <span className="font-semibold">Ngày hết hạn:</span> {formatDateToDDMMYYYY(item[0].expdate)}
+                </li>
               </ul>
               {item[0].orders.length > 0 && (
                 <div className="absolute top-2 right-2 text-lg text-red-500">
