@@ -1,16 +1,27 @@
 import { Icon } from '@iconify/react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'src/redux/store';
+import { getUser } from 'src/redux/slice/userSlice';
+import { RootState, useAppDispatch } from 'src/redux/store';
 import { formatDateTime } from 'src/util/SupportFnc';
 
 export default function Notification() {
   const user: any = useSelector((state: RootState) => state.user.userData);
+  const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+
+  const dispatch = useAppDispatch();
 
   const Notifications = [...user.notifications].sort((a: any, b: any) => {
     const dateA = new Date(a.notificationDate).getTime();
     const dateB = new Date(b.notificationDate).getTime();
     return dateB - dateA;
   });
+
+  useEffect(() => {
+    if (isLogin === true) {
+      dispatch(getUser());
+    }
+  }, [dispatch]);
 
   return (
     <div className="flex w-full px-5 flex-col">
