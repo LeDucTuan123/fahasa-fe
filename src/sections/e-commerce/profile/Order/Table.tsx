@@ -182,44 +182,105 @@ function Table(props: TableProps) {
               </tr>
             </thead>
             {loading ? (
-              // Hiển thị dữ liệu theo trang
-              <tbody className="">
-                {currentItems.map((item: any) => (
-                  // Hiển thị thông tin cho mỗi mục trong trang hiện tại
-                  <tr
-                    key={item.id}
-                    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
-                  >
-                    <td className="px-6 py-3">{item.id}</td>
-                    <td className="px-6 py-3 tracking-widest">{formatDateToDDMMYYYY(item.orderdate)}</td>
-                    <td className="px-6 py-3">{item.receiver}</td>
-                    <td className="px-6 py-3 tracking-wide">{ConvertToVietNamDong(item.totalamount)}</td>
-                    <td className="text-center">
-                      <div
-                        className={
-                          item.statuss.statuss === 'Đã thanh toán'
-                            ? 'bg-[#24a148] rounded-full py-1 px-1 text-white'
-                            : item.statuss.statuss === 'Chưa thanh toán'
-                            ? 'bg-[#ff832b]  rounded-full py-1 px-1 text-white'
-                            : item.statuss.statuss === 'Đang xử lý'
-                            ? 'bg-[#f1c21b]  rounded-full py-1 px-1 text-white'
-                            : item.statuss.statuss === 'Đã hủy'
-                            ? 'bg-[#da1e28]  rounded-full py-1 px-1 text-white'
-                            : ''
-                        }
+              <>
+                <tbody className="">
+                  {currentItems.map((item: any) => (
+                    // Hiển thị thông tin cho mỗi mục trong trang hiện tại
+                    <tr
+                      key={item.id}
+                      className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+                    >
+                      <td className="px-6 py-3">{item.id}</td>
+                      <td className="px-6 py-3 tracking-widest">{formatDateToDDMMYYYY(item.orderdate)}</td>
+                      <td className="px-6 py-3">{item.receiver}</td>
+                      <td className="px-6 py-3 tracking-wide">{ConvertToVietNamDong(item.totalamount)}</td>
+                      <td className="text-center">
+                        <div
+                          className={
+                            item.statuss.statuss === 'Đã thanh toán'
+                              ? 'bg-[#24a148] rounded-full py-1 px-1 text-white'
+                              : item.statuss.statuss === 'Chưa thanh toán'
+                              ? 'bg-[#ff832b]  rounded-full py-1 px-1 text-white'
+                              : item.statuss.statuss === 'Đang xử lý'
+                              ? 'bg-[#f1c21b]  rounded-full py-1 px-1 text-white'
+                              : item.statuss.statuss === 'Đã hủy'
+                              ? 'bg-[#da1e28]  rounded-full py-1 px-1 text-white'
+                              : ''
+                          }
+                        >
+                          {item.statuss.statuss}
+                        </div>
+                      </td>
+                      <td
+                        className=" font-semibold text-red-500 px-6 py-4 text-center cursor-pointer hover:text-[#C92127]"
+                        onClick={() => props.changeToDetail(item.id)}
                       >
-                        {item.statuss.statuss}
+                        Xem chi tiết
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                {noOrders ? (
+                  // Hiển thị thông báo khi không có đơn hàng
+                  <>
+                    <tr>
+                      <td colSpan={6}>
+                        <div className="text-center py-3 mt-4">
+                          <div className="mt-4 pt-14 text-slate-500 pb-2">Không có đơn hàng nào</div>
+                        </div>
+                        <div className="text-center py-3 mt-4 border-none">
+                          <div>
+                            <Link to="/">
+                              <button className="bg-orange-400 text-xl py-2 font-medium outline-none rounded-lg px-3 hover:bg-red-500 active:bg-red-800">
+                                Đặt hàng ngay
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </>
+                ) : filteredOrders.length <= itemsPerPage ? (
+                  <></>
+                ) : (
+                  // Hiển thị pagination khi có dữ liệu và không phải loading
+                  <tr>
+                    <td colSpan={6}>
+                      <div className="pagination flex justify-end items-center gap-4 py-4">
+                        <div className="border-2 text-sm font-medium border-blue-600 rounded-full hover:bg-blue-600 hover:text-white">
+                          <button
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            className="flex items-center px-4 py-1"
+                          >
+                            <Icon
+                              icon="ic:round-navigate-before"
+                              fontSize={18}
+                            />
+                            <span>Trang trước</span>
+                          </button>
+                        </div>
+                        <div className="text-sm font-medium">
+                          Trang {currentPage}/{totalPages}
+                        </div>
+                        <div className="border-2 text-sm font-medium border-blue-600 rounded-full hover:bg-blue-600 hover:text-white">
+                          <button
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={indexOfLastItem >= filteredOrders.length}
+                            className="flex items-center px-4 py-1"
+                          >
+                            <span>Trang tiếp </span>
+                            <Icon
+                              icon="ic:round-navigate-next"
+                              fontSize={18}
+                            />
+                          </button>
+                        </div>
                       </div>
                     </td>
-                    <td
-                      className=" font-semibold text-red-500 px-6 py-4 text-center cursor-pointer hover:text-[#C92127]"
-                      onClick={() => props.changeToDetail(item.id)}
-                    >
-                      Xem chi tiết
-                    </td>
                   </tr>
-                ))}
-              </tbody>
+                )}
+              </>
             ) : (
               // Hiển thị skeleton hoặc thông báo loading
               <>
@@ -232,59 +293,6 @@ function Table(props: TableProps) {
             )}
           </table>
         </div>
-
-        {noOrders ? (
-          // Hiển thị thông báo khi không có đơn hàng
-          <>
-            <div className="text-center py-3 mt-4">
-              <div className="mt-4 pt-14 text-slate-500 pb-2">Không có đơn hàng nào</div>
-            </div>
-            <div className="text-center py-3 mt-4 border-none">
-              <div>
-                <Link to="/">
-                  <button className="bg-orange-400 text-xl py-2 font-medium outline-none rounded-lg px-3 hover:bg-red-500 active:bg-red-800">
-                    Đặt hàng ngay
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </>
-        ) : filteredOrders.length <= itemsPerPage ? (
-          <></>
-        ) : (
-          // Hiển thị pagination khi có dữ liệu và không phải loading
-          <div className="pagination flex justify-end items-center gap-4 pt-4">
-            <div className="border-2 text-sm font-medium border-blue-600 rounded-full px-4 py-1 hover:bg-blue-600 hover:text-white">
-              <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="flex items-center"
-              >
-                <Icon
-                  icon="ic:round-navigate-before"
-                  fontSize={18}
-                />
-                <span>Trang trước</span>
-              </button>
-            </div>
-            <div className="text-sm font-medium">
-              Trang {currentPage}/{totalPages}
-            </div>
-            <div className="border-2 text-sm font-medium border-blue-600 rounded-full px-4 py-1 hover:bg-blue-600 hover:text-white">
-              <button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={indexOfLastItem >= filteredOrders.length}
-                className="flex items-center"
-              >
-                <span>Trang tiếp </span>
-                <Icon
-                  icon="ic:round-navigate-next"
-                  fontSize={18}
-                />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

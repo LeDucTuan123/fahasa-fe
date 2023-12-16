@@ -267,17 +267,19 @@ export default function DetailProduct() {
 
   return (
     <>
-      <div>
+      <div className="pt-4 font-medium">
         {/* Breadcrumbs */}
         <Breadcrumbs
           separator="›"
           aria-label="breadcrumb"
         >
-          <Link
+          <Typography
             component={RouterLink}
             to="/"
+            color="text.primary"
           >
             Trang chủ
+<!-- <<<<<<< fixredirectauthority -->
           </Link>
           <Link
             component={RouterLink}
@@ -291,6 +293,11 @@ export default function DetailProduct() {
           >
             {getCateNameLevel2}
           </Link>
+<!-- ======= -->
+          </Typography>
+          <Typography color="text.primary">{getCateNameLevel1}</Typography>
+          <Typography color="text.primary">{getCateNameLevel2}</Typography>
+<!-- >>>>>>> dev -->
           <Typography color="text.primary">{getCateNameLevel3}</Typography>
         </Breadcrumbs>
       </div>
