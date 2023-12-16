@@ -244,7 +244,9 @@ export default function DetailProduct() {
         getCate?.map((cate: any | CategoryType[]) => {
           cate.schooltools.map((tool: any) => {
             if (data?.id === tool.id) {
-              setGetCateNameLevel3(cate.categoryname);
+              setGetCateNameLevel1(cate.parent.parent.categoryname); // Level 1
+              setGetCateNameLevel2(cate.parent.categoryname); // Level 2
+              setGetCateNameLevel3(cate.categoryname); // Level 3
             }
           });
         });
@@ -265,30 +267,21 @@ export default function DetailProduct() {
 
   return (
     <>
-      <div>
+      <div className="pt-4 font-medium">
         {/* Breadcrumbs */}
         <Breadcrumbs
           separator="›"
           aria-label="breadcrumb"
         >
-          <Link
+          <Typography
             component={RouterLink}
             to="/"
+            color="text.primary"
           >
             Trang chủ
-          </Link>
-          <Link
-            component={RouterLink}
-            to={`/${getCateNameLevel1}`}
-          >
-            {getCateNameLevel1}
-          </Link>
-          <Link
-            component={RouterLink}
-            to={`/${getCateNameLevel1}/${getCateNameLevel2}`}
-          >
-            {getCateNameLevel2}
-          </Link>
+          </Typography>
+          <Typography color="text.primary">{getCateNameLevel1}</Typography>
+          <Typography color="text.primary">{getCateNameLevel2}</Typography>
           <Typography color="text.primary">{getCateNameLevel3}</Typography>
         </Breadcrumbs>
       </div>
