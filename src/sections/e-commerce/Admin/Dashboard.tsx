@@ -7,6 +7,7 @@ import fetch from 'src/services/axios/Axios';
 import axios from 'axios';
 import { BookType } from 'src/types/book';
 import { ToolType } from 'src/types/tool';
+import { formatDateToDDMMYYYY } from 'src/util/SupportFnc';
 
 type OrderDataType = {
   labels: any[];
@@ -64,6 +65,8 @@ export default function Dashboard() {
     loadUsers();
   }, []);
 
+  console.log(orderData);
+
   const loadUsers = async () => {
     const result = await axios.get('http://localhost:8080/api/v1/admin/users', {
       validateStatus: () => {
@@ -80,37 +83,39 @@ export default function Dashboard() {
 
       const mergedData = filteredData.reduce(
         (acc, data) => {
-          const existingIndex = acc.labels.indexOf(data.orderdate);
+          const formattedDate = formatDateToDDMMYYYY(data.orderdate);
+          const existingIndex = acc.labels.indexOf(formattedDate);
 
           if (existingIndex !== -1) {
             // If the date already exists, update the totalamount
             acc.datasets[0].data[existingIndex] += data.totalamount;
           } else {
             // If the date doesn't exist, add it to labels and add totalamount to data
-            acc.labels.push(data.orderdate);
+            acc.labels.push(formattedDate);
             acc.datasets[0].data.push(data.totalamount);
           }
 
           return acc;
         },
-        { labels: [], datasets: [{ label: 'doanh thu', data: [] }] },
+        { labels: [], datasets: [{ label: 'Doanh thu', data: [] }] },
       );
       const mergedData1 = filteredData.reduce(
         (acc, data) => {
-          const existingIndex = acc.labels.indexOf(data.orderdate);
+          const formattedDate = formatDateToDDMMYYYY(data.orderdate);
+          const existingIndex = acc.labels.indexOf(formattedDate);
 
           if (existingIndex !== -1) {
             // If the date already exists, update the totalamount
             acc.datasets[0].data[existingIndex] += 1;
           } else {
             // If the date doesn't exist, add it to labels and add totalamount to data
-            acc.labels.push(data.orderdate);
+            acc.labels.push(formattedDate);
             acc.datasets[0].data.push(1);
           }
 
           return acc;
         },
-        { labels: [], datasets: [{ label: 'đơn hàng', data: [] }] },
+        { labels: [], datasets: [{ label: 'Đơn hàng', data: [] }] },
       );
 
       setOrderData(mergedData);
@@ -131,20 +136,6 @@ export default function Dashboard() {
     setTotalUsers(totalUsersCount);
   }, [fetchDataOrder, users, books, tools]);
   console.log();
-
-  const options = {
-    scales: {
-      x: {
-        type: 'time',
-        time: {
-          unit: 'day',
-          displayFormats: {
-            day: 'DD/MM/YYYY',
-          },
-        },
-      },
-    },
-  };
 
   return (
     <>
@@ -265,10 +256,7 @@ export default function Dashboard() {
                 <span className="text-[#4e73df]">Tổng Doanh Thu</span>
               </div>
               <div className="px-3 py-3">
-                <LineChart
-                  chartData={orderData}
-                  chartOptions={options}
-                />
+                <LineChart chartData={orderData} />
               </div>
             </div>
             <div className="w-1/2 rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white">
@@ -280,10 +268,7 @@ export default function Dashboard() {
                 <span className="text-[#4e73df]">Tổng Đơn Hàng</span>
               </div>
               <div className="px-3 py-3">
-                <BarChart
-                  chartData={orderData1}
-                  chartOptions={options}
-                />
+                <BarChart chartData={orderData1} />
               </div>
             </div>
           </div>
