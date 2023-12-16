@@ -26,7 +26,7 @@ export default function FormVoucher() {
       .get(apiPaths.voucher)
       .then((res) => setFetchDataVoucher(res.data))
       .catch((err) => console.log(err.message));
-  }, []);
+  }, [fetchDataVoucher.length]);
 
   const addVoucher = () => {
     try {
