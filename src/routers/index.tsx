@@ -31,8 +31,18 @@ import AdminLayout from 'src/layouts/AdminLayout';
 import ProfileLayout from 'src/layouts/ProfileLayout';
 import { SpinLuckyLayout } from 'src/layouts/spinlucky-layout';
 import PaymentSuccess from 'src/sections/e-commerce/PaymentSuccess/PaymentSuccess';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 
 export default function Route() {
+  const user: any = useSelector((state: RootState) => state.user.userData);
+
+  //redirect authority
+  useEffect(() => {
+    if (user && user.role === 'ADMIN') localStorage.setItem('authority', user.role);
+  }, [user, user.role]);
+
   return useRoutes([
     //Main
     {

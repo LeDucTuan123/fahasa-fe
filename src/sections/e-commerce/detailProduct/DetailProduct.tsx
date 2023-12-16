@@ -234,9 +234,9 @@ export default function DetailProduct() {
         getCate?.map((cate) => {
           if (getCateId === cate.id) {
             if (cate.parent && cate.parent.parent) {
-              setGetCateNameLevel1(cate.parent.parent.categoryname); // Level 1
-              setGetCateNameLevel2(cate.parent.categoryname); // Level 2
-              setGetCateNameLevel3(cate.categoryname); // Level 3
+              setGetCateNameLevel1(cate.parent.parent.categoryname.replace(/\s/g, '-')); // Level 1
+              setGetCateNameLevel2(cate.parent.categoryname.replace(/\s/g, '-')); // Level 2
+              setGetCateNameLevel3(cate.categoryname.replace(/\s/g, '-')); // Level 3
             }
           }
         });
@@ -244,9 +244,9 @@ export default function DetailProduct() {
         getCate?.map((cate: any | CategoryType[]) => {
           cate.schooltools.map((tool: any) => {
             if (data?.id === tool.id) {
-              setGetCateNameLevel1(cate.parent.parent.categoryname); // Level 1
-              setGetCateNameLevel2(cate.parent.categoryname); // Level 2
-              setGetCateNameLevel3(cate.categoryname); // Level 3
+              setGetCateNameLevel1(cate.parent.parent.categoryname.replace(/\s/g, '-')); // Level 1
+              setGetCateNameLevel2(cate.parent.categoryname.replace(/\s/g, '-')); // Level 2
+              setGetCateNameLevel3(cate.categoryname.replace(/\s/g, '-'));
             }
           });
         });
@@ -279,9 +279,25 @@ export default function DetailProduct() {
             color="text.primary"
           >
             Trang chủ
+<!-- <<<<<<< fixredirectauthority -->
+          </Link>
+          <Link
+            component={RouterLink}
+            to={`/category/${getCateNameLevel1}`}
+          >
+            {getCateNameLevel1}
+          </Link>
+          <Link
+            component={RouterLink}
+            to={`/category/${getCateNameLevel1}/${getCateNameLevel2}`}
+          >
+            {getCateNameLevel2}
+          </Link>
+<!-- ======= -->
           </Typography>
           <Typography color="text.primary">{getCateNameLevel1}</Typography>
           <Typography color="text.primary">{getCateNameLevel2}</Typography>
+<!-- >>>>>>> dev -->
           <Typography color="text.primary">{getCateNameLevel3}</Typography>
         </Breadcrumbs>
       </div>

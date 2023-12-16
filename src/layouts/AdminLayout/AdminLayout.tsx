@@ -28,11 +28,12 @@ export default function AdminLayout() {
     }
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (!isLogin || (user && user.authorities && user.authorities[0].authority === 'USER')) {
-  //     navigate('/error');
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    const isAdmin = localStorage.getItem('authority');
+    if (!isAdmin) {
+      navigate('/error');
+    }
+  }, [user]);
 
   return (
     <div className="p-0 m-0 w-full h-screen">

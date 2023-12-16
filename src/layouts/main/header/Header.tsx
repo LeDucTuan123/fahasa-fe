@@ -186,6 +186,7 @@ export default function Header() {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('authority');
     dispatch(setIsLogin(false));
     toast.success('Đăng xuất thành công');
     window.location.href = '/';
