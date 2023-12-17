@@ -34,7 +34,7 @@ export default function Desktop() {
                   />
                 </div>
 
-                <div className="flex flex-row justify-between pt-3">
+                {/* <div className="flex flex-row justify-between pt-3">
                   <img
                     src="https://cdn0.fahasa.com/media/wysiwyg/Logo-NCC/android1.png"
                     alt="ggplay"
@@ -45,7 +45,7 @@ export default function Desktop() {
                     alt="store"
                     className="w-40 object-contain"
                   />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
