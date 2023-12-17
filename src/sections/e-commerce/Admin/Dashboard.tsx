@@ -99,23 +99,56 @@ export default function Dashboard() {
         },
         { labels: [], datasets: [{ label: 'Doanh thu', data: [] }] },
       );
-      const mergedData1 = filteredData.reduce(
+      const mergedData1 = fetchDataOrder.reduce(
         (acc, data) => {
           const formattedDate = formatDateToDDMMYYYY(data.orderdate);
           const existingIndex = acc.labels.indexOf(formattedDate);
 
           if (existingIndex !== -1) {
             // If the date already exists, update the totalamount
-            acc.datasets[0].data[existingIndex] += 1;
+            if (data.statuss.id === 1) {
+              acc.datasets[0].data[existingIndex] += 1;
+            } else if (data.statuss.id === 3) {
+              acc.datasets[1].data[existingIndex] += 1;
+            } else if (data.statuss.id === 2){
+              acc.datasets[2].data[existingIndex] += 1;
+            }
           } else {
             // If the date doesn't exist, add it to labels and add totalamount to data
             acc.labels.push(formattedDate);
-            acc.datasets[0].data.push(1);
+            acc.datasets[0].data.push(data.statuss.id === 1 ? 1 : 0);
+            acc.datasets[1].data.push(data.statuss.id === 3 ? 1 : 0);
+            acc.datasets[2].data.push(data.statuss.id === 2 ? 1 : 0);
           }
 
           return acc;
         },
-        { labels: [], datasets: [{ label: 'Đơn hàng', data: [] }] },
+        { 
+          labels: [], 
+          datasets: [
+            {
+              label: 'Chưa thanh toán',
+              data: [],
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1,
+            },
+            {
+              label: 'Đang xử lý',
+              data: [],
+              backgroundColor: 'rgba(252, 211, 77, 0.2)',
+              borderColor: 'rgba(252, 211, 77, 1)',
+              borderWidth: 1,
+            },
+            {
+              label: 'Đã hoàn thành',
+              data: [],             
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+            },            
+          ], 
+        },
       );
 
       setOrderData(mergedData);
