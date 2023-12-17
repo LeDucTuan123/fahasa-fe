@@ -115,7 +115,7 @@ export default function Filter({
           </ol>
         </div>
 
-        <div className="font-medium h-[500px] overflow-y-scroll border-b-2 border-t-2">
+        <div className="font-medium h-[500px] overflow-y-scroll border-b-2 border-t-2 px-3">
           {subCategory
             .filter((item) => item.level === 3)
             .map((item) => {
