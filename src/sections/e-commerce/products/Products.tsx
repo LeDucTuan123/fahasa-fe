@@ -260,7 +260,7 @@ export default function Products() {
       </div>
 
       <div className="col-span-3">
-        <div ref={scrollToTopRef}>
+        {/* <div ref={scrollToTopRef}>
           <div className="columns-2">
             <img
               className="rounded-lg"
@@ -273,7 +273,7 @@ export default function Products() {
               src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/NCC1980BooksT1023_Gold_BannerSocial_1080x1080.png"
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="w-full bg-white mt-4 p-3 rounded-lg">
           <div className="flex justify-start pb-5">
