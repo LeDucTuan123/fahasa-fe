@@ -65,8 +65,9 @@ function Detail(props: DetailProps) {
         )}
       </div>
       <div className="p-5 shadow-lg w-full rounded-lg">
-        <h1 className="font-bold text-[#C92127]">Chi tiết đơn hàng</h1>
-        <table className="table-auto border-collapse border-spacing-3 w-full mt-5">
+        <h1 className="font-bold text-[#C92127] pb-4">Chi tiết đơn hàng</h1>
+        <span className="uppercase font-bold mt-4">Đơn hàng: {props.order.codeorder}</span>
+        <table className="table-auto border-collapse border-spacing-3 w-full mt-4">
           <thead>
             <th>Hình ảnh</th>
             <th>Tên sản phẩm</th>

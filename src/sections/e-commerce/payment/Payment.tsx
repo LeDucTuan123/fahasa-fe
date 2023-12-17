@@ -235,7 +235,7 @@ export default function Payment() {
       fetch
         .post('/rest/order/payment', {
           orderdate: new Date(),
-          codeorder: `Happy_${faker.string.numeric(10)}`,
+          codeorder: `HAPPY_${faker.string.numeric(10)}`,
 
           totalamount: calculateTotalAmount(),
           receiver: information.lastname + information.firstname,
@@ -308,7 +308,7 @@ export default function Payment() {
       fetch
         .post('/rest/order/payment', {
           orderdate: new Date(),
-          codeorder: `Happy_${faker.string.numeric(10)}`,
+          codeorder: `HAPPY_${faker.string.numeric(10)}`,
           totalamount: calculateTotalAmount(),
           // sum -
           // (voucher ? voucher.valuev : 0) +

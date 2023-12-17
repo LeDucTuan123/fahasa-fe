@@ -277,16 +277,21 @@ export default function DetailProduct() {
             component={RouterLink}
             to="/"
             color="text.primary"
+            underline="hover"
           >
             Trang chủ
           </Link>
           <Link
+            color="text.primary"
+            underline="hover"
             component={RouterLink}
             to={`/category/${getCateNameLevel1}`}
           >
             {getCateNameLevel1}
           </Link>
           <Link
+            color="text.primary"
+            underline="hover"
             component={RouterLink}
             to={`/category/${getCateNameLevel1}/${getCateNameLevel2}`}
           >

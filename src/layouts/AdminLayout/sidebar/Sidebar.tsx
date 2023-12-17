@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { NavLink } from 'react-router-dom';
 import { Link } from 'src/components/Link';
-import Logo from '../../../assets/image/logo.png';
+import Logo from '../../../assets/image/logo2.png';
 
 interface Props {
   isShowSidebar: boolean;
