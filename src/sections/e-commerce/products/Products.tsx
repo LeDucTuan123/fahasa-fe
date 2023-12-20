@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState, useRef } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 
@@ -99,13 +99,15 @@ export default function Products() {
   }, [cate, searchInputText]);
 
   // Lọc kết quả tìm kiếm dựa trên phạm vi giá được chọn
-  const filteredResults = selectedPriceRange
-    ? categoryResult.filter((item) => {
-        const [minPrice, maxPrice] = selectedPriceRange.split('-');
-        const itemPrice = item.price - (item.price * item.discount) / 100;
-        return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
-      })
-    : categoryResult;
+  const filteredResults = useMemo(() => {
+    return selectedPriceRange
+      ? categoryResult.filter((item) => {
+          const [minPrice, maxPrice] = selectedPriceRange.split('-');
+          const itemPrice = item.price - (item.price * item.discount) / 100;
+          return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
+        })
+      : categoryResult;
+  }, [selectedPriceRange, categoryResult]);
 
   useEffect(() => {
     fetchApiSearch();
@@ -165,11 +167,11 @@ export default function Products() {
     } else if (sortCriteria === 'z-to-a') {
       sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
     }
-
     const newLastPostIndex = currentPage * postsPerPage;
     const newFirstPostIndex = newLastPostIndex - postsPerPage;
     setSearchResult(sortedCategoryResult.slice(newFirstPostIndex, newLastPostIndex));
-  }, [sortCriteria, postsPerPage, categoryResult, filteredResults]);
+  }, [currentPage, filteredResults, postsPerPage, sortCriteria]);
+  console.log('first');
   // }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
 
   const pages = Math.ceil(filteredResults.length / postsPerPage);
