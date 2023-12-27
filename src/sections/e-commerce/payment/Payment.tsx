@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { Link, useNavigate } from 'react-router-dom';
+import { faker } from '@faker-js/faker';
 import Form from './Form';
 import { useEffect, useState } from 'react';
 import { ConvertToVietNamDong } from 'src/util/SupportFnc';
@@ -13,6 +14,7 @@ import ModalMyVoucher from '../cart/ModalMyVoucher';
 import { apiPaths } from 'src/services/api/path-api';
 
 import ListAddress from './ListAddress';
+import { toast } from 'react-toastify';
 
 export default function Payment() {
   const navigate = useNavigate();
@@ -222,14 +224,18 @@ export default function Payment() {
     // Return a default value or handle other cases as needed
     return sum >= 0 ? sum : 0;
   }
+  // console.log('random faker: ', fakerCodeOrder);
 
   console.log('user id: ', applyMyVoucher?.id);
-
   function handlePayment() {
+    if (!openForm && !addressId) {
+      return toast.warning('Vui lòng thêm đầy đủ thông tin');
+    }
     if (valid() && openForm) {
       fetch
         .post('/rest/order/payment', {
           orderdate: new Date(),
+          codeorder: `HAPPY_${faker.string.numeric(10)}`,
 
           totalamount: calculateTotalAmount(),
           receiver: information.lastname + information.firstname,
@@ -302,6 +308,7 @@ export default function Payment() {
       fetch
         .post('/rest/order/payment', {
           orderdate: new Date(),
+          codeorder: `HAPPY_${faker.string.numeric(10)}`,
           totalamount: calculateTotalAmount(),
           // sum -
           // (voucher ? voucher.valuev : 0) +

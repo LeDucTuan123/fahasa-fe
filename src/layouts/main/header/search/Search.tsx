@@ -180,7 +180,7 @@ export default function Search() {
       >
         <form
           action=""
-          className="relative w-full flex-center flex items-center mx-2 border border-[#d3d4d5] rounded-lg bg-white"
+          className="relative w-full flex-center flex items-center mx-2 border border-[#d3d4d5] rounded-full bg-white"
         >
           <input
             type="text"
@@ -195,7 +195,7 @@ export default function Search() {
             onKeyPress={handleOnKeyUp}
           />
           <div
-            className="m-1 rounded-full lg:rounded-lg bg-[#c92127] text-white px-2 py-1 lg:px-6 lg:py-2 "
+            className="m-1 rounded-full  bg-[#c92127] text-white px-2 py-1 lg:px-6 lg:py-2 "
             onClick={handleOnClickSearchh}
           >
             <Icon

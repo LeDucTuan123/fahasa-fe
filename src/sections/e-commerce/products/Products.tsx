@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState, useRef } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'src/components/Link';
 
@@ -34,7 +34,7 @@ export default function Products() {
 
   // là mảng chứa những category level 2
   let level2: any = null;
-  console.log(level2);
+  // console.log(level2);
   // Đây là đoạn code gọi api category -- start
   const [categoryId, setCategoryId] = useState<number>();
   const [subCategory, setSubCategory] = useState([]);
@@ -99,13 +99,15 @@ export default function Products() {
   }, [cate, searchInputText]);
 
   // Lọc kết quả tìm kiếm dựa trên phạm vi giá được chọn
-  const filteredResults = selectedPriceRange
-    ? categoryResult.filter((item) => {
-        const [minPrice, maxPrice] = selectedPriceRange.split('-');
-        const itemPrice = item.price - (item.price * item.discount) / 100;
-        return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
-      })
-    : categoryResult;
+  const filteredResults = useMemo(() => {
+    return selectedPriceRange
+      ? categoryResult.filter((item) => {
+          const [minPrice, maxPrice] = selectedPriceRange.split('-');
+          const itemPrice = item.price - (item.price * item.discount) / 100;
+          return itemPrice >= parseFloat(minPrice) && itemPrice <= parseFloat(maxPrice);
+        })
+      : categoryResult;
+  }, [selectedPriceRange, categoryResult]);
 
   useEffect(() => {
     fetchApiSearch();
@@ -165,11 +167,11 @@ export default function Products() {
     } else if (sortCriteria === 'z-to-a') {
       sortedCategoryResult.sort((a, b) => b.title.localeCompare(a.title));
     }
-
     const newLastPostIndex = currentPage * postsPerPage;
     const newFirstPostIndex = newLastPostIndex - postsPerPage;
     setSearchResult(sortedCategoryResult.slice(newFirstPostIndex, newLastPostIndex));
-  }, [sortCriteria, postsPerPage, categoryResult, filteredResults]);
+  }, [currentPage, filteredResults, postsPerPage, sortCriteria]);
+  console.log('first');
   // }, [sortCriteria, postsPerPage, currentPage, categoryResult, filteredResults]);
 
   const pages = Math.ceil(filteredResults.length / postsPerPage);
@@ -260,7 +262,7 @@ export default function Products() {
       </div>
 
       <div className="col-span-3">
-        <div ref={scrollToTopRef}>
+        {/* <div ref={scrollToTopRef}>
           <div className="columns-2">
             <img
               className="rounded-lg"
@@ -273,7 +275,7 @@ export default function Products() {
               src="https://cdn0.fahasa.com/media/wysiwyg/Thang-10-2023/NCC1980BooksT1023_Gold_BannerSocial_1080x1080.png"
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="w-full bg-white mt-4 p-3 rounded-lg">
           <div className="flex justify-start pb-5">

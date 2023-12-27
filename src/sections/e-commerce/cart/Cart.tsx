@@ -47,7 +47,7 @@ export default function Cart({ product, setProduct }: Props) {
     async function test() {
       const voucher = await fetch.get('/rest/voucher');
       setVouchers(voucher.data);
-      if (isLogin) {
+      if (isLogin && user.id) {
         const myVoucher = await fetch.get(`${apiPaths.myvoucher}/success/${user.id}`);
         setMyVouchers(myVoucher.data);
         // lấy dữ liệu db đổ lên cart

@@ -87,12 +87,12 @@ function FormProfile(props: formProps) {
   useEffect(() => {
     setTimeout(() => {
       setLoading(true);
-    }, 2000);
+    }, 1000);
   }, [loading]);
   return (
     <>
       <div className="p-5 shadow-lg w-full rounded-lg">
-        <h1 className="uppercase font-bold">Thông tin tài khoản</h1>
+        <h1 className="uppercase text-lg font-bold">Thông tin tài khoản</h1>
         {loading ? (
           <form className="mt-3">
             <div className="py-3">

@@ -31,12 +31,14 @@ export default function FormBook() {
 
   const [fetchDataBook, setfetchDataBook] = useState<any[]>([]);
 
+  const [validateFormError, setValidateFormError] = useState<any>(null);
+
   useEffect(() => {
     fetch
       .get(apiPaths.book)
       .then((res: any) => setfetchDataBook(res.data))
       .catch((err: any) => console.log(err.message));
-  }, []);
+  }, [fetchDataBook.length]);
 
   const onDrop = useCallback((acceptedFiles: any) => {
     if (acceptedFiles[0]) {
@@ -98,9 +100,31 @@ export default function FormBook() {
     }
   }, [dataBook.images]);
 
+  //validate form
+  const validateForm = () => {
+    if (dataBook.title.length === 0) {
+      return true;
+    } else if (dataBook.author.length === 0) {
+      return true;
+    }
+    if (dataBook.description.length === 0) {
+      return true;
+    } else if (dataBook.price === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   //thêm sản phẩm
   const handleAddBook = async (e: any) => {
     e.preventDefault();
+
+    setValidateFormError(dataBook);
+    if (validateForm()) {
+      return;
+    }
+
     if (imageUpload === null) return toast.error('Vui lòng thêm ảnh');
     setIsLoading(true);
     const id = Math.random() * 1000;
@@ -147,6 +171,7 @@ export default function FormBook() {
   };
 
   const handleEditBook = (item: any) => {
+    console.log('first: ', item);
     setDataBook((prev) => ({
       ...prev,
       id: item.id,
@@ -154,7 +179,7 @@ export default function FormBook() {
       author: item.author,
       description: item.description,
       discount: item.discount,
-      images: item.images,
+      images: String(item.images),
       price: item.price,
     }));
     setIsShowEdit(true);
@@ -172,7 +197,7 @@ export default function FormBook() {
           author: dataBook.author,
           description: dataBook.description,
           discount: dataBook.discount,
-          images: dataBook.images,
+          images: String(dataBook.images),
           price: dataBook.price,
           title: dataBook.title,
         }),
@@ -201,8 +226,14 @@ export default function FormBook() {
   };
 
   const handleUpdateBook = (e: any) => {
-    setIsLoading(true);
     e.preventDefault();
+
+    setValidateFormError(dataBook);
+    if (validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
 
     const urlImage = ref(storage, dataBook.images);
     const pathImage = ref(storage, urlImage.fullPath);
@@ -240,7 +271,7 @@ export default function FormBook() {
 
   return (
     <>
-      <div className="w-full h-auto shadow-xl p-5 border-[1px] rounded-xl">
+      <div className="w-full h-auto shadow-md p-5 border-[1px] rounded-xl">
         <div className="flex relative pb-5">
           <div className="w-full">
             <div className="grid md:grid-cols-5 md:gap-6">
@@ -261,6 +292,9 @@ export default function FormBook() {
                     value={dataBook.title}
                     onChange={(e: any) => setDataBook((prev) => ({ ...prev, title: e.target.value }))}
                   />
+                  {validateFormError && validateFormError.title.length === 0 && (
+                    <div className="text-red-500 pt-3">Vui lòng thêm tên sản phẩm</div>
+                  )}
                   <label
                     htmlFor="floating_name"
                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -278,6 +312,9 @@ export default function FormBook() {
                     value={dataBook.author}
                     onChange={(e: any) => setDataBook((prev) => ({ ...prev, author: e.target.value }))}
                   />
+                  {validateFormError && validateFormError.author.length === 0 && (
+                    <div className="text-red-500 pt-3">Vui lòng thêm tác giả của sản phẩm</div>
+                  )}
                   <label
                     htmlFor="floating_author"
                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -296,6 +333,9 @@ export default function FormBook() {
                     value={dataBook.price}
                     onChange={(e: any) => setDataBook((prev) => ({ ...prev, price: e.target.value }))}
                   />
+                  {validateFormError && validateFormError.price === 0 && (
+                    <div className="text-red-500 pt-3">Vui lòng thêm giá sản phẩm lớn hơn 0</div>
+                  )}
                   <label
                     htmlFor="floating_price"
                     className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -336,6 +376,9 @@ export default function FormBook() {
                     value={dataBook.description}
                     onChange={(e: any) => setDataBook((prev) => ({ ...prev, description: e.target.value }))}
                   ></textarea>
+                  {validateFormError && validateFormError.description.length === 0 && (
+                    <div className="text-red-500 pt-3">Vui lòng thêm miêu tả sản phẩm</div>
+                  )}
                 </div>
 
                 <div className="relative z-0 w-[100px] mb-6 group">

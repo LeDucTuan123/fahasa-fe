@@ -4,7 +4,7 @@ export default function Product() {
   return (
     <>
       <div className="">
-        <div className="text-4xl font-sans">Product</div>
+        <div className="text-xl pb-4 font-bold uppercase">Quản lý sản phẩm</div>
         <Form />
       </div>
     </>

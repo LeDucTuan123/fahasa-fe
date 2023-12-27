@@ -9,6 +9,7 @@ import { RootState, useAppDispatch } from 'src/redux/store';
 import fetch from 'src/services/axios';
 import LogoHome from '../../../assets/image/logo.png';
 import MegaMenu from './MegaMenu';
+import Notify from './Notify';
 
 import { jwtDecode } from 'jwt-decode';
 
@@ -154,15 +155,23 @@ export default function Header() {
   // mở menu con sử dụng trong mobile --> end
 
   // show info
-
   const [openInfo, setOpenInfo] = useState(false);
 
   const handleInfo = () => {
     setOpenInfo(!openInfo);
   };
 
-  // token
+  // show notify
+  const [openNotify, setOpenNotify] = useState(false);
 
+  const handleHoverNotiEnter = () => {
+    setOpenNotify(true);
+  };
+  const handleHoverNotiLeave = () => {
+    setOpenNotify(false);
+  };
+
+  // token
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -177,6 +186,7 @@ export default function Header() {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('authority');
     dispatch(setIsLogin(false));
     toast.success('Đăng xuất thành công');
     window.location.href = '/';
@@ -265,17 +275,63 @@ export default function Header() {
           <Search />
           {/* msg icon */}
           <div className="flex items-center gap-2">
-            <Link to="/">
-              <div className="header-icon text-gray-header">
+            <div className="notify relative">
+              <div
+                onMouseEnter={handleHoverNotiEnter}
+                onMouseLeave={handleHoverNotiLeave}
+                className="header-icon text-gray-header hover:text-blue-500 font-medium"
+              >
                 <Icon
                   icon="solar:bell-line-duotone"
                   className="bx bx-bell text-2xl"
                 />
                 <span className="text-sm hidden lg:block">Thông báo</span>
               </div>
-            </Link>
+              {openNotify && (
+                <>
+                  {!isLogin ? (
+                    <>
+                      <div
+                        onMouseEnter={handleHoverNotiEnter}
+                        onMouseLeave={handleHoverNotiLeave}
+                        className="absolute right-0 top-[38px] pt-8 w-[350px] z-10"
+                      >
+                        <div className="rounded-lg shadow-lg items-center">
+                          <div className="px-4 py-2 font-semibold text-lg text-center text-gray-700 rounded-t-lg bg-gray-50">
+                            Thông báo
+                          </div>
+                          <div className="divide-y divide-gray-100 bg-white flex justify-center items-center">
+                            <div className="py-4 text-slate-400 text-center">
+                              <span>Không có thông báo</span>
+                            </div>
+                          </div>
+                          <div className="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50">
+                            <div>
+                              <div className="inline-flex items-center cursor-pointer font-medium text-slate-500 hover:text-slate-800">
+                                <Icon icon="majesticons:eye-line" />
+                                <span className="px-2">Xem tất cả</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {openNotify && (
+                        <Notify
+                          onMouse={handleHoverNotiEnter}
+                          onLeave={handleHoverNotiLeave}
+                        />
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+
             <Link to="/cart">
-              <div className="header-icon text-gray-header relative">
+              <div className="header-icon text-gray-header relative hover:text-blue-500 font-medium">
                 <Icon
                   icon="mynaui:cart"
                   className="bx bx-bell text-2xl"
@@ -292,7 +348,7 @@ export default function Header() {
                 <div className="relative">
                   <div
                     onClick={handleInfo}
-                    className="header-icon text-gray-header"
+                    className="header-icon text-gray-header hover:text-blue-500 font-medium"
                   >
                     <Icon
                       icon="bx:user"
@@ -354,6 +410,18 @@ export default function Header() {
                                     className="text-xl"
                                   />
                                   <span className="px-2">Đơn hàng của tôi</span>
+                                </div>
+                              </Link>
+                            </div>
+                            <hr className="border-gray-300 py-1" />
+                            <div className="p-1 hover:bg-gray-50">
+                              <Link to="/member/notification">
+                                <div className="flex items-center w-full">
+                                  <Icon
+                                    icon="solar:bell-line-duotone"
+                                    className="text-xl"
+                                  />
+                                  <span className="px-2">Thông báo</span>
                                 </div>
                               </Link>
                             </div>

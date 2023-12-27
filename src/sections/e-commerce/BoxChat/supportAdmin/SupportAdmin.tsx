@@ -7,8 +7,8 @@ const SupportAdmin = () => {
   return (
     <ReactChatEngine.ChatEngine
       projectID={process.env.REACT_APP_CE_PROJECT_ID}
-      userName="Kisakiii"
-      userSecret="1510Tr0ng@"
+      userName="Supporter"
+      userSecret="1510trong"
       height="calc(100vh - 12px)"
     />
   );

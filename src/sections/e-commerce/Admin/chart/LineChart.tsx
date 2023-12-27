@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, { FC } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as Chartjs, LineController, LinearScale, PointElement, LineElement } from 'chart.js/auto';
 
@@ -13,4 +13,4 @@ const LineChart: React.FC<LineChartProps> = ({ chartData }) => {
   return <Line data={chartData} />;
 };
 
-export default LineChart
+export default LineChart;

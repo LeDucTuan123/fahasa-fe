@@ -3,7 +3,7 @@ import { Button } from 'flowbite-react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'src/redux/store';
 import fetch from 'src/services/axios/Axios';
-import { ConvertToVietNamDong } from 'src/util/SupportFnc';
+import { ConvertToVietNamDong, formatDateTime } from 'src/util/SupportFnc';
 
 interface DetailProps {
   changeToTable: () => void;
@@ -14,10 +14,6 @@ interface DetailProps {
 }
 
 function Detail(props: DetailProps) {
-
-  console.log('orther: ', props.order);
-  console.log('product: ', props.products);
-
   const user: any = useSelector((state: RootState) => state.user.userData);
   const address: any =
     user.listAddress &&
@@ -29,12 +25,15 @@ function Detail(props: DetailProps) {
 
   function handleDeleteOrder() {
     fetch
-      .delete(`/rest/order/delete/${props.order.id}`)
+      .patch(`/rest/order/delete/${props.order.id}`)
       .then((res) => {
         props.changeToTable();
-        props.setOrders((prev: any[]) => {
-          return prev.filter((item: any) => {
-            return item.id !== props.order.id;
+        props.setOrders((prev) => {
+          return prev.map((item) => {
+            if (item.id === res.data.id) {
+              return res.data;
+            }
+            return item;
           });
         });
       })
@@ -66,8 +65,9 @@ function Detail(props: DetailProps) {
         )}
       </div>
       <div className="p-5 shadow-lg w-full rounded-lg">
-        <h1 className="font-bold text-[#C92127]">Chi tiết đơn hàng</h1>
-        <table className="table-auto border-collapse border-spacing-3 w-full mt-5">
+        <h1 className="font-bold text-[#C92127] pb-4">Chi tiết đơn hàng</h1>
+        <span className="uppercase font-bold mt-4">Đơn hàng: {props.order.codeorder}</span>
+        <table className="table-auto border-collapse border-spacing-3 w-full mt-4">
           <thead>
             <th>Hình ảnh</th>
             <th>Tên sản phẩm</th>
@@ -111,6 +111,9 @@ function Detail(props: DetailProps) {
               </li>
               <li className="mt-3">
                 Số điện thoại: <span className="font-bold">{props.user.phone}</span>
+              </li>
+              <li className="mt-3">
+                Ngày mua: <span className="font-bold">{formatDateTime(props.order.orderdate)}</span>
               </li>
             </ul>
           </div>

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Role } from './enums';
 
-
 interface User {
   id: number;
   firstname: string;
@@ -18,7 +17,6 @@ interface User {
   role: string;
 }
 
-
 export default function User() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,23 +26,20 @@ export default function User() {
   }, []);
 
   const loadUsers = async () => {
-    const result = await axios.get(
-      "http://localhost:8080/api/v1/admin/users",
-      {
-        validateStatus: () => {
-          return true;
-        },
-      }
-    );
+    const result = await axios.get('http://localhost:8080/api/v1/admin/users', {
+      validateStatus: () => {
+        return true;
+      },
+    });
     if (result.status === 302) {
-      setUsers(result.data)
+      setUsers(result.data);
     }
   };
 
   const handlePasswordChange = (index: number, newPassword: string) => {
     // Giới hạn số ký tự của password là 40
     if (newPassword.length <= 40) {
-      setUsers(prevUsers => {
+      setUsers((prevUsers) => {
         const updatedUsers = [...prevUsers];
         updatedUsers[index].password = newPassword;
         return updatedUsers;
@@ -86,18 +81,9 @@ export default function User() {
     );
   });
 
-
   return (
     <>
-      <p className="text-xl pb-5 flex items-center gap-3">
-        Quản lí người dùng{' '}
-        <span>
-          <Icon
-            icon={'mdi:user'}
-            fontSize={24}
-          />
-        </span>{' '}
-      </p>
+      <p className="text-xl pb-5 flex items-center gap-3 font-bold uppercase">Quản lí người dùng</p>
 
       <input
         type="text"
@@ -141,12 +127,12 @@ export default function User() {
               >
                 Giới tính
               </th>
-              <th
+              {/* <th
                 scope="col"
                 className="px-6 py-3"
               >
                 Mật khẩu
-              </th>
+              </th> */}
               <th
                 scope="col"
                 className="px-6 py-3"
@@ -176,11 +162,14 @@ export default function User() {
           </thead>
           <tbody>
             {filteredUsers.map((user, index) => (
-
-              <tr key={user.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700
-               hover:bg-gray-50 dark:hover:bg-gray-600">
+              <tr
+                key={user.id}
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700
+               hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
                 <th
-                  scope="row" key={index}
+                  scope="row"
+                  key={index}
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
                   {index + 1}
@@ -189,18 +178,22 @@ export default function User() {
                 <td className="px-6 py-4 max-w-[170px]">{user.firstname}</td>
                 <td className="px-6 py-4 max-w-[130px]">{user.birthday}</td>
                 <td className="px-6 py-4 max-w-[50px]">{user.gender}</td>
-                <td className="px-6 py-4 max-w-[145px]">
-                  <input disabled className='rounded-2xl w-24'
-                    type='password'
+                {/* <td className="px-6 py-4 max-w-[145px]">
+                  <input
+                    disabled
+                    className="rounded-2xl w-24"
+                    type="password"
                     value={user.password}
                     onChange={(e) => handlePasswordChange(index, e.target.value)}
                     maxLength={15}
                   />
+                </td> */}
+                <td className="px-6 py-4 max-w-[220px]">
+                  {user.email.length > 25 ? `${user.email.slice(0, 25)}...` : user.email}
                 </td>
-                <td className="px-6 py-4 max-w-[220px]">{user.email.length > 25 ? `${user.email.slice(0, 25)}...` : user.email}</td>
                 <td className="px-6 py-4 max-w-[150px]">{user.phone}</td>
 
-                <td className="px-6 py-4 max-w-[170px]" >{user.role}</td>
+                <td className="px-6 py-4 max-w-[170px]">{user.role}</td>
                 <td className="px-6 py-4 max-w-[170px] text-center">
                   <input
                     type="checkbox"

@@ -11,13 +11,15 @@ import ForgotPassword from './ForgotPassword';
 
 export default function Login() {
   const dispatch = useAppDispatch();
-  const user: any = useSelector((state: RootState) => state.user.userData);
 
+  const user: any = useSelector((state: RootState) => state.user.userData);
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const loading = useSelector((state: RootState) => state.auth.loading);
   const error = useSelector((state: RootState) => state.auth.error);
 
   //state
+  const [openModal, setOpenModal] = useState(false);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -58,8 +60,6 @@ export default function Login() {
       navigate('/');
     }
   }, [dispatch, isLogin, user]);
-
-  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>

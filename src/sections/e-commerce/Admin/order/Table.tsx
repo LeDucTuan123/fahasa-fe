@@ -8,9 +8,7 @@ interface TableProps {
   user?: {
     phone: string; // assuming phone is a string, update the type accordingly
     // other user properties...
-  }
-
-
+  };
 }
 
 interface DetailProps {
@@ -23,7 +21,6 @@ interface DetailProps {
 }
 
 function Table(props: TableProps, details: DetailProps) {
-
   return (
     <>
       <div className="overflow-x-auto">
@@ -35,6 +32,12 @@ function Table(props: TableProps, details: DetailProps) {
                 className="px-6 py-3"
               >
                 Id
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3"
+              >
+                Mã đơn hàng
               </th>
               <th
                 scope="col"
@@ -54,7 +57,6 @@ function Table(props: TableProps, details: DetailProps) {
               >
                 Ngày mua
               </th>
-
 
               <th
                 scope="col"
@@ -79,23 +81,33 @@ function Table(props: TableProps, details: DetailProps) {
           <tbody className="divide-y">
             {props.orders &&
               props.orders.map((item: any) => {
-
                 return (
-                  <tr key={item.id} className="bg-white text-sm border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <tr
+                    key={item.id}
+                    className="bg-white text-sm border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  >
                     <td className="px-6 py-4 max-w-[40px] overflow-hidden overflow-ellipsis">{item.id}</td>
-                    <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">{ConvertToVietNamDong(item.totalamount)}</td>
+                    <td className="px-6 py-4 max-w-[40px] overflow-hidden overflow-ellipsis">{item.codeorder}</td>
+                    <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">
+                      {ConvertToVietNamDong(item.totalamount)}
+                    </td>
                     <td className="px-6 py-4 max-w-[140px] overflow-hidden overflow-ellipsis">{item.receiver}</td>
-                    <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">{formatDateToDDMMYYYY(item.orderdate)}</td>
+                    <td className="px-6 py-4 max-w-[120px] overflow-hidden overflow-ellipsis">
+                      {formatDateToDDMMYYYY(item.orderdate)}
+                    </td>
 
                     <td
-                      className="text-[#C92127] hover:cursor-pointer hover:font-semibold text-left px-6 py-4 max-w-[140px]"
+                      className="text-[#C92127] hover:cursor-pointer hover:font-semibold text-left px-6 py-4 max-w-[120px]"
                       onClick={() => props.changeToDetail(item.id)}
                     >
                       Xem chi tiết
                     </td>
-                    <td className="px-6 py-4 max-w-[100px] overflow-hidden overflow-ellipsis">{item.statuss.statuss}</td>
+                    <td className="px-3 py-4 max-w-[100px] overflow-hidden overflow-ellipsis">
+                      {item.statuss.statuss}
+                    </td>
                     <td className="px-6 py-4 w-28 text-left overflow-hidden overflow-ellipsis ">
-                      <select className='text-sm'
+                      <select
+                        className="text-sm"
                         value={item.statuss.id}
                         onChange={(e) => props.onStatusChange(item.id, parseInt(e.target.value))}
                       >

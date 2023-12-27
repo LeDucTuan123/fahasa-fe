@@ -10,6 +10,7 @@ import {
   AdminSupport,
   AdminUser,
   AdminVoucher,
+  AdminNotification,
   Cart,
   DetailProductPage,
   Error,
@@ -20,6 +21,7 @@ import {
   Profile,
   ProfileAddress,
   ProfileMyvoucher,
+  ProfileNotification,
   ProfileOrder,
   Register,
   SpinLuckyVoucher,
@@ -29,8 +31,18 @@ import AdminLayout from 'src/layouts/AdminLayout';
 import ProfileLayout from 'src/layouts/ProfileLayout';
 import { SpinLuckyLayout } from 'src/layouts/spinlucky-layout';
 import PaymentSuccess from 'src/sections/e-commerce/PaymentSuccess/PaymentSuccess';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'src/redux/store';
 
 export default function Route() {
+  const user: any = useSelector((state: RootState) => state.user.userData);
+
+  //redirect authority
+  useEffect(() => {
+    if (user && user.role === 'ADMIN') localStorage.setItem('authority', user.role);
+  }, [user, user.role]);
+
   return useRoutes([
     //Main
     {
@@ -80,6 +92,7 @@ export default function Route() {
         { path: 'bill', element: <AdminBill /> },
         { path: 'orther', element: <AdminOrther /> },
         { path: 'voucher', element: <AdminVoucher /> },
+        { path: 'notification', element: <AdminNotification /> },
         { path: 'category', element: <AdminCategory /> },
         { path: 'support', element: <AdminSupport /> },
       ],
@@ -92,6 +105,7 @@ export default function Route() {
         { path: 'profile', element: <Profile /> },
         { path: 'address', element: <ProfileAddress /> },
         { path: 'order', element: <ProfileOrder /> },
+        { path: 'notification', element: <ProfileNotification /> },
         { path: 'myvoucher', element: <ProfileMyvoucher /> },
       ],
     },

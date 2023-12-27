@@ -18,7 +18,7 @@ export default function Banner({ scrollToTopRef }: Props) {
   return (
     <div
       ref={scrollToTopRef}
-      className="flex flex-row pt-2 h-[316px]"
+      className="flex flex-row pt-5 gap-4"
     >
       <div className="w-[70%] rounded-lg">
         <Slider
@@ -47,20 +47,20 @@ export default function Banner({ scrollToTopRef }: Props) {
           />
         </Slider>
       </div>
-      <div className="flex flex-col w-[29%] ml-2">
-        <div className="h-[50%]">
+      <div className="flex flex-col w-[29%] gap-5">
+        <div className="h-1/2">
           <img
             src="https://firebasestorage.googleapis.com/v0/b/poly-java-6-5ef9e.appspot.com/o/imagesFahasa%2Fbanner%2Fbannerright.jpg?alt=media&token=7c8c0426-0efe-4fad-8f60-6cefa60cb08b&_gl=1*7kua0i*_ga*MjkwMjk5NzA4LjE2OTU5NzU1NjA.*_ga_CW55HF8NVT*MTY5ODcyMjc0NS4zNS4xLjE2OTg3MjI5NDQuNjAuMC4w"
             alt="Banner"
-            className="w-full h-full object-cover rounded-lg mb-2"
+            className="w-full h-full object-cover rounded-lg"
           />
         </div>
 
-        <div className="h-[50%]">
+        <div className="h-1/2">
           <img
             src="https://firebasestorage.googleapis.com/v0/b/poly-java-6-5ef9e.appspot.com/o/imagesFahasa%2Fbanner%2Fbannerright1.jpg?alt=media&token=a84d6a7f-d0c6-4322-af37-9c7ebde0640c&_gl=1*cqaas4*_ga*MjkwMjk5NzA4LjE2OTU5NzU1NjA.*_ga_CW55HF8NVT*MTY5ODcyMjc0NS4zNS4xLjE2OTg3MjI5NzYuMjguMC4w"
             alt="Banner"
-            className="w-full h-full object-cover rounded-lg mt-4"
+            className="w-full h-full object-cover rounded-lg"
           />
         </div>
       </div>

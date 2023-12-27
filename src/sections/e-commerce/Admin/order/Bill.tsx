@@ -10,14 +10,12 @@ const u = localStorage.getItem('user');
 const user = JSON.parse(u ? u : '');
 
 export default function Feedback() {
-
   const [isChange, setIsChange] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [order, setOrder] = useState<any>();
   const [newStatusId, setNewStatusId] = useState<number>(/* giá trị khởi tạo */);
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
-
 
   useEffect(() => {
     fetch
@@ -63,35 +61,26 @@ export default function Feedback() {
       .then((res: AxiosResponse) => res.data)
       .then((data) => {
         // Update the orders state or handle the response accordingly
-        toast.success("Cập nhật trạng thái đơn hàng thành công")
-
+        toast.success('Cập nhật trạng thái đơn hàng thành công');
 
         // Load updated data
-        fetch.get(`/rest/order/ordersuccess`)
+        fetch
+          .get(`/rest/order/ordersuccess`)
           .then((res) => {
             setOrders(res.data);
           })
           .catch((error) => {
             console.log(error);
           });
-
       })
       .catch((error) => {
-        toast.error("Cập nhật trạng thái thất bại")
+        toast.error('Cập nhật trạng thái thất bại');
       });
   };
 
   return (
     <>
-      <p className="text-xl pb-5 flex items-center gap-3">
-        Quản lí hóa đơn{' '}
-        <span>
-          <Icon
-            icon={'solar:bill-list-bold'}
-            fontSize={24}
-          />
-        </span>{' '}
-      </p>
+      <p className="text-xl pb-5 flex items-center font-bold uppercase gap-3">Quản lí đơn hàng </p>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         {isChange ? (
           <Detail
@@ -100,16 +89,12 @@ export default function Feedback() {
             order={order}
             products={products}
             setOrders={setOrders}
-
-
           />
         ) : (
           <Table
             changeToDetail={changeToDetail}
             orders={orders}
             onStatusChange={handleStatusChange}
-
-
           />
         )}
       </div>
